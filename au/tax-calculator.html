@@ -65,6 +65,18 @@
       font-weight: bold;
       margin-bottom: 10px;
     }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media(max-width: 700px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 
@@ -84,6 +96,7 @@
     <input id="income" type="number" value="80000">
 
     <div class="result">
+
       <div>Total tax</div>
       <div class="big" id="tax"></div>
 
@@ -96,8 +109,20 @@
       <div>Net income</div>
       <div id="net"></div>
 
+      <div class="grid">
+        <div>
+          <div>Monthly take-home</div>
+          <div id="monthly"></div>
+        </div>
+        <div>
+          <div>Weekly take-home</div>
+          <div id="weekly"></div>
+        </div>
+      </div>
+
       <div>Effective tax rate</div>
       <div id="rate"></div>
+
     </div>
 
   </div>
@@ -108,37 +133,68 @@
 function calculateTax(income) {
   let tax = 0;
 
+  // Stage 3 tax rates
   if (income <= 18200) {
     tax = 0;
   } else if (income <= 45000) {
-    tax = (income - 18200) * 0.19;
-  } else if (income <= 120000) {
-    tax = 5092 + (income - 45000) * 0.325;
-  } else if (income <= 180000) {
-    tax = 29467 + (income - 120000) * 0.37;
+    tax = (income - 18200) * 0.16;
+  } else if (income <= 135000) {
+    tax = 4288 + (income - 45000) * 0.30;
+  } else if (income <= 190000) {
+    tax = 31288 + (income - 135000) * 0.37;
   } else {
-    tax = 51667 + (income - 180000) * 0.45;
+    tax = 51638 + (income - 190000) * 0.45;
   }
 
   return tax;
+}
+
+function calculateLITO(income) {
+  if (income <= 37500) {
+    return 700;
+  } else if (income <= 45000) {
+    return 700 - (income - 37500) * 0.05;
+  } else if (income <= 66667) {
+    return 325 - (income - 45000) * 0.015;
+  } else {
+    return 0;
+  }
+}
+
+function calculateMedicare(income) {
+  const threshold = 26000;
+
+  if (income <= threshold) {
+    return 0;
+  } else if (income <= threshold * 1.25) {
+    return (income - threshold) * 0.10;
+  } else {
+    return income * 0.02;
+  }
 }
 
 function calculate() {
   let income = parseFloat(document.getElementById("income").value) || 0;
 
   let tax = calculateTax(income);
-  let medicare = income * 0.02;
-  let total = tax + medicare;
+  let lito = calculateLITO(income);
+  let medicare = calculateMedicare(income);
+
+  let totalTax = Math.max(0, tax - lito);
+  let total = totalTax + medicare;
   let net = income - total;
 
   function format(x) {
     return "$" + Math.round(x).toLocaleString();
   }
 
-  document.getElementById("tax").innerText = format(tax);
+  document.getElementById("tax").innerText = format(totalTax);
   document.getElementById("medicare").innerText = format(medicare);
   document.getElementById("total").innerText = format(total);
   document.getElementById("net").innerText = format(net);
+
+  document.getElementById("monthly").innerText = format(net / 12);
+  document.getElementById("weekly").innerText = format(net / 52);
 
   let rate = income > 0 ? (total / income) * 100 : 0;
   document.getElementById("rate").innerText = rate.toFixed(1) + "%";
