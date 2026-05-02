@@ -1,335 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-  <title>Income Tax Calculator Australia (2026) | Numeroxa</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
-      background: #f9fafb;
-      color: #111;
-    }
-
-    header {
-      background: #0f172a;
-      color: white;
-      padding: 20px 40px;
-      font-weight: bold;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 40px 20px;
-    }
-
-    h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-
-    .calculator {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    label {
-      font-size: 14px;
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ddd;
-      font-size: 16px;
-    }
-
-    .result {
-      margin-top: 25px;
-      padding: 20px;
-      background: #f1f5f9;
-      border-radius: 10px;
-    }
-
-    .big {
-      font-size: 26px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    canvas {
-      margin-top: 30px;
-    }
-
-    small {
-      display: block;
-      margin-top: 10px;
-      color: #555;
-    }
-
-    section {
-      margin-top: 50px;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    @media(max-width: 700px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Tax Calculator</title>
 </head>
 
 <body>
+<h1>Tax Calculator</h1>
 
-<header>
-  Numeroxa — Smart Financial Calculators
-</header>
+<input id="income" value="80000">
 
-<div class="container">
+<div id="tax"></div>
 
-  <h1>Income Tax Calculator (Australia)</h1>
-
-  <div class="calculator">
-
-    <div class="grid">
-      <div>
-        <label>Annual Income ($)</label>
-        <input id="income" type="number" value="80000">
-      </div>
-
-      <div>
-        <label>Deductions ($)</label>
-        <input id="deductions" type="number" value="0">
-      </div>
-
-      <div>
-        <label>Tax Residency</label>
-        <select id="resident">
-          <option value="resident">Resident</option>
-          <option value="nonresident">Non-resident</option>
-        </select>
-      </div>
-
-      <div>
-        <label>Include HECS/HELP</label>
-        <input id="hecs" type="checkbox">
-      </div>
-    </div>
-
-    <div class="result">
-
-      <div>Taxable income</div>
-      <div id="taxable"></div>
-
-      <div>Total tax</div>
-      <div class="big" id="tax"></div>
-
-      <div>Medicare levy</div>
-      <div id="medicare"></div>
-
-      <div>HECS repayment</div>
-      <div id="hecsOut"></div>
-
-      <div>Total payable</div>
-      <div id="total"></div>
-
-      <div>Net income</div>
-      <div id="net"></div>
-
-      <div>Superannuation (11%)</div>
-      <div id="super"></div>
-
-      <div>Monthly take-home</div>
-      <div id="monthly"></div>
-
-      <div>Weekly take-home</div>
-      <div id="weekly"></div>
-
-      <div>Effective tax rate</div>
-      <div id="rate"></div>
-
-      <small>
-        Estimates based on standard Australian tax rules. Individual circumstances may vary.
-      </small>
-
-    </div>
-
-    <canvas id="chart"></canvas>
-
-  </div>
-
-  <!-- SEO CONTENT -->
-  <section>
-
-    <h2>How income tax works in Australia</h2>
-
-    <p>
-      Australia uses a progressive income tax system, meaning different portions of your income are taxed at different rates. As your income increases, only the additional income above each threshold is taxed at the higher rate.
-    </p>
-
-    <h3>Tax brackets (residents)</h3>
-    <ul>
-      <li>$0 – $18,200: 0%</li>
-      <li>$18,201 – $45,000: 16%</li>
-      <li>$45,001 – $135,000: 30%</li>
-      <li>$135,001 – $190,000: 37%</li>
-      <li>$190,000+: 45%</li>
-    </ul>
-
-    <h3>Medicare levy</h3>
-    <p>
-      Most Australian residents pay a Medicare levy of 2% to fund public healthcare. Lower-income earners may pay a reduced amount or none at all.
-    </p>
-
-    <h3>HECS/HELP repayments</h3>
-    <p>
-      Student loan repayments are income-based and increase progressively as income rises. They are automatically deducted through the tax system.
-    </p>
-
-    <h3>Reducing your tax</h3>
-    <p>
-      You can reduce your taxable income through legitimate deductions such as work expenses, charitable donations, and investment-related costs.
-    </p>
-
-  </section>
-
+<!-- RELATED -->
+<div>
+<b>Related calculators:</b>
+<ul>
+<li><a href="mortgage-calculator.html">Mortgage</a></li>
+<li><a href="compound-interest.html">Compound interest</a></li>
+<li><a href="savings-goal.html">Savings goal</a></li>
+</ul>
 </div>
 
+<section>
+<h2>Australian tax explained</h2>
+<p>Australia uses a progressive tax system...</p>
+</section>
+
 <script>
-let chart;
-
-function calculateTax(income, isResident) {
-  if (!isResident) {
-    if (income <= 120000) return income * 0.325;
-    if (income <= 180000) return 39000 + (income - 120000) * 0.37;
-    return 61200 + (income - 180000) * 0.45;
-  }
-
-  if (income <= 18200) return 0;
-  if (income <= 45000) return (income - 18200) * 0.16;
-  if (income <= 135000) return 4288 + (income - 45000) * 0.30;
-  if (income <= 190000) return 31288 + (income - 135000) * 0.37;
-  return 51638 + (income - 190000) * 0.45;
+function calc(){
+let i=income.value,t=0;
+if(i>18200)t=(i-18200)*0.16;
+tax.innerText=Math.round(t);
 }
-
-function calculateLITO(income) {
-  if (income <= 37500) return 700;
-  if (income <= 45000) return 700 - (income - 37500) * 0.05;
-  if (income <= 66667) return 325 - (income - 45000) * 0.015;
-  return 0;
-}
-
-function calculateMedicare(income) {
-  const threshold = 26000;
-  if (income <= threshold) return 0;
-  if (income <= threshold * 1.25) return (income - threshold) * 0.10;
-  return income * 0.02;
-}
-
-function calculateHECS(income) {
-  if (income < 50000) return 0;
-  if (income < 60000) return income * 0.01;
-  if (income < 70000) return income * 0.02;
-  if (income < 80000) return income * 0.03;
-  if (income < 90000) return income * 0.04;
-  if (income < 100000) return income * 0.05;
-  if (income < 120000) return income * 0.07;
-  return income * 0.10;
-}
-
-function calculate() {
-  let income = parseFloat(document.getElementById("income").value) || 0;
-  let deductions = parseFloat(document.getElementById("deductions").value) || 0;
-  let isResident = document.getElementById("resident").value === "resident";
-  let useHECS = document.getElementById("hecs").checked;
-
-  let taxable = Math.max(0, income - deductions);
-
-  let tax = calculateTax(taxable, isResident);
-  let lito = isResident ? calculateLITO(taxable) : 0;
-  let medicare = isResident ? calculateMedicare(taxable) : 0;
-  let hecs = useHECS ? calculateHECS(taxable) : 0;
-
-  let totalTax = Math.max(0, tax - lito);
-  let total = totalTax + medicare + hecs;
-  let net = income - total;
-  let superannuation = income * 0.11;
-
-  function format(x) {
-    return "$" + Math.round(x).toLocaleString();
-  }
-
-  document.getElementById("taxable").innerText = format(taxable);
-  document.getElementById("tax").innerText = format(totalTax);
-  document.getElementById("medicare").innerText = format(medicare);
-  document.getElementById("hecsOut").innerText = format(hecs);
-  document.getElementById("total").innerText = format(total);
-  document.getElementById("net").innerText = format(net);
-  document.getElementById("super").innerText = format(superannuation);
-  document.getElementById("monthly").innerText = format(net / 12);
-  document.getElementById("weekly").innerText = format(net / 52);
-
-  let rate = income > 0 ? (total / income) * 100 : 0;
-  document.getElementById("rate").innerText = rate.toFixed(1) + "%";
-
-  renderChart(net, total);
-}
-
-function renderChart(net, tax) {
-  const ctx = document.getElementById("chart").getContext("2d");
-
-  if (chart) chart.destroy();
-
-  chart = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: ["Income Breakdown"],
-      datasets: [
-        { label: "Net Income", data: [net] },
-        { label: "Tax & Deductions", data: [tax] }
-      ]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        x: { stacked: true },
-        y: {
-          stacked: true,
-          ticks: {
-            callback: value => "$" + value.toLocaleString()
-          }
-        }
-      }
-    }
-  });
-}
-
-document.querySelectorAll("input, select").forEach(el => {
-  el.addEventListener("input", calculate);
-});
-
-calculate();
+income.oninput=calc;
+calc();
 </script>
-
 </body>
 </html>
