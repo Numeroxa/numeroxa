@@ -5,122 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Compound Interest Calculator Australia (2026) | Numeroxa</title>
-<meta name="description" content="Calculate compound interest growth with regular contributions. Visualise investment growth over time.">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body {
-  margin:0;
-  font-family:Inter, Arial;
-  background:#f9fafb;
-  color:#111;
-}
-
-header {
-  background:#0f172a;
-  color:white;
-  padding:18px 40px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-header a {
-  color:white;
-  text-decoration:none;
-  margin-left:20px;
-}
-
-.logo {
-  font-size:20px;
-  font-weight:600;
-  letter-spacing:0.5px;
-  line-height:1.1;
-}
-
-.tagline {
-  display:block;
-  font-size:11px;
-  font-weight:400;
-  opacity:0.7;
-}
-
-.container {
-  max-width:1000px;
-  margin:auto;
-  padding:40px 20px;
-}
-
-h1 {
-  font-size:32px;
-  margin-bottom:20px;
-}
-
-.grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-}
-
-label {
-  font-size:14px;
-  margin-bottom:5px;
-  display:block;
-}
-
-input {
-  width:100%;
-  padding:10px;
-  border-radius:6px;
-  border:1px solid #ddd;
-}
-
-.result {
-  margin-top:30px;
-  padding:25px;
-  background:white;
-  border-radius:12px;
-}
-
-.result-row {
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:10px;
-}
-
-.big {
-  font-size:28px;
-  font-weight:bold;
-}
-
+body {margin:0;font-family:Inter, Arial;background:#f9fafb;color:#111;}
+header {background:#0f172a;color:white;padding:18px 40px;display:flex;justify-content:space-between;align-items:center;}
+header a {color:white;text-decoration:none;margin-left:20px;}
+.logo {font-size:20px;font-weight:600;}
+.tagline {display:block;font-size:11px;opacity:0.7;}
+.container {max-width:1000px;margin:auto;padding:40px 20px;}
+.grid {display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+input {width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;}
+.result {margin-top:30px;background:white;padding:25px;border-radius:12px;}
+.big {font-size:28px;font-weight:bold;}
 canvas {margin-top:30px;}
-
-.related {
-  margin-top:40px;
-  padding:20px;
-  background:#eef2ff;
-  border-radius:10px;
-}
-
-section {
-  margin-top:50px;
-}
-
-@media(max-width:700px){
-  .grid {grid-template-columns:1fr;}
-}
 </style>
 </head>
 
 <body>
 
 <header>
-<a href="../index.html" class="logo">
-  Numeroxa
-  <span class="tagline">Smart Financial Calculators</span>
-</a>
+<a href="../index.html" class="logo">Numeroxa<span class="tagline">Smart Financial Calculators</span></a>
 <div>
 <a href="../index.html">Home</a>
 <a href="mortgage-calculator.html">Mortgage</a>
@@ -134,110 +41,19 @@ section {
 <h1>Compound Interest Calculator</h1>
 
 <div class="grid">
-
-<div>
-<label>Initial Investment ($)</label>
-<input id="principal" type="number" value="10000">
-</div>
-
-<div>
-<label>Monthly Contribution ($)</label>
-<input id="monthly" type="number" value="500">
-</div>
-
-<div>
-<label>Interest Rate (% p.a.)</label>
-<input id="rate" type="number" value="7">
-</div>
-
-<div>
-<label>Time Period (years)</label>
-<input id="years" type="number" value="20">
-</div>
-
+<input id="principal" value="10000">
+<input id="monthly" value="500">
+<input id="rate" value="7">
+<input id="years" value="20">
 </div>
 
 <div class="result">
-
-<div class="result-row">
-<span>Final balance</span>
-<span class="big" id="final"></span>
-</div>
-
-<div class="result-row">
-<span>Total contributions</span>
-<span id="contributions"></span>
-</div>
-
-<div class="result-row">
-<span>Interest earned</span>
-<span id="interest"></span>
-</div>
-
+<div class="big" id="final"></div>
+<div id="contributions"></div>
+<div id="interest"></div>
 </div>
 
 <canvas id="chart"></canvas>
-
-<div class="related">
-<strong>Related calculators:</strong>
-<ul>
-<li><a href="mortgage-calculator.html">Compare against mortgage repayments</a></li>
-<li><a href="savings-goal.html">Plan a savings target</a></li>
-<li><a href="tax-calculator.html">Estimate after-tax income</a></li>
-</ul>
-</div>
-
-<section>
-<h2>What is compound interest?</h2>
-<p>
-Compound interest allows your investment to grow exponentially by earning returns on both your initial investment and accumulated gains.
-</p>
-
-<h3>Why time matters</h3>
-<p>
-The longer you invest, the more powerful compounding becomes, as returns generate further returns over time.
-</p>
-
-<h3>How to maximise growth</h3>
-<ul>
-<li>Start early</li>
-<li>Invest consistently</li>
-<li>Reinvest earnings</li>
-</ul>
-</section>
-
-<section>
-
-<h2>Frequently asked questions</h2>
-
-<h3>What is compound interest?</h3>
-<p>It is interest earned on both your original investment and accumulated returns.</p>
-
-<h3>Does compounding frequency matter?</h3>
-<p>Yes, more frequent compounding leads to faster growth.</p>
-
-<h3>Why does compounding accelerate?</h3>
-<p>Because returns themselves generate additional returns over time.</p>
-
-<h3>Are regular contributions important?</h3>
-<p>Yes, consistent investing significantly increases long-term outcomes.</p>
-
-</section>
-
-<script type="application/ld+json">
-{
-"@context":"https://schema.org",
-"@type":"FAQPage",
-"mainEntity":[
-{"@type":"Question","name":"What is compound interest?","acceptedAnswer":{"@type":"Answer","text":"Interest earned on both your initial investment and accumulated returns."}},
-{"@type":"Question","name":"Does compounding frequency matter?","acceptedAnswer":{"@type":"Answer","text":"More frequent compounding leads to faster growth."}},
-{"@type":"Question","name":"Why does compounding accelerate?","acceptedAnswer":{"@type":"Answer","text":"Returns generate additional returns over time."}},
-{"@type":"Question","name":"Are regular contributions important?","acceptedAnswer":{"@type":"Answer","text":"Yes, consistent investing significantly increases outcomes."}}
-]
-}
-</script>
-
-</div>
 
 <script>
 let chart;
@@ -252,18 +68,14 @@ let n=years.value*12;
 let balance=P;
 let totalContrib=P;
 
-let labels=[];
-let contribData=[];
-let interestData=[];
+let labels=[],contribData=[],interestData=[];
 
 for(let i=0;i<=n;i++){
-
 if(i%12===0){
 labels.push("Year "+i/12);
 contribData.push(totalContrib);
 interestData.push(balance-totalContrib);
 }
-
 balance=balance*(1+r)+PMT;
 totalContrib+=PMT;
 }
@@ -271,8 +83,8 @@ totalContrib+=PMT;
 function f(x){return "$"+Math.round(x).toLocaleString();}
 
 final.innerText=f(balance);
-contributions.innerText=f(totalContrib);
-interest.innerText=f(balance-totalContrib);
+contributions.innerText="Contributions: "+f(totalContrib);
+interest.innerText="Interest: "+f(balance-totalContrib);
 
 if(chart) chart.destroy();
 
@@ -281,21 +93,36 @@ type:"line",
 data:{
 labels:labels,
 datasets:[
-{label:"Contributions",data:contribData},
-{label:"Interest",data:interestData}
+{
+label:"Contributions",
+data:contribData,
+fill:true,
+tension:0.3,
+backgroundColor:"rgba(37,99,235,0.2)",
+borderColor:"rgba(37,99,235,1)"
+},
+{
+label:"Interest",
+data:interestData,
+fill:true,
+tension:0.3,
+backgroundColor:"rgba(236,72,153,0.2)",
+borderColor:"rgba(236,72,153,1)"
+}
 ]
 },
 options:{
 responsive:true,
-interaction:{mode:"index",intersect:false}
+interaction:{mode:"index",intersect:false},
+scales:{y:{stacked:true}}
 }
 });
 }
 
 document.querySelectorAll("input").forEach(i=>i.oninput=calculate);
-
 calculate();
 </script>
 
+</div>
 </body>
 </html>
