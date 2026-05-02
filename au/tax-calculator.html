@@ -1,1 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+  <title>Income Tax Calculator Australia (2026) | Numeroxa</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+      background: #f9fafb;
+      color: #111;
+    }
+
+    header {
+      background: #0f172a;
+      color: white;
+      padding: 20px 40px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .calculator {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    label {
+      font-size: 14px;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .result {
+      padding: 20px;
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+
+    .big {
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  Numeroxa — Smart Financial Calculators
+</header>
+
+<div class="container">
+
+  <h1>Income Tax Calculator (Australia)</h1>
+
+  <div class="calculator">
+
+    <label>Annual Income ($)</label>
+    <input id="income" type="number" value="80000">
+
+    <div class="result">
+      <div>Total tax</div>
+      <div class="big" id="tax"></div>
+
+      <div>Medicare levy</div>
+      <div id="medicare"></div>
+
+      <div>Total payable</div>
+      <div id="total"></div>
+
+      <div>Net income</div>
+      <div id="net"></div>
+
+      <div>Effective tax rate</div>
+      <div id="rate"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function calculateTax(income) {
+  let tax = 0;
+
+  if (income <= 18200) {
+    tax = 0;
+  } else if (income <= 45000) {
+    tax = (income - 18200) * 0.19;
+  } else if (income <= 120000) {
+    tax = 5092 + (income - 45000) * 0.325;
+  } else if (income <= 180000) {
+    tax = 29467 + (income - 120000) * 0.37;
+  } else {
+    tax = 51667 + (income - 180000) * 0.45;
+  }
+
+  return tax;
+}
+
+function calculate() {
+  let income = parseFloat(document.getElementById("income").value) || 0;
+
+  let tax = calculateTax(income);
+  let medicare = income * 0.02;
+  let total = tax + medicare;
+  let net = income - total;
+
+  function format(x) {
+    return "$" + Math.round(x).toLocaleString();
+  }
+
+  document.getElementById("tax").innerText = format(tax);
+  document.getElementById("medicare").innerText = format(medicare);
+  document.getElementById("total").innerText = format(total);
+  document.getElementById("net").innerText = format(net);
+
+  let rate = income > 0 ? (total / income) * 100 : 0;
+  document.getElementById("rate").innerText = rate.toFixed(1) + "%";
+}
+
+document.getElementById("income").addEventListener("input", calculate);
+
+calculate();
+</script>
+
+</body>
+</html>
