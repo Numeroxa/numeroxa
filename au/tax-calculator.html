@@ -11,14 +11,16 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
   background: #f9fafb;
+  color: #111;
 }
 
 header {
   background: #0f172a;
   color: white;
-  padding: 20px;
+  padding: 20px 40px;
+  font-weight: bold;
 }
 
 .container {
@@ -27,10 +29,21 @@ header {
   padding: 40px 20px;
 }
 
+h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+}
+
+label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  display: block;
 }
 
 input, select {
@@ -38,26 +51,57 @@ input, select {
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ddd;
+  font-size: 16px;
 }
 
 .result {
-  margin-top: 20px;
-  padding: 20px;
-  background: #f1f5f9;
-  border-radius: 10px;
+  margin-top: 30px;
+  padding: 25px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.result-label {
+  color: #555;
 }
 
 .big {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
+}
+
+.section-title {
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 16px;
 }
 
 canvas {
   margin-top: 30px;
 }
 
+.related {
+  margin-top: 40px;
+  padding: 20px;
+  background: #eef2ff;
+  border-radius: 10px;
+}
+
 section {
   margin-top: 50px;
+}
+
+@media(max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
 </head>
@@ -101,42 +145,65 @@ Numeroxa — Smart Financial Calculators
 
 <div class="result">
 
-<div>Taxable income</div>
-<div id="taxable"></div>
+<div class="section-title">Summary</div>
 
-<div>Total tax</div>
-<div class="big" id="tax"></div>
+<div class="result-row">
+<span class="result-label">Taxable income</span>
+<span id="taxable"></span>
+</div>
 
-<div>Medicare levy</div>
-<div id="medicare"></div>
+<div class="result-row">
+<span class="result-label">Total tax</span>
+<span class="big" id="tax"></span>
+</div>
 
-<div>HECS repayment</div>
-<div id="hecsOut"></div>
+<div class="result-row">
+<span class="result-label">Medicare levy</span>
+<span id="medicare"></span>
+</div>
 
-<div>Total payable</div>
-<div id="total"></div>
+<div class="result-row">
+<span class="result-label">HECS repayment</span>
+<span id="hecsOut"></span>
+</div>
 
-<div>Net income</div>
-<div id="net"></div>
+<div class="result-row">
+<span class="result-label">Total payable</span>
+<span id="total"></span>
+</div>
 
-<div>Superannuation (11%)</div>
-<div id="super"></div>
+<div class="section-title">Income</div>
 
-<div>Monthly take-home</div>
-<div id="monthly"></div>
+<div class="result-row">
+<span class="result-label">Net income</span>
+<span class="big" id="net"></span>
+</div>
 
-<div>Weekly take-home</div>
-<div id="weekly"></div>
+<div class="result-row">
+<span class="result-label">Super (11%)</span>
+<span id="super"></span>
+</div>
 
-<div>Effective tax rate</div>
-<div id="rate"></div>
+<div class="result-row">
+<span class="result-label">Monthly take-home</span>
+<span id="monthly"></span>
+</div>
+
+<div class="result-row">
+<span class="result-label">Weekly take-home</span>
+<span id="weekly"></span>
+</div>
+
+<div class="result-row">
+<span class="result-label">Effective tax rate</span>
+<span id="rate"></span>
+</div>
 
 </div>
 
 <canvas id="chart"></canvas>
 
-<!-- RELATED -->
-<div style="margin-top:40px; background:#eef2ff; padding:20px; border-radius:10px;">
+<div class="related">
 <strong>Related calculators:</strong>
 <ul>
 <li><a href="mortgage-calculator.html">Estimate mortgage repayments from your income</a></li>
@@ -148,23 +215,8 @@ Numeroxa — Smart Financial Calculators
 <section>
 <h2>How income tax works in Australia</h2>
 <p>
-Australia uses a progressive tax system, meaning higher portions of income are taxed at higher rates rather than one flat rate.
+Australia uses a progressive tax system, meaning higher income is taxed at higher rates.
 </p>
-
-<h3>What affects your tax</h3>
-<ul>
-<li>Income level</li>
-<li>Deductions</li>
-<li>Residency status</li>
-<li>Student loan repayments</li>
-</ul>
-
-<h3>How to reduce your tax</h3>
-<ul>
-<li>Claim work-related deductions</li>
-<li>Use tax offsets</li>
-<li>Contribute to super</li>
-</ul>
 </section>
 
 </div>
@@ -212,10 +264,10 @@ function calculateHECS(income) {
 }
 
 function calculate() {
-  let income = parseFloat(incomeInput.value) || 0;
-  let deductions = parseFloat(deductionsInput.value) || 0;
-  let isResident = resident.value === "resident";
-  let useHECS = hecs.checked;
+  let income = parseFloat(document.getElementById("income").value) || 0;
+  let deductions = parseFloat(document.getElementById("deductions").value) || 0;
+  let isResident = document.getElementById("resident").value === "resident";
+  let useHECS = document.getElementById("hecs").checked;
 
   let taxable = Math.max(0, income - deductions);
 
@@ -231,22 +283,23 @@ function calculate() {
 
   function f(x){ return "$" + Math.round(x).toLocaleString(); }
 
-  taxableOut.innerText = f(taxable);
-  taxOut.innerText = f(totalTax);
-  medicareOut.innerText = f(medicare);
-  hecsOut.innerText = f(hecsVal);
-  totalOut.innerText = f(total);
-  netOut.innerText = f(net);
-  superOut.innerText = f(superannuation);
-  monthlyOut.innerText = f(net/12);
-  weeklyOut.innerText = f(net/52);
-  rateOut.innerText = ((total/income)*100).toFixed(1) + "%";
+  document.getElementById("taxable").innerText = f(taxable);
+  document.getElementById("tax").innerText = f(totalTax);
+  document.getElementById("medicare").innerText = f(medicare);
+  document.getElementById("hecsOut").innerText = f(hecsVal);
+  document.getElementById("total").innerText = f(total);
+  document.getElementById("net").innerText = f(net);
+  document.getElementById("super").innerText = f(superannuation);
+  document.getElementById("monthly").innerText = f(net / 12);
+  document.getElementById("weekly").innerText = f(net / 52);
+  document.getElementById("rate").innerText = income > 0 ? ((total/income)*100).toFixed(1) + "%" : "0%";
 
   renderChart(net, total);
 }
 
 function renderChart(net, tax) {
   const ctx = document.getElementById("chart").getContext("2d");
+
   if (chart) chart.destroy();
 
   chart = new Chart(ctx, {
@@ -266,23 +319,6 @@ function renderChart(net, tax) {
     }
   });
 }
-
-/* FIXED element references */
-const incomeInput = document.getElementById("income");
-const deductionsInput = document.getElementById("deductions");
-const resident = document.getElementById("resident");
-const hecs = document.getElementById("hecs");
-
-const taxableOut = document.getElementById("taxable");
-const taxOut = document.getElementById("tax");
-const medicareOut = document.getElementById("medicare");
-const hecsOut = document.getElementById("hecsOut");
-const totalOut = document.getElementById("total");
-const netOut = document.getElementById("net");
-const superOut = document.getElementById("super");
-const monthlyOut = document.getElementById("monthly");
-const weeklyOut = document.getElementById("weekly");
-const rateOut = document.getElementById("rate");
 
 document.querySelectorAll("input, select").forEach(el => {
   el.addEventListener("input", calculate);
