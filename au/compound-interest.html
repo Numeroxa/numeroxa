@@ -159,25 +159,35 @@ function calculate() {
   let n = years * 12;
 
   let balance = P;
-  let data = [];
+  let totalContrib = P;
+
   let labels = [];
+  let contributionData = [];
+  let interestData = [];
 
   for (let i = 0; i <= n; i++) {
+
     if (i % 12 === 0) {
-      data.push(balance);
+      let interest = balance - totalContrib;
+
       labels.push("Year " + (i / 12));
+      contributionData.push(totalContrib);
+      interestData.push(interest);
     }
+
     balance = balance * (1 + r) + PMT;
+    totalContrib += PMT;
   }
 
-  let contributions = P + (PMT * n);
-  let interest = balance - contributions;
+  let finalBalance = balance;
+  let contributions = totalContrib;
+  let interest = finalBalance - contributions;
 
   function format(x) {
     return "$" + Math.round(x).toLocaleString();
   }
 
-  document.getElementById("final").innerText = format(balance);
+  document.getElementById("final").innerText = format(finalBalance);
   document.getElementById("contributions").innerText = format(contributions);
   document.getElementById("interest").innerText = format(interest);
 
@@ -186,34 +196,48 @@ function calculate() {
       ? "Your money grows by " + format(interest) + " from compound interest"
       : "";
 
-  renderChart(labels, data);
+  renderChart(labels, contributionData, interestData);
 }
 
-function renderChart(labels, data) {
+function renderChart(labels, contributions, interest) {
   const ctx = document.getElementById("chart").getContext("2d");
 
-  if (chart) {
-    chart.destroy();
-  }
+  if (chart) chart.destroy();
 
   chart = new Chart(ctx, {
     type: "line",
     data: {
       labels: labels,
-      datasets: [{
-        label: "Balance Growth",
-        data: data,
-        borderWidth: 2,
-        fill: false
-      }]
+      datasets: [
+        {
+          label: "Contributions",
+          data: contributions,
+          fill: true,
+          borderWidth: 1
+        },
+        {
+          label: "Interest",
+          data: interest,
+          fill: true,
+          borderWidth: 1
+        }
+      ]
     },
     options: {
       responsive: true,
+      interaction: {
+        mode: "index",
+        intersect: false
+      },
+      stacked: true,
       plugins: {
-        legend: { display: false }
+        legend: {
+          position: "top"
+        }
       },
       scales: {
         y: {
+          stacked: true,
           ticks: {
             callback: value => "$" + value.toLocaleString()
           }
