@@ -6,6 +6,9 @@
 
   <title>Income Tax Calculator Australia (2026) | Numeroxa</title>
 
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     body {
       margin: 0;
@@ -72,6 +75,10 @@
       gap: 20px;
     }
 
+    canvas {
+      margin-top: 30px;
+    }
+
     @media(max-width: 700px) {
       .grid {
         grid-template-columns: 1fr;
@@ -125,52 +132,35 @@
 
     </div>
 
+    <canvas id="chart"></canvas>
+
   </div>
 
 </div>
 
 <script>
+let chart;
+
 function calculateTax(income) {
-  let tax = 0;
-
-  // Stage 3 tax rates
-  if (income <= 18200) {
-    tax = 0;
-  } else if (income <= 45000) {
-    tax = (income - 18200) * 0.16;
-  } else if (income <= 135000) {
-    tax = 4288 + (income - 45000) * 0.30;
-  } else if (income <= 190000) {
-    tax = 31288 + (income - 135000) * 0.37;
-  } else {
-    tax = 51638 + (income - 190000) * 0.45;
-  }
-
-  return tax;
+  if (income <= 18200) return 0;
+  if (income <= 45000) return (income - 18200) * 0.16;
+  if (income <= 135000) return 4288 + (income - 45000) * 0.30;
+  if (income <= 190000) return 31288 + (income - 135000) * 0.37;
+  return 51638 + (income - 190000) * 0.45;
 }
 
 function calculateLITO(income) {
-  if (income <= 37500) {
-    return 700;
-  } else if (income <= 45000) {
-    return 700 - (income - 37500) * 0.05;
-  } else if (income <= 66667) {
-    return 325 - (income - 45000) * 0.015;
-  } else {
-    return 0;
-  }
+  if (income <= 37500) return 700;
+  if (income <= 45000) return 700 - (income - 37500) * 0.05;
+  if (income <= 66667) return 325 - (income - 45000) * 0.015;
+  return 0;
 }
 
 function calculateMedicare(income) {
   const threshold = 26000;
-
-  if (income <= threshold) {
-    return 0;
-  } else if (income <= threshold * 1.25) {
-    return (income - threshold) * 0.10;
-  } else {
-    return income * 0.02;
-  }
+  if (income <= threshold) return 0;
+  if (income <= threshold * 1.25) return (income - threshold) * 0.10;
+  return income * 0.02;
 }
 
 function calculate() {
@@ -198,6 +188,52 @@ function calculate() {
 
   let rate = income > 0 ? (total / income) * 100 : 0;
   document.getElementById("rate").innerText = rate.toFixed(1) + "%";
+
+  renderChart(net, total);
+}
+
+function renderChart(net, tax) {
+  const ctx = document.getElementById("chart").getContext("2d");
+
+  if (chart) chart.destroy();
+
+  chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["Income Breakdown"],
+      datasets: [
+        {
+          label: "Net Income",
+          data: [net],
+          borderWidth: 1
+        },
+        {
+          label: "Tax + Medicare",
+          data: [tax],
+          borderWidth: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "top"
+        }
+      },
+      scales: {
+        x: {
+          stacked: true
+        },
+        y: {
+          stacked: true,
+          ticks: {
+            callback: value => "$" + value.toLocaleString()
+          }
+        }
+      }
+    }
+  });
 }
 
 document.getElementById("income").addEventListener("input", calculate);
