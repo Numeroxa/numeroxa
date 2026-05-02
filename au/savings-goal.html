@@ -11,14 +11,16 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
   background: #f9fafb;
+  color: #111;
 }
 
 header {
   background: #0f172a;
   color: white;
-  padding: 20px;
+  padding: 20px 40px;
+  font-weight: bold;
 }
 
 .container {
@@ -27,10 +29,21 @@ header {
   padding: 40px 20px;
 }
 
+h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+}
+
+label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  display: block;
 }
 
 input {
@@ -38,33 +51,65 @@ input {
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ddd;
+  font-size: 16px;
 }
 
 .result {
-  margin-top: 20px;
-  padding: 20px;
-  background: #f1f5f9;
-  border-radius: 10px;
+  margin-top: 30px;
+  padding: 25px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.result-label {
+  color: #555;
 }
 
 .big {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
 }
 
+.section-title {
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
 .highlight {
-  margin-top: 10px;
-  padding: 10px;
-  background: #fde68a;
+  margin-top: 15px;
+  padding: 15px;
+  background: #dbeafe;
   border-radius: 8px;
+  font-weight: bold;
 }
 
 canvas {
   margin-top: 30px;
 }
 
+.related {
+  margin-top: 40px;
+  padding: 20px;
+  background: #eef2ff;
+  border-radius: 10px;
+}
+
 section {
   margin-top: 50px;
+}
+
+@media(max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
 </head>
@@ -80,6 +125,7 @@ Numeroxa — Smart Financial Calculators
 <h1>Savings Goal Calculator</h1>
 
 <div class="grid">
+
 <div>
 <label>Target Amount ($)</label>
 <input id="target" type="number" value="100000">
@@ -99,25 +145,35 @@ Numeroxa — Smart Financial Calculators
 <label>Time Period (years)</label>
 <input id="years" type="number" value="10">
 </div>
+
 </div>
 
 <div class="result">
-<div>Required monthly saving</div>
-<div class="big" id="monthly"></div>
 
-<div>Total contributions</div>
-<div id="contributions"></div>
+<div class="section-title">Savings Plan</div>
 
-<div>Interest earned</div>
-<div id="interest"></div>
+<div class="result-row">
+<span class="result-label">Required monthly saving</span>
+<span class="big" id="monthly"></span>
+</div>
+
+<div class="result-row">
+<span class="result-label">Total contributions</span>
+<span id="contributions"></span>
+</div>
+
+<div class="result-row">
+<span class="result-label">Interest earned</span>
+<span id="interest"></span>
+</div>
 
 <div class="highlight" id="message"></div>
+
 </div>
 
 <canvas id="chart"></canvas>
 
-<!-- RELATED -->
-<div style="margin-top:40px; background:#eef2ff; padding:20px; border-radius:10px;">
+<div class="related">
 <strong>Related calculators:</strong>
 <ul>
 <li><a href="compound-interest.html">See how compound interest grows your savings</a></li>
@@ -127,21 +183,21 @@ Numeroxa — Smart Financial Calculators
 </div>
 
 <section>
-<h2>How much do you need to save each month?</h2>
+<h2>How much should you save each month?</h2>
 <p>
-Your required monthly savings depend on your goal, time horizon, and expected returns. The longer your timeframe, the less you need to contribute each month.
+Your required monthly savings depend on your goal, timeframe, and expected returns. Longer timeframes significantly reduce the monthly amount required.
 </p>
 
 <h3>Why starting early matters</h3>
 <p>
-Time allows compound interest to significantly reduce how much you need to save.
+Starting early allows compound interest to reduce how much you need to save each month.
 </p>
 
-<h3>How to reach your goal faster</h3>
+<h3>Ways to reach your goal faster</h3>
 <ul>
-<li>Increase contributions</li>
-<li>Start earlier</li>
-<li>Earn higher returns (with risk)</li>
+<li>Increase your contributions</li>
+<li>Extend your timeframe</li>
+<li>Earn higher returns (with appropriate risk)</li>
 </ul>
 </section>
 
@@ -192,16 +248,14 @@ function calculate() {
   let contributions = totalContrib;
   let interest = balance - contributions;
 
-  function format(x) {
-    return "$" + Math.round(x).toLocaleString();
-  }
+  function f(x){ return "$" + Math.round(x).toLocaleString(); }
 
-  document.getElementById("monthly").innerText = format(monthly);
-  document.getElementById("contributions").innerText = format(contributions);
-  document.getElementById("interest").innerText = format(interest);
+  document.getElementById("monthly").innerText = f(monthly);
+  document.getElementById("contributions").innerText = f(contributions);
+  document.getElementById("interest").innerText = f(interest);
 
   document.getElementById("message").innerText =
-    "To reach your goal, you need to save " + format(monthly) + " per month";
+    "To reach your goal, you need to save " + f(monthly) + " per month.";
 
   renderChart(labels, contribData, interestData);
 }
@@ -230,10 +284,7 @@ function renderChart(labels, contributions, interest) {
     },
     options: {
       responsive: true,
-      interaction: {
-        mode: "index",
-        intersect: false
-      },
+      interaction: { mode: "index", intersect: false },
       scales: {
         y: {
           stacked: true,
