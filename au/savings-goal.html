@@ -1,44 +1,256 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Savings Goal Calculator | Numeroxa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Savings Goal Calculator Australia (2026) | Numeroxa</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f9fafb;
+}
+
+header {
+  background: #0f172a;
+  color: white;
+  padding: 20px;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.result {
+  margin-top: 20px;
+  padding: 20px;
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.big {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.highlight {
+  margin-top: 10px;
+  padding: 10px;
+  background: #fde68a;
+  border-radius: 8px;
+}
+
+canvas {
+  margin-top: 30px;
+}
+
+section {
+  margin-top: 50px;
+}
+</style>
 </head>
 
 <body>
 
+<header>
+Numeroxa — Smart Financial Calculators
+</header>
+
+<div class="container">
+
 <h1>Savings Goal Calculator</h1>
 
-<input id="target" value="100000">
-<input id="current" value="10000">
-<input id="rate" value="5">
-<input id="years" value="10">
+<div class="grid">
+<div>
+<label>Target Amount ($)</label>
+<input id="target" type="number" value="100000">
+</div>
 
-<div id="monthly"></div>
+<div>
+<label>Current Savings ($)</label>
+<input id="current" type="number" value="10000">
+</div>
+
+<div>
+<label>Interest Rate (% p.a.)</label>
+<input id="rate" type="number" value="5">
+</div>
+
+<div>
+<label>Time Period (years)</label>
+<input id="years" type="number" value="10">
+</div>
+</div>
+
+<div class="result">
+<div>Required monthly saving</div>
+<div class="big" id="monthly"></div>
+
+<div>Total contributions</div>
+<div id="contributions"></div>
+
+<div>Interest earned</div>
+<div id="interest"></div>
+
+<div class="highlight" id="message"></div>
+</div>
+
+<canvas id="chart"></canvas>
 
 <!-- RELATED -->
-<div style="margin-top:40px;background:#eef2ff;padding:20px;border-radius:10px;">
+<div style="margin-top:40px; background:#eef2ff; padding:20px; border-radius:10px;">
 <strong>Related calculators:</strong>
 <ul>
-<li><a href="compound-interest.html">Compound interest</a></li>
-<li><a href="mortgage-calculator.html">Mortgage</a></li>
-<li><a href="tax-calculator.html">Tax</a></li>
+<li><a href="compound-interest.html">See how compound interest grows your savings</a></li>
+<li><a href="mortgage-calculator.html">Plan how saving more affects your mortgage</a></li>
+<li><a href="tax-calculator.html">Calculate your after-tax income</a></li>
 </ul>
 </div>
 
 <section>
-<h2>How to reach your savings goal</h2>
-<p>Your required savings depend on time, returns, and your starting balance.</p>
+<h2>How much do you need to save each month?</h2>
+<p>
+Your required monthly savings depend on your goal, time horizon, and expected returns. The longer your timeframe, the less you need to contribute each month.
+</p>
+
+<h3>Why starting early matters</h3>
+<p>
+Time allows compound interest to significantly reduce how much you need to save.
+</p>
+
+<h3>How to reach your goal faster</h3>
+<ul>
+<li>Increase contributions</li>
+<li>Start earlier</li>
+<li>Earn higher returns (with risk)</li>
+</ul>
 </section>
 
+</div>
+
 <script>
-function calc(){
-let t=+target.value,c=+current.value,r=rate.value/100/12,n=years.value*12;
-let m=(t-c*Math.pow(1+r,n))/((Math.pow(1+r,n)-1)/r);
-monthly.innerText="$"+Math.round(m).toLocaleString();
+let chart;
+
+function calculate() {
+  let target = parseFloat(document.getElementById("target").value) || 0;
+  let current = parseFloat(document.getElementById("current").value) || 0;
+  let r = parseFloat(document.getElementById("rate").value) / 100 / 12;
+  let years = parseFloat(document.getElementById("years").value);
+  let n = years * 12;
+
+  let monthly;
+
+  if (r === 0) {
+    monthly = (target - current) / n;
+  } else {
+    monthly = (target - current * Math.pow(1 + r, n)) /
+              ((Math.pow(1 + r, n) - 1) / r);
+  }
+
+  monthly = Math.max(0, monthly);
+
+  let balance = current;
+  let totalContrib = current;
+
+  let labels = [];
+  let contribData = [];
+  let interestData = [];
+
+  for (let i = 0; i <= n; i++) {
+
+    if (i % 12 === 0) {
+      let interest = balance - totalContrib;
+
+      labels.push("Year " + (i / 12));
+      contribData.push(totalContrib);
+      interestData.push(interest);
+    }
+
+    balance = balance * (1 + r) + monthly;
+    totalContrib += monthly;
+  }
+
+  let contributions = totalContrib;
+  let interest = balance - contributions;
+
+  function format(x) {
+    return "$" + Math.round(x).toLocaleString();
+  }
+
+  document.getElementById("monthly").innerText = format(monthly);
+  document.getElementById("contributions").innerText = format(contributions);
+  document.getElementById("interest").innerText = format(interest);
+
+  document.getElementById("message").innerText =
+    "To reach your goal, you need to save " + format(monthly) + " per month";
+
+  renderChart(labels, contribData, interestData);
 }
-document.querySelectorAll("input").forEach(i=>i.oninput=calc);
-calc();
+
+function renderChart(labels, contributions, interest) {
+  const ctx = document.getElementById("chart").getContext("2d");
+
+  if (chart) chart.destroy();
+
+  chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "Contributions",
+          data: contributions,
+          fill: true
+        },
+        {
+          label: "Interest",
+          data: interest,
+          fill: true
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: {
+        mode: "index",
+        intersect: false
+      },
+      scales: {
+        y: {
+          stacked: true,
+          ticks: {
+            callback: value => "$" + value.toLocaleString()
+          }
+        }
+      }
+    }
+  });
+}
+
+document.querySelectorAll("input").forEach(el => {
+  el.addEventListener("input", calculate);
+});
+
+calculate();
 </script>
 
 </body>
