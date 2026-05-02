@@ -86,6 +86,35 @@
       font-weight: bold;
     }
 
+    /* Tooltip styling */
+    .info {
+      position: relative;
+      display: inline-block;
+      margin-left: 6px;
+      cursor: pointer;
+      color: #2563eb;
+      font-weight: bold;
+    }
+
+    .tooltip {
+      visibility: hidden;
+      width: 240px;
+      background: #111;
+      color: #fff;
+      text-align: left;
+      padding: 8px;
+      border-radius: 6px;
+      position: absolute;
+      top: 25px;
+      left: 0;
+      font-size: 12px;
+      z-index: 1;
+    }
+
+    .info:hover .tooltip {
+      visibility: visible;
+    }
+
     @media(max-width: 700px) {
       .grid {
         grid-template-columns: 1fr;
@@ -123,11 +152,16 @@
       </div>
 
       <div>
-        <label>Extra Repayment (per month) ($)</label>
+        <label>
+          Extra repayment (per month)
+          <span class="info">ⓘ
+            <span class="tooltip">
+              Optional extra amount added to your normal repayment.
+              This reduces your loan duration and total interest paid.
+            </span>
+          </span>
+        </label>
         <input id="extra" type="number" value="0">
-        <small style="color:#555;">
-Optional: extra amount you pay each month on top of your normal repayment
-</small>
       </div>
     </div>
 
