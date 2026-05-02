@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mortgage Calculator Australia | Numeroxa</title>
+<title>Mortgage Calculator Australia (2026) | Numeroxa</title>
 
 <style>
-body {margin:0;font-family:Arial;background:#f9fafb;}
+body {margin:0;font-family:Arial;background:#f9fafb;color:#111;}
 header {background:#0f172a;color:white;padding:20px;}
 .container {max-width:900px;margin:auto;padding:40px 20px;}
 .grid {display:grid;grid-template-columns:1fr 1fr;gap:20px;}
 input {width:100%;padding:10px;border-radius:6px;border:1px solid #ddd;}
 .result {margin-top:20px;background:#f1f5f9;padding:20px;border-radius:10px;}
+.big {font-size:24px;font-weight:bold;}
 section {margin-top:50px;}
 </style>
 </head>
@@ -23,20 +24,24 @@ section {margin-top:50px;}
 <h1>Mortgage Calculator</h1>
 
 <div class="grid">
-<input id="loan" type="number" value="600000">
-<input id="rate" type="number" value="6">
-<input id="years" type="number" value="30">
-<input id="extra" type="number" value="0">
+<div><label>Loan</label><input id="loan" type="number" value="600000"></div>
+<div><label>Rate %</label><input id="rate" type="number" value="6"></div>
+<div><label>Years</label><input id="years" type="number" value="30"></div>
+<div><label>Extra Monthly</label><input id="extra" type="number" value="0"></div>
 </div>
 
 <div class="result">
-<div>Monthly repayment: <b id="monthly"></b></div>
-<div>Total interest: <b id="interest"></b></div>
+<div>Monthly repayment</div>
+<div class="big" id="monthly"></div>
+<div>Total interest</div>
+<div id="interest"></div>
+<div>Loan duration</div>
+<div id="duration"></div>
 </div>
 
 <!-- RELATED -->
 <div style="margin-top:40px;background:#eef2ff;padding:20px;border-radius:10px;">
-<b>Related calculators:</b>
+<strong>Related calculators:</strong>
 <ul>
 <li><a href="compound-interest.html">Compound interest calculator</a></li>
 <li><a href="savings-goal.html">Savings goal calculator</a></li>
@@ -46,24 +51,40 @@ section {margin-top:50px;}
 
 <section>
 <h2>How mortgage repayments are calculated</h2>
-<p>Mortgage repayments combine principal and interest. Early payments are mostly interest.</p>
+<p>Mortgage repayments combine principal and interest. Early payments mostly cover interest, while later payments reduce principal faster.</p>
+<h3>Why extra repayments matter</h3>
+<p>Even small additional payments can significantly reduce interest and shorten your loan.</p>
 </section>
 
 </div>
 
 <script>
 function calculate(){
-let P=loan.value,r=rate.value/100/12,n=years.value*12;
-let m=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
-monthly.innerText="$"+Math.round(m).toLocaleString();
+let P=+loan.value;
+let r=+rate.value/100/12;
+let n=+years.value*12;
+let extra=+extra.value||0;
 
-let balance=P,totalInterest=0;
-for(let i=0;i<n;i++){
+let m=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+
+let balance=P,totalInterest=0,months=0;
+
+while(balance>0 && months<1000*12){
 let interest=balance*r;
-balance=balance+interest-m;
+let payment=m+extra;
+
+if(payment>balance+interest) payment=balance+interest;
+
+balance=balance+interest-payment;
 totalInterest+=interest;
+months++;
 }
-interest.innerText="$"+Math.round(totalInterest).toLocaleString();
+
+function f(x){return "$"+Math.round(x).toLocaleString();}
+
+monthly.innerText=f(m+extra);
+interest.innerText=f(totalInterest);
+duration.innerText=Math.floor(months/12)+"y "+(months%12)+"m";
 }
 document.querySelectorAll("input").forEach(i=>i.oninput=calculate);
 calculate();
