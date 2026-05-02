@@ -1,155 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Numeroxa — Smart Financial Calculators</title>
-  <meta name="description" content="Free financial calculators for mortgages, compound interest, and more." />
+<title>Numeroxa — Smart Financial Calculators</title>
+<meta name="description" content="Free financial calculators for Australia. Mortgage, compound interest, savings goals, and tax calculators.">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
-      background: #f9fafb;
-      color: #111;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
-    header {
-      background: #0f172a;
-      color: white;
-      padding: 20px 40px;
-      font-weight: bold;
-      font-size: 20px;
-    }
+<style>
+body {
+  margin:0;
+  font-family:Inter, Arial;
+  background:#f9fafb;
+  color:#111;
+}
 
-    .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 40px 20px;
-    }
+header {
+  background:#0f172a;
+  color:white;
+  padding:18px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
 
-    h1 {
-      font-size: 36px;
-      margin-bottom: 10px;
-      text-align: center;
-    }
+header a {
+  color:white;
+  text-decoration:none;
+  margin-left:20px;
+}
 
-    p.subtitle {
-      text-align: center;
-      color: #555;
-      margin-bottom: 40px;
-    }
+.logo {
+  font-size:20px;
+  font-weight:600;
+  line-height:1.1;
+}
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 20px;
-    }
+.tagline {
+  display:block;
+  font-size:11px;
+  opacity:0.7;
+}
 
-    .card {
-      background: white;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-      text-align: left;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
+.container {
+  max-width:1000px;
+  margin:auto;
+  padding:60px 20px;
+  text-align:center;
+}
 
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
-    }
+h1 {
+  font-size:36px;
+  margin-bottom:10px;
+}
 
-    .card h2 {
-      margin-top: 0;
-      font-size: 20px;
-    }
+p {
+  color:#555;
+  margin-bottom:40px;
+}
 
-    .card p {
-      color: #555;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
+.buttons {
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:15px;
+}
 
-    .button {
-      display: inline-block;
-      padding: 10px 16px;
-      background: #2563eb;
-      color: white;
-      text-decoration: none;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: bold;
-    }
+.button {
+  padding:14px 22px;
+  background:#2563eb;
+  color:white;
+  text-decoration:none;
+  border-radius:8px;
+  font-weight:bold;
+}
 
-    .button.green {
-      background: #10b981;
-    }
+.button.secondary {
+  background:#10b981;
+}
 
-    @media(max-width: 600px) {
-      h1 {
-        font-size: 28px;
-      }
-    }
-  </style>
+@media(max-width:700px){
+  .buttons {
+    flex-direction:column;
+    align-items:center;
+  }
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  Numeroxa — Smart Financial Calculators
+<a href="index.html" class="logo">
+  Numeroxa
+  <span class="tagline">Smart Financial Calculators</span>
+</a>
+<div>
+<a href="index.html">Home</a>
+<a href="au/mortgage-calculator.html">Mortgage</a>
+<a href="au/compound-interest.html">Compound</a>
+<a href="au/savings-goal.html">Savings</a>
+<a href="au/tax-calculator.html">Tax</a>
+</div>
 </header>
 
 <div class="container">
 
-  <h1>Smart Financial Calculators</h1>
-  <p class="subtitle">
-    Free tools to help you make better financial decisions
-  </p>
+<h1>Smart Financial Calculators</h1>
 
-  <div class="grid">
+<p>Simple, powerful tools to help you make better financial decisions.</p>
 
-    <!-- Mortgage Calculator -->
-    <div class="card">
-      <h2>Mortgage Calculator</h2>
-      <p>
-        Calculate repayments, interest, and see how extra payments reduce your loan term.
-      </p>
-      <a class="button" href="au/mortgage-calculator.html">
-        Open Calculator
-      </a>
-    </div>
+<div class="buttons">
 
-    <!-- Compound Interest Calculator -->
-    <div class="card">
-      <h2>Compound Interest Calculator</h2>
-      <p>
-        See how your savings grow over time with contributions and compound interest.
-      </p>
-      <a class="button green" href="au/compound-interest.html">
-        Open Calculator
-      </a>
-    </div>
-<div class="card">
-  <h2>Savings Goal Calculator</h2>
-  <p>
-    Work out how much you need to save each month to reach your target.
-  </p>
-  <a class="button" href="au/savings-goal.html">
-    Open Calculator
-  </a>
+<a class="button" href="au/mortgage-calculator.html">
+Mortgage Calculator
+</a>
+
+<a class="button secondary" href="au/compound-interest.html">
+Compound Interest Calculator
+</a>
+
+<a class="button" href="au/savings-goal.html">
+Savings Goal Calculator
+</a>
+
+<a class="button secondary" href="au/tax-calculator.html">
+Tax Calculator
+</a>
+
 </div>
-    <div class="card">
-  <h2>Tax Calculator</h2>
-  <p>
-    Estimate your income tax, Medicare levy, and take-home pay.
-  </p>
-  <a class="button" href="au/tax-calculator.html">
-    Open Calculator
-  </a>
-</div>
-  </div>
 
 </div>
 
