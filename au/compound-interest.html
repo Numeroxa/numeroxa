@@ -5,29 +5,120 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Compound Interest Calculator Australia (2026) | Numeroxa</title>
+<meta name="description" content="Calculate compound interest growth with regular contributions. Visualise investment growth over time.">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body {margin:0;font-family:Inter, Arial;background:#f9fafb;color:#111;}
-header {background:#0f172a;color:white;padding:18px 40px;display:flex;justify-content:space-between;align-items:center;}
-header a {color:white;text-decoration:none;margin-left:20px;}
-.logo {font-size:20px;font-weight:600;}
-.tagline {display:block;font-size:11px;opacity:0.7;}
-.container {max-width:1000px;margin:auto;padding:40px 20px;}
-.grid {display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-input {width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;}
-.result {margin-top:30px;background:white;padding:25px;border-radius:12px;}
-.big {font-size:28px;font-weight:bold;}
+body {
+  margin:0;
+  font-family:Inter, Arial;
+  background:#f9fafb;
+  color:#111;
+}
+
+header {
+  background:#0f172a;
+  color:white;
+  padding:18px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+header a {
+  color:white;
+  text-decoration:none;
+  margin-left:20px;
+}
+
+.logo {
+  font-size:20px;
+  font-weight:600;
+  line-height:1.1;
+}
+
+.tagline {
+  display:block;
+  font-size:11px;
+  opacity:0.7;
+}
+
+.container {
+  max-width:1000px;
+  margin:auto;
+  padding:40px 20px;
+}
+
+h1 {
+  font-size:32px;
+  margin-bottom:20px;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+label {
+  font-size:14px;
+  margin-bottom:5px;
+  display:block;
+}
+
+input {
+  width:100%;
+  padding:10px;
+  border-radius:6px;
+  border:1px solid #ddd;
+}
+
+.result {
+  margin-top:30px;
+  padding:25px;
+  background:white;
+  border-radius:12px;
+}
+
+.result-row {
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
+
+.big {
+  font-size:28px;
+  font-weight:bold;
+}
+
 canvas {margin-top:30px;}
+
+.related {
+  margin-top:40px;
+  padding:20px;
+  background:#eef2ff;
+  border-radius:10px;
+}
+
+section {
+  margin-top:50px;
+}
+
+@media(max-width:700px){
+  .grid {grid-template-columns:1fr;}
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<a href="../index.html" class="logo">Numeroxa<span class="tagline">Smart Financial Calculators</span></a>
+<a href="../index.html" class="logo">
+  Numeroxa
+  <span class="tagline">Smart Financial Calculators</span>
+</a>
 <div>
 <a href="../index.html">Home</a>
 <a href="mortgage-calculator.html">Mortgage</a>
@@ -41,19 +132,97 @@ canvas {margin-top:30px;}
 <h1>Compound Interest Calculator</h1>
 
 <div class="grid">
+
+<div>
+<label>Initial Investment ($)</label>
 <input id="principal" value="10000">
+</div>
+
+<div>
+<label>Monthly Contribution ($)</label>
 <input id="monthly" value="500">
+</div>
+
+<div>
+<label>Interest Rate (% p.a.)</label>
 <input id="rate" value="7">
+</div>
+
+<div>
+<label>Time Period (years)</label>
 <input id="years" value="20">
 </div>
 
+</div>
+
 <div class="result">
-<div class="big" id="final"></div>
-<div id="contributions"></div>
-<div id="interest"></div>
+
+<div class="result-row">
+<span>Final balance</span>
+<span class="big" id="final"></span>
+</div>
+
+<div class="result-row">
+<span>Total contributions</span>
+<span id="contributions"></span>
+</div>
+
+<div class="result-row">
+<span>Interest earned</span>
+<span id="interest"></span>
+</div>
+
 </div>
 
 <canvas id="chart"></canvas>
+
+<div class="related">
+<strong>Related calculators:</strong>
+<ul>
+<li><a href="mortgage-calculator.html">Mortgage calculator</a></li>
+<li><a href="savings-goal.html">Savings goal calculator</a></li>
+<li><a href="tax-calculator.html">Tax calculator</a></li>
+</ul>
+</div>
+
+<section>
+
+<h2>What is compound interest?</h2>
+<p>
+Compound interest means you earn returns not only on your original investment, but also on the returns that accumulate over time.
+</p>
+
+<h3>Why compounding matters</h3>
+<p>
+The longer you invest, the more powerful compounding becomes, as your investment growth accelerates.
+</p>
+
+<h3>How to maximise returns</h3>
+<ul>
+<li>Start early</li>
+<li>Invest consistently</li>
+<li>Reinvest earnings</li>
+</ul>
+
+</section>
+
+<section>
+
+<h2>Frequently asked questions</h2>
+
+<h3>What is compound interest?</h3>
+<p>It is interest earned on both your original investment and accumulated returns.</p>
+
+<h3>Why is compounding powerful?</h3>
+<p>Because returns generate further returns over time.</p>
+
+<h3>Do regular contributions help?</h3>
+<p>Yes, consistent investing significantly increases outcomes.</p>
+
+<h3>Does time matter?</h3>
+<p>Time is the most important factor in compounding growth.</p>
+
+</section>
 
 <script>
 let chart;
@@ -71,11 +240,13 @@ let totalContrib=P;
 let labels=[],contribData=[],interestData=[];
 
 for(let i=0;i<=n;i++){
+
 if(i%12===0){
 labels.push("Year "+i/12);
 contribData.push(totalContrib);
 interestData.push(balance-totalContrib);
 }
+
 balance=balance*(1+r)+PMT;
 totalContrib+=PMT;
 }
@@ -83,8 +254,8 @@ totalContrib+=PMT;
 function f(x){return "$"+Math.round(x).toLocaleString();}
 
 final.innerText=f(balance);
-contributions.innerText="Contributions: "+f(totalContrib);
-interest.innerText="Interest: "+f(balance-totalContrib);
+contributions.innerText=f(totalContrib);
+interest.innerText=f(balance-totalContrib);
 
 if(chart) chart.destroy();
 
@@ -120,9 +291,9 @@ scales:{y:{stacked:true}}
 }
 
 document.querySelectorAll("input").forEach(i=>i.oninput=calculate);
+
 calculate();
 </script>
 
-</div>
 </body>
 </html>
