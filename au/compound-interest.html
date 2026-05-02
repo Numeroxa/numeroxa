@@ -15,13 +15,13 @@
 <input id="y" value="20">
 
 <div id="result"></div>
-<canvas id="c"></canvas>
+<canvas id="chart"></canvas>
 
 <!-- RELATED -->
 <div>
 <b>Related calculators:</b>
 <ul>
-<li><a href="mortgage-calculator.html">Mortgage calculator</a></li>
+<li><a href="mortgage-calculator.html">Mortgage</a></li>
 <li><a href="savings-goal.html">Savings goal</a></li>
 <li><a href="tax-calculator.html">Tax calculator</a></li>
 </ul>
@@ -29,7 +29,7 @@
 
 <section>
 <h2>What is compound interest?</h2>
-<p>Compound interest means your money grows exponentially...</p>
+<p>Compound interest allows exponential growth over time.</p>
 </section>
 
 <script>
@@ -41,9 +41,10 @@ for(let i=0;i<n;i++){
 bal=bal*(1+rte)+PMT;
 if(i%12===0){data.push(bal);labels.push(i/12);}
 }
-result.innerText=Math.round(bal);
+result.innerText="$"+Math.round(bal).toLocaleString();
+
 if(chart)chart.destroy();
-chart=new Chart(c,{type:'line',data:{labels,datasets:[{data}]}})
+chart=new Chart(chart,{type:'line',data:{labels,datasets:[{data}]}})
 }
 document.querySelectorAll("input").forEach(i=>i.oninput=calc);
 calc();
