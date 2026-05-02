@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Mortgage Calculator Australia (2026) | Numeroxa</title>
+  <meta name="description" content="Calculate your mortgage repayments and total interest with this fast, accurate Australian mortgage calculator." />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+      background: #f9fafb;
+      color: #111;
+    }
+
+    header {
+      background: #0f172a;
+      color: white;
+      padding: 20px 40px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    p.sub {
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    .calculator {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      margin-bottom: 30px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    label {
+      font-size: 14px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+    }
+
+    .result {
+      margin-top: 25px;
+      padding: 20px;
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+
+    .result h2 {
+      margin: 0 0 10px;
+    }
+
+    .big {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .small {
+      color: #555;
+      font-size: 14px;
+    }
+
+    .info {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      margin-top: 30px;
+    }
+
+    @media(max-width: 700px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  Numeroxa — Smart Financial Calculators
+</header>
+
+<div class="container">
+
+  <h1>Mortgage Calculator (Australia)</h1>
+  <p class="sub">
+    Estimate your monthly repayments and total interest on your home loan.
+  </p>
+
+  <div class="calculator">
+
+    <div class="grid">
+      <div>
+        <label>Loan Amount (AUD)</label>
+        <input id="loan" type="number" value="600000" />
+      </div>
+
+      <div>
+        <label>Interest Rate (% p.a.)</label>
+        <input id="rate" type="number" value="6" step="0.01" />
+      </div>
+
+      <div>
+        <label>Loan Term (years)</label>
+        <input id="years" type="number" value="30" />
+      </div>
+
+      <div>
+        <label>Repayment Type</label>
+        <select id="type">
+          <option value="principal">Principal & Interest</option>
+          <option value="interest">Interest Only</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="result">
+      <h2>Estimated Repayment</h2>
+      <div class="big" id="monthly">$0</div>
+      <div class="small" id="total"></div>
+    </div>
+
+  </div>
+
+  <div class="info">
+    <h2>How this calculator works</h2>
+    <p>
+      This mortgage calculator estimates your repayments using standard loan amortisation formulas.
+      Results assume a constant interest rate over the loan term.
+    </p>
+
+    <p>
+      Your actual repayments may vary depending on fees, rate changes, and loan structure.
+    </p>
+  </div>
+
+</div>
+
+<script>
+function calculate() {
+  let loan = parseFloat(document.getElementById("loan").value);
+  let rate = parseFloat(document.getElementById("rate").value) / 100 / 12;
+  let months = parseFloat(document.getElementById("years").value) * 12;
+  let type = document.getElementById("type").value;
+
+  let monthly;
+
+  if (type === "interest") {
+    monthly = loan * rate;
+  } else {
+    monthly = loan * (rate * Math.pow(1 + rate, months)) /
+              (Math.pow(1 + rate, months) - 1);
+  }
+
+  let totalPaid = monthly * months;
+  let interest = totalPaid - loan;
+
+  document.getElementById("monthly").innerText =
+    "$" + monthly.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+  document.getElementById("total").innerText =
+    "Total interest: $" + interest.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+document.querySelectorAll("input, select").forEach(el => {
+  el.addEventListener("input", calculate);
+});
+
+calculate();
+</script>
+
+</body>
+</html>
