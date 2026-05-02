@@ -5,111 +5,119 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Savings Goal Calculator Australia (2026) | Numeroxa</title>
+<meta name="description" content="Calculate how much you need to save each month to reach your financial goal. Includes interest and growth visualisation.">
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
-  background: #f9fafb;
-  color: #111;
+  margin:0;
+  font-family:Inter, Arial;
+  background:#f9fafb;
+  color:#111;
 }
 
 header {
-  background: #0f172a;
-  color: white;
-  padding: 20px 40px;
-  font-weight: bold;
+  background:#0f172a;
+  color:white;
+  padding:18px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+header a {
+  color:white;
+  text-decoration:none;
+  margin-left:20px;
+}
+
+.logo {
+  font-size:20px;
+  font-weight:600;
+  letter-spacing:0.5px;
+  line-height:1.1;
+}
+
+.tagline {
+  display:block;
+  font-size:11px;
+  font-weight:400;
+  opacity:0.7;
 }
 
 .container {
-  max-width: 900px;
-  margin: auto;
-  padding: 40px 20px;
+  max-width:1000px;
+  margin:auto;
+  padding:40px 20px;
 }
 
 h1 {
-  font-size: 32px;
-  margin-bottom: 20px;
+  font-size:32px;
+  margin-bottom:20px;
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
 }
 
 label {
-  font-size: 14px;
-  margin-bottom: 5px;
-  display: block;
+  font-size:14px;
+  margin-bottom:5px;
+  display:block;
 }
 
 input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  font-size: 16px;
+  width:100%;
+  padding:10px;
+  border-radius:6px;
+  border:1px solid #ddd;
 }
 
 .result {
-  margin-top: 30px;
-  padding: 25px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-top:30px;
+  padding:25px;
+  background:white;
+  border-radius:12px;
 }
 
 .result-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.result-label {
-  color: #555;
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
 }
 
 .big {
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.section-title {
-  margin-top: 20px;
-  font-weight: bold;
-  font-size: 16px;
+  font-size:28px;
+  font-weight:bold;
 }
 
 .highlight {
-  margin-top: 15px;
-  padding: 15px;
-  background: #dbeafe;
-  border-radius: 8px;
-  font-weight: bold;
+  margin-top:15px;
+  padding:15px;
+  background:#dbeafe;
+  border-radius:8px;
+  font-weight:bold;
 }
 
-canvas {
-  margin-top: 30px;
-}
+canvas {margin-top:30px;}
 
 .related {
-  margin-top: 40px;
-  padding: 20px;
-  background: #eef2ff;
-  border-radius: 10px;
+  margin-top:40px;
+  padding:20px;
+  background:#eef2ff;
+  border-radius:10px;
 }
 
 section {
-  margin-top: 50px;
+  margin-top:50px;
 }
 
-@media(max-width: 700px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+@media(max-width:700px){
+  .grid {grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -117,7 +125,16 @@ section {
 <body>
 
 <header>
-Numeroxa — Smart Financial Calculators
+<a href="../index.html" class="logo">
+  Numeroxa
+  <span class="tagline">Smart Financial Calculators</span>
+</a>
+<div>
+<a href="../index.html">Home</a>
+<a href="mortgage-calculator.html">Mortgage</a>
+<a href="compound-interest.html">Compound</a>
+<a href="tax-calculator.html">Tax</a>
+</div>
 </header>
 
 <div class="container">
@@ -128,42 +145,40 @@ Numeroxa — Smart Financial Calculators
 
 <div>
 <label>Target Amount ($)</label>
-<input id="target" type="number" value="100000">
+<input id="target" value="100000">
 </div>
 
 <div>
 <label>Current Savings ($)</label>
-<input id="current" type="number" value="10000">
+<input id="current" value="10000">
 </div>
 
 <div>
 <label>Interest Rate (% p.a.)</label>
-<input id="rate" type="number" value="5">
+<input id="rate" value="5">
 </div>
 
 <div>
 <label>Time Period (years)</label>
-<input id="years" type="number" value="10">
+<input id="years" value="10">
 </div>
 
 </div>
 
 <div class="result">
 
-<div class="section-title">Savings Plan</div>
-
 <div class="result-row">
-<span class="result-label">Required monthly saving</span>
+<span>Required monthly saving</span>
 <span class="big" id="monthly"></span>
 </div>
 
 <div class="result-row">
-<span class="result-label">Total contributions</span>
+<span>Total contributions</span>
 <span id="contributions"></span>
 </div>
 
 <div class="result-row">
-<span class="result-label">Interest earned</span>
+<span>Interest earned</span>
 <span id="interest"></span>
 </div>
 
@@ -177,105 +192,58 @@ Numeroxa — Smart Financial Calculators
 <strong>Related calculators:</strong>
 <ul>
 <li><a href="compound-interest.html">See how compound interest grows your savings</a></li>
-<li><a href="mortgage-calculator.html">Plan how saving more affects your mortgage</a></li>
-<li><a href="tax-calculator.html">Calculate your after-tax income</a></li>
+<li><a href="mortgage-calculator.html">Compare saving vs paying off debt</a></li>
+<li><a href="tax-calculator.html">Estimate your after-tax income</a></li>
 </ul>
 </div>
 
 <section>
 <h2>How much should you save each month?</h2>
 <p>
-Your required monthly savings depend on your goal, timeframe, and expected returns. Longer timeframes significantly reduce the monthly amount required.
+Your required monthly savings depend on your goal, timeframe, and expected returns. Longer timeframes reduce the amount required.
 </p>
 
 <h3>Why starting early matters</h3>
 <p>
-Starting early allows compound interest to reduce how much you need to save each month.
+Starting early allows compound interest to significantly reduce how much you need to contribute.
 </p>
 
 <h3>Ways to reach your goal faster</h3>
 <ul>
-<li>Increase your contributions</li>
-<li>Extend your timeframe</li>
-<li>Earn higher returns (with appropriate risk)</li>
+<li>Increase contributions</li>
+<li>Extend timeframe</li>
+<li>Improve investment returns</li>
 </ul>
+</section>
+
 <section>
 
 <h2>Frequently asked questions</h2>
 
 <h3>How much should I save each month?</h3>
-<p>
-Your monthly savings depend on your goal, timeframe, and interest rate.
-</p>
-
-<h3>Is it better to save or invest?</h3>
-<p>
-Saving is safer but offers lower returns, while investing can grow your money faster but involves risk.
-</p>
+<p>It depends on your goal, timeframe, and interest rate.</p>
 
 <h3>What if I can’t reach my goal?</h3>
-<p>
-You can increase contributions, extend your timeframe, or adjust your target amount.
-</p>
+<p>You can increase contributions or extend your timeframe.</p>
 
-<h3>How much does interest help?</h3>
-<p>
-Interest can significantly reduce the amount you need to save over time.
-</p>
+<h3>Does interest make a big difference?</h3>
+<p>Yes, compounding significantly reduces required savings.</p>
 
-<h3>Should I start saving early?</h3>
-<p>
-Yes—starting early allows compounding to reduce the total effort required.
-</p>
+<h3>Should I start early?</h3>
+<p>Yes, starting early has the biggest impact.</p>
 
 </section>
 
 <script type="application/ld+json">
 {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "How much should I save each month?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Monthly savings depend on your target, timeframe, and expected returns."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is it better to save or invest?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Saving is safer but offers lower returns, while investing can grow wealth faster with higher risk."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What if I cannot reach my goal?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "You can increase contributions, extend your timeframe, or adjust your goal."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How much does interest help?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Interest significantly reduces the required savings over time through compounding."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Should I start saving early?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, starting early maximises compounding benefits and reduces effort required."
-      }
-    }
-  ]
+"@context":"https://schema.org",
+"@type":"FAQPage",
+"mainEntity":[
+{"@type":"Question","name":"How much should I save each month?","acceptedAnswer":{"@type":"Answer","text":"Depends on your goal, timeframe, and returns."}},
+{"@type":"Question","name":"What if I cannot reach my goal?","acceptedAnswer":{"@type":"Answer","text":"Adjust contributions or timeframe."}},
+{"@type":"Question","name":"Does interest help?","acceptedAnswer":{"@type":"Answer","text":"Yes, compounding reduces required savings."}},
+{"@type":"Question","name":"Should I start early?","acceptedAnswer":{"@type":"Answer","text":"Yes, starting early maximises compounding benefits."}}
+]
 }
 </script>
 
@@ -284,100 +252,70 @@ Yes—starting early allows compounding to reduce the total effort required.
 <script>
 let chart;
 
-function calculate() {
-  let target = parseFloat(document.getElementById("target").value) || 0;
-  let current = parseFloat(document.getElementById("current").value) || 0;
-  let r = parseFloat(document.getElementById("rate").value) / 100 / 12;
-  let years = parseFloat(document.getElementById("years").value);
-  let n = years * 12;
+function calculate(){
 
-  let monthly;
+let targetVal=+target.value;
+let currentVal=+current.value;
+let r=rate.value/100/12;
+let n=years.value*12;
 
-  if (r === 0) {
-    monthly = (target - current) / n;
-  } else {
-    monthly = (target - current * Math.pow(1 + r, n)) /
-              ((Math.pow(1 + r, n) - 1) / r);
-  }
+let monthly;
 
-  monthly = Math.max(0, monthly);
-
-  let balance = current;
-  let totalContrib = current;
-
-  let labels = [];
-  let contribData = [];
-  let interestData = [];
-
-  for (let i = 0; i <= n; i++) {
-
-    if (i % 12 === 0) {
-      let interest = balance - totalContrib;
-
-      labels.push("Year " + (i / 12));
-      contribData.push(totalContrib);
-      interestData.push(interest);
-    }
-
-    balance = balance * (1 + r) + monthly;
-    totalContrib += monthly;
-  }
-
-  let contributions = totalContrib;
-  let interest = balance - contributions;
-
-  function f(x){ return "$" + Math.round(x).toLocaleString(); }
-
-  document.getElementById("monthly").innerText = f(monthly);
-  document.getElementById("contributions").innerText = f(contributions);
-  document.getElementById("interest").innerText = f(interest);
-
-  document.getElementById("message").innerText =
-    "To reach your goal, you need to save " + f(monthly) + " per month.";
-
-  renderChart(labels, contribData, interestData);
+if(r===0){
+monthly=(targetVal-currentVal)/n;
+}else{
+monthly=(targetVal-currentVal*Math.pow(1+r,n))/((Math.pow(1+r,n)-1)/r);
 }
 
-function renderChart(labels, contributions, interest) {
-  const ctx = document.getElementById("chart").getContext("2d");
+monthly=Math.max(0,monthly);
 
-  if (chart) chart.destroy();
+let balance=currentVal;
+let totalContrib=currentVal;
 
-  chart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: "Contributions",
-          data: contributions,
-          fill: true
-        },
-        {
-          label: "Interest",
-          data: interest,
-          fill: true
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      interaction: { mode: "index", intersect: false },
-      scales: {
-        y: {
-          stacked: true,
-          ticks: {
-            callback: value => "$" + value.toLocaleString()
-          }
-        }
-      }
-    }
-  });
+let labels=[];
+let contribData=[];
+let interestData=[];
+
+for(let i=0;i<=n;i++){
+
+if(i%12===0){
+labels.push("Year "+i/12);
+contribData.push(totalContrib);
+interestData.push(balance-totalContrib);
 }
 
-document.querySelectorAll("input").forEach(el => {
-  el.addEventListener("input", calculate);
+balance=balance*(1+r)+monthly;
+totalContrib+=monthly;
+}
+
+function f(x){return "$"+Math.round(x).toLocaleString();}
+
+document.getElementById("monthly").innerText=f(monthly);
+document.getElementById("contributions").innerText=f(totalContrib);
+document.getElementById("interest").innerText=f(balance-totalContrib);
+
+document.getElementById("message").innerText=
+"To reach your goal, save "+f(monthly)+" per month.";
+
+if(chart) chart.destroy();
+
+chart=new Chart(document.getElementById("chart"),{
+type:"line",
+data:{
+labels:labels,
+datasets:[
+{label:"Contributions",data:contribData},
+{label:"Interest",data:interestData}
+]
+},
+options:{
+responsive:true,
+interaction:{mode:"index",intersect:false}
+}
 });
+}
+
+document.querySelectorAll("input").forEach(i=>i.oninput=calculate);
 
 calculate();
 </script>
