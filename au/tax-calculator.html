@@ -6,7 +6,6 @@
 
   <title>Income Tax Calculator Australia (2026) | Numeroxa</title>
 
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
@@ -42,6 +41,12 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
 
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
     label {
       font-size: 14px;
       display: block;
@@ -54,10 +59,10 @@
       border-radius: 6px;
       border: 1px solid #ddd;
       font-size: 16px;
-      margin-bottom: 20px;
     }
 
     .result {
+      margin-top: 25px;
       padding: 20px;
       background: #f1f5f9;
       border-radius: 10px;
@@ -67,12 +72,6 @@
       font-size: 26px;
       font-weight: bold;
       margin-bottom: 10px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
     }
 
     canvas {
@@ -99,10 +98,27 @@
 
   <div class="calculator">
 
-    <label>Annual Income ($)</label>
-    <input id="income" type="number" value="80000">
+    <div class="grid">
+      <div>
+        <label>Annual Income ($)</label>
+        <input id="income" type="number" value="80000">
+      </div>
+
+      <div>
+        <label>Deductions ($)</label>
+        <input id="deductions" type="number" value="0">
+      </div>
+
+      <div>
+        <label>Include HECS/HELP</label>
+        <input id="hecs" type="checkbox">
+      </div>
+    </div>
 
     <div class="result">
+
+      <div>Taxable income</div>
+      <div id="taxable"></div>
 
       <div>Total tax</div>
       <div class="big" id="tax"></div>
@@ -110,22 +126,23 @@
       <div>Medicare levy</div>
       <div id="medicare"></div>
 
+      <div>HECS repayment</div>
+      <div id="hecsOut"></div>
+
       <div>Total payable</div>
       <div id="total"></div>
 
       <div>Net income</div>
       <div id="net"></div>
 
-      <div class="grid">
-        <div>
-          <div>Monthly take-home</div>
-          <div id="monthly"></div>
-        </div>
-        <div>
-          <div>Weekly take-home</div>
-          <div id="weekly"></div>
-        </div>
-      </div>
+      <div>Superannuation (11%)</div>
+      <div id="super"></div>
+
+      <div>Monthly take-home</div>
+      <div id="monthly"></div>
+
+      <div>Weekly take-home</div>
+      <div id="weekly"></div>
 
       <div>Effective tax rate</div>
       <div id="rate"></div>
@@ -163,26 +180,39 @@ function calculateMedicare(income) {
   return income * 0.02;
 }
 
+function calculateHECS(income) {
+  if (income < 50000) return 0;
+  return income * 0.05; // simplified
+}
+
 function calculate() {
   let income = parseFloat(document.getElementById("income").value) || 0;
+  let deductions = parseFloat(document.getElementById("deductions").value) || 0;
+  let useHECS = document.getElementById("hecs").checked;
 
-  let tax = calculateTax(income);
-  let lito = calculateLITO(income);
-  let medicare = calculateMedicare(income);
+  let taxable = Math.max(0, income - deductions);
+
+  let tax = calculateTax(taxable);
+  let lito = calculateLITO(taxable);
+  let medicare = calculateMedicare(taxable);
+  let hecs = useHECS ? calculateHECS(taxable) : 0;
 
   let totalTax = Math.max(0, tax - lito);
-  let total = totalTax + medicare;
+  let total = totalTax + medicare + hecs;
   let net = income - total;
+  let superannuation = income * 0.11;
 
   function format(x) {
     return "$" + Math.round(x).toLocaleString();
   }
 
+  document.getElementById("taxable").innerText = format(taxable);
   document.getElementById("tax").innerText = format(totalTax);
   document.getElementById("medicare").innerText = format(medicare);
+  document.getElementById("hecsOut").innerText = format(hecs);
   document.getElementById("total").innerText = format(total);
   document.getElementById("net").innerText = format(net);
-
+  document.getElementById("super").innerText = format(superannuation);
   document.getElementById("monthly").innerText = format(net / 12);
   document.getElementById("weekly").innerText = format(net / 52);
 
@@ -202,29 +232,14 @@ function renderChart(net, tax) {
     data: {
       labels: ["Income Breakdown"],
       datasets: [
-        {
-          label: "Net Income",
-          data: [net],
-          borderWidth: 1
-        },
-        {
-          label: "Tax + Medicare",
-          data: [tax],
-          borderWidth: 1
-        }
+        { label: "Net Income", data: [net] },
+        { label: "Tax & Deductions", data: [tax] }
       ]
     },
     options: {
       responsive: true,
-      plugins: {
-        legend: {
-          position: "top"
-        }
-      },
       scales: {
-        x: {
-          stacked: true
-        },
+        x: { stacked: true },
         y: {
           stacked: true,
           ticks: {
@@ -236,7 +251,9 @@ function renderChart(net, tax) {
   });
 }
 
-document.getElementById("income").addEventListener("input", calculate);
+document.querySelectorAll("input").forEach(el => {
+  el.addEventListener("input", calculate);
+});
 
 calculate();
 </script>
