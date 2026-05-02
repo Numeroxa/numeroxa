@@ -11,14 +11,16 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
   background: #f9fafb;
+  color: #111;
 }
 
 header {
   background: #0f172a;
   color: white;
-  padding: 20px;
+  padding: 20px 40px;
+  font-weight: bold;
 }
 
 .container {
@@ -27,10 +29,21 @@ header {
   padding: 40px 20px;
 }
 
+h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+}
+
+label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  display: block;
 }
 
 input {
@@ -38,26 +51,57 @@ input {
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ddd;
+  font-size: 16px;
 }
 
 .result {
-  margin-top: 20px;
-  padding: 20px;
-  background: #f1f5f9;
-  border-radius: 10px;
+  margin-top: 30px;
+  padding: 25px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.result-label {
+  color: #555;
 }
 
 .big {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
+}
+
+.section-title {
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 16px;
 }
 
 canvas {
   margin-top: 30px;
 }
 
+.related {
+  margin-top: 40px;
+  padding: 20px;
+  background: #eef2ff;
+  border-radius: 10px;
+}
+
 section {
   margin-top: 50px;
+}
+
+@media(max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
 </head>
@@ -73,6 +117,7 @@ Numeroxa — Smart Financial Calculators
 <h1>Compound Interest Calculator</h1>
 
 <div class="grid">
+
 <div>
 <label>Initial Investment ($)</label>
 <input id="principal" type="number" value="10000">
@@ -92,47 +137,57 @@ Numeroxa — Smart Financial Calculators
 <label>Time Period (years)</label>
 <input id="years" type="number" value="20">
 </div>
+
 </div>
 
 <div class="result">
-<div>Final balance</div>
-<div class="big" id="final"></div>
 
-<div>Total contributions</div>
-<div id="contributions"></div>
+<div class="section-title">Results</div>
 
-<div>Interest earned</div>
-<div id="interest"></div>
+<div class="result-row">
+<span class="result-label">Final balance</span>
+<span class="big" id="final"></span>
+</div>
+
+<div class="result-row">
+<span class="result-label">Total contributions</span>
+<span id="contributions"></span>
+</div>
+
+<div class="result-row">
+<span class="result-label">Interest earned</span>
+<span id="interest"></span>
+</div>
+
 </div>
 
 <canvas id="chart"></canvas>
 
-<!-- RELATED -->
-<div style="margin-top:40px; background:#eef2ff; padding:20px; border-radius:10px;">
+<div class="related">
 <strong>Related calculators:</strong>
 <ul>
-<li><a href="mortgage-calculator.html">Mortgage calculator</a></li>
-<li><a href="savings-goal.html">Savings goal calculator</a></li>
-<li><a href="tax-calculator.html">Tax calculator</a></li>
+<li><a href="mortgage-calculator.html">Compare investing vs paying off your mortgage</a></li>
+<li><a href="savings-goal.html">Calculate how much you need to save monthly</a></li>
+<li><a href="tax-calculator.html">Estimate your after-tax income</a></li>
 </ul>
 </div>
 
 <section>
 <h2>What is compound interest?</h2>
 <p>
-Compound interest allows your investment to grow exponentially by earning returns on both your initial investment and accumulated interest over time.
+Compound interest allows your money to grow exponentially by earning returns on both your initial investment and accumulated interest.
 </p>
 
-<h3>Why time matters</h3>
+<h3>Why time is critical</h3>
 <p>
-The longer your money remains invested, the more powerful compounding becomes.
+The longer you invest, the more powerful compounding becomes.
 </p>
 
-<h3>How to maximise returns</h3>
+<h3>How to maximise growth</h3>
 <ul>
 <li>Start early</li>
-<li>Invest regularly</li>
-<li>Reinvest earnings</li>
+<li>Contribute regularly</li>
+<li>Reinvest returns</li>
 </ul>
 </section>
 
@@ -173,13 +228,11 @@ function calculate() {
   let contributions = totalContrib;
   let interest = finalBalance - contributions;
 
-  function format(x) {
-    return "$" + Math.round(x).toLocaleString();
-  }
+  function f(x){ return "$" + Math.round(x).toLocaleString(); }
 
-  document.getElementById("final").innerText = format(finalBalance);
-  document.getElementById("contributions").innerText = format(contributions);
-  document.getElementById("interest").innerText = format(interest);
+  document.getElementById("final").innerText = f(finalBalance);
+  document.getElementById("contributions").innerText = f(contributions);
+  document.getElementById("interest").innerText = f(interest);
 
   renderChart(labels, contribData, interestData);
 }
@@ -208,10 +261,7 @@ function renderChart(labels, contributions, interest) {
     },
     options: {
       responsive: true,
-      interaction: {
-        mode: "index",
-        intersect: false
-      },
+      interaction: { mode: "index", intersect: false },
       scales: {
         y: {
           stacked: true,
