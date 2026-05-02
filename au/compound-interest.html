@@ -6,6 +6,9 @@
 
   <title>Compound Interest Calculator Australia (2026) | Numeroxa</title>
 
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     body {
       margin: 0;
@@ -80,6 +83,10 @@
       font-weight: bold;
     }
 
+    canvas {
+      margin-top: 30px;
+    }
+
     @media(max-width: 700px) {
       .grid {
         grid-template-columns: 1fr;
@@ -135,20 +142,31 @@
       <div class="highlight" id="growth"></div>
     </div>
 
+    <canvas id="chart"></canvas>
+
   </div>
 
 </div>
 
 <script>
+let chart;
+
 function calculate() {
   let P = parseFloat(document.getElementById("principal").value) || 0;
   let PMT = parseFloat(document.getElementById("monthly").value) || 0;
   let r = parseFloat(document.getElementById("rate").value) / 100 / 12;
-  let n = parseFloat(document.getElementById("years").value) * 12;
+  let years = parseFloat(document.getElementById("years").value);
+  let n = years * 12;
 
   let balance = P;
+  let data = [];
+  let labels = [];
 
-  for (let i = 0; i < n; i++) {
+  for (let i = 0; i <= n; i++) {
+    if (i % 12 === 0) {
+      data.push(balance);
+      labels.push("Year " + (i / 12));
+    }
     balance = balance * (1 + r) + PMT;
   }
 
@@ -167,6 +185,42 @@ function calculate() {
     interest > 0
       ? "Your money grows by " + format(interest) + " from compound interest"
       : "";
+
+  renderChart(labels, data);
+}
+
+function renderChart(labels, data) {
+  const ctx = document.getElementById("chart").getContext("2d");
+
+  if (chart) {
+    chart.destroy();
+  }
+
+  chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Balance Growth",
+        data: data,
+        borderWidth: 2,
+        fill: false
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: {
+          ticks: {
+            callback: value => "$" + value.toLocaleString()
+          }
+        }
+      }
+    }
+  });
 }
 
 document.querySelectorAll("input").forEach(el => {
