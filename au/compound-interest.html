@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  <title>Mortgage Calculator Australia (2026) | Numeroxa</title>
-  <meta name="description" content="Calculate your mortgage repayments, interest, and savings from extra repayments." />
+  <title>Compound Interest Calculator Australia (2026) | Numeroxa</title>
 
   <style>
     body {
@@ -67,10 +66,6 @@
       border-radius: 10px;
     }
 
-    .result div {
-      margin-bottom: 8px;
-    }
-
     .big {
       font-size: 26px;
       font-weight: bold;
@@ -80,38 +75,9 @@
     .highlight {
       margin-top: 15px;
       padding: 15px;
-      background: #dbeafe;
+      background: #d1fae5;
       border-radius: 8px;
       font-weight: bold;
-    }
-
-    /* Tooltip styling */
-    .info {
-      position: relative;
-      display: inline-block;
-      margin-left: 6px;
-      cursor: pointer;
-      color: #2563eb;
-      font-weight: bold;
-    }
-
-    .tooltip {
-      visibility: hidden;
-      width: 240px;
-      background: #111;
-      color: #fff;
-      text-align: left;
-      padding: 8px;
-      border-radius: 6px;
-      position: absolute;
-      top: 25px;
-      left: 0;
-      font-size: 12px;
-      z-index: 1;
-    }
-
-    .info:hover .tooltip {
-      visibility: visible;
     }
 
     @media(max-width: 700px) {
@@ -130,54 +96,43 @@
 
 <div class="container">
 
-  <h1>Mortgage Calculator (Australia)</h1>
+  <h1>Compound Interest Calculator</h1>
 
   <div class="calculator">
 
     <div class="grid">
       <div>
-        <label>Loan Amount ($)</label>
-        <input id="loan" type="number" value="600000">
+        <label>Initial Investment ($)</label>
+        <input id="principal" type="number" value="10000">
+      </div>
+
+      <div>
+        <label>Monthly Contribution ($)</label>
+        <input id="monthly" type="number" value="500">
       </div>
 
       <div>
         <label>Interest Rate (% p.a.)</label>
-        <input id="rate" type="number" value="6" step="0.01">
+        <input id="rate" type="number" value="7" step="0.01">
       </div>
 
       <div>
-        <label>Loan Term (years)</label>
-        <input id="years" type="number" value="30">
-      </div>
-
-      <div>
-        <label>
-          Extra repayment (per month)
-          <span class="info">ⓘ
-            <span class="tooltip">
-              Optional extra amount added to your normal repayment.
-              This reduces your loan duration and total interest paid.
-            </span>
-          </span>
-        </label>
-        <input id="extra" type="number" value="0">
+        <label>Time Period (years)</label>
+        <input id="years" type="number" value="20">
       </div>
     </div>
 
     <div class="result">
-      <div>Monthly repayment</div>
-      <div class="big" id="monthly"></div>
+      <div>Final balance</div>
+      <div class="big" id="final"></div>
 
-      <div>Total interest</div>
+      <div>Total contributions</div>
+      <div id="contributions"></div>
+
+      <div>Interest earned</div>
       <div id="interest"></div>
 
-      <div>Interest saved</div>
-      <div id="saved"></div>
-
-      <div>Loan duration</div>
-      <div id="duration"></div>
-
-      <div class="highlight" id="yearsSaved"></div>
+      <div class="highlight" id="growth"></div>
     </div>
 
   </div>
@@ -185,66 +140,32 @@
 </div>
 
 <script>
-function calculateLoan(loan, rate, months, extra) {
-  let balance = loan;
-  let totalInterest = 0;
-  let monthCount = 0;
-
-  let baseMonthly = loan * (rate * Math.pow(1 + rate, months)) /
-                    (Math.pow(1 + rate, months) - 1);
-
-  while (balance > 0 && monthCount < 1000 * 12) {
-    let interest = balance * rate;
-    let payment = baseMonthly + extra;
-
-    if (payment > balance + interest) {
-      payment = balance + interest;
-    }
-
-    balance = balance + interest - payment;
-    totalInterest += interest;
-    monthCount++;
-  }
-
-  return { totalInterest, monthCount, baseMonthly };
-}
-
 function calculate() {
-  let loan = parseFloat(document.getElementById("loan").value);
-  let rate = parseFloat(document.getElementById("rate").value) / 100 / 12;
-  let months = parseFloat(document.getElementById("years").value) * 12;
-  let extra = parseFloat(document.getElementById("extra").value) || 0;
+  let P = parseFloat(document.getElementById("principal").value) || 0;
+  let PMT = parseFloat(document.getElementById("monthly").value) || 0;
+  let r = parseFloat(document.getElementById("rate").value) / 100 / 12;
+  let n = parseFloat(document.getElementById("years").value) * 12;
 
-  let normal = calculateLoan(loan, rate, months, 0);
-  let extraPay = calculateLoan(loan, rate, months, extra);
+  let balance = P;
 
-  function format(n) {
-    return "$" + Math.round(n).toLocaleString();
+  for (let i = 0; i < n; i++) {
+    balance = balance * (1 + r) + PMT;
   }
 
-  function formatYears(months) {
-    let y = Math.floor(months / 12);
-    let m = months % 12;
-    return y + "y " + m + "m";
+  let contributions = P + (PMT * n);
+  let interest = balance - contributions;
+
+  function format(x) {
+    return "$" + Math.round(x).toLocaleString();
   }
 
-  let savedMonths = normal.monthCount - extraPay.monthCount;
+  document.getElementById("final").innerText = format(balance);
+  document.getElementById("contributions").innerText = format(contributions);
+  document.getElementById("interest").innerText = format(interest);
 
-  document.getElementById("monthly").innerText =
-    format(extraPay.baseMonthly + extra);
-
-  document.getElementById("interest").innerText =
-    format(extraPay.totalInterest);
-
-  document.getElementById("saved").innerText =
-    format(normal.totalInterest - extraPay.totalInterest);
-
-  document.getElementById("duration").innerText =
-    formatYears(extraPay.monthCount);
-
-  document.getElementById("yearsSaved").innerText =
-    savedMonths > 0
-      ? "You will pay off your loan " + formatYears(savedMonths) + " earlier"
+  document.getElementById("growth").innerText =
+    interest > 0
+      ? "Your money grows by " + format(interest) + " from compound interest"
       : "";
 }
 
