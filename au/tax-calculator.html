@@ -53,7 +53,7 @@
       margin-bottom: 5px;
     }
 
-    input {
+    input, select {
       width: 100%;
       padding: 10px;
       border-radius: 6px;
@@ -76,6 +76,12 @@
 
     canvas {
       margin-top: 30px;
+    }
+
+    small {
+      display: block;
+      margin-top: 10px;
+      color: #555;
     }
 
     @media(max-width: 700px) {
@@ -107,6 +113,14 @@
       <div>
         <label>Deductions ($)</label>
         <input id="deductions" type="number" value="0">
+      </div>
+
+      <div>
+        <label>Tax Residency</label>
+        <select id="resident">
+          <option value="resident">Resident</option>
+          <option value="nonresident">Non-resident</option>
+        </select>
       </div>
 
       <div>
@@ -147,6 +161,10 @@
       <div>Effective tax rate</div>
       <div id="rate"></div>
 
+      <small>
+        Estimates based on standard Australian tax rules. Individual circumstances may vary.
+      </small>
+
     </div>
 
     <canvas id="chart"></canvas>
@@ -158,7 +176,13 @@
 <script>
 let chart;
 
-function calculateTax(income) {
+function calculateTax(income, isResident) {
+  if (!isResident) {
+    if (income <= 120000) return income * 0.325;
+    if (income <= 180000) return 39000 + (income - 120000) * 0.37;
+    return 61200 + (income - 180000) * 0.45;
+  }
+
   if (income <= 18200) return 0;
   if (income <= 45000) return (income - 18200) * 0.16;
   if (income <= 135000) return 4288 + (income - 45000) * 0.30;
@@ -182,19 +206,26 @@ function calculateMedicare(income) {
 
 function calculateHECS(income) {
   if (income < 50000) return 0;
-  return income * 0.05; // simplified
+  if (income < 60000) return income * 0.01;
+  if (income < 70000) return income * 0.02;
+  if (income < 80000) return income * 0.03;
+  if (income < 90000) return income * 0.04;
+  if (income < 100000) return income * 0.05;
+  if (income < 120000) return income * 0.07;
+  return income * 0.10;
 }
 
 function calculate() {
   let income = parseFloat(document.getElementById("income").value) || 0;
   let deductions = parseFloat(document.getElementById("deductions").value) || 0;
+  let isResident = document.getElementById("resident").value === "resident";
   let useHECS = document.getElementById("hecs").checked;
 
   let taxable = Math.max(0, income - deductions);
 
-  let tax = calculateTax(taxable);
-  let lito = calculateLITO(taxable);
-  let medicare = calculateMedicare(taxable);
+  let tax = calculateTax(taxable, isResident);
+  let lito = isResident ? calculateLITO(taxable) : 0;
+  let medicare = isResident ? calculateMedicare(taxable) : 0;
   let hecs = useHECS ? calculateHECS(taxable) : 0;
 
   let totalTax = Math.max(0, tax - lito);
@@ -251,7 +282,7 @@ function renderChart(net, tax) {
   });
 }
 
-document.querySelectorAll("input").forEach(el => {
+document.querySelectorAll("input, select").forEach(el => {
   el.addEventListener("input", calculate);
 });
 
