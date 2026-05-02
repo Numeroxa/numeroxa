@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Mortgage Calculator Australia (2026) | Numeroxa</title>
+  <meta name="description" content="Calculate your mortgage repayments, interest, and savings from extra repayments." />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+      background: #f9fafb;
+      color: #111;
+    }
+
+    header {
+      background: #0f172a;
+      color: white;
+      padding: 20px 40px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .calculator {
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    label {
+      font-size: 14px;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+    }
+
+    .result {
+      margin-top: 25px;
+      padding: 20px;
+      background: #f1f5f9;
+      border-radius: 10px;
+    }
+
+    .result div {
+      margin-bottom: 8px;
+    }
+
+    .big {
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .highlight {
+      margin-top: 15px;
+      padding: 15px;
+      background: #dbeafe;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    /* Tooltip styling */
+    .info {
+      position: relative;
+      display: inline-block;
+      margin-left: 6px;
+      cursor: pointer;
+      color: #2563eb;
+      font-weight: bold;
+    }
+
+    .tooltip {
+      visibility: hidden;
+      width: 240px;
+      background: #111;
+      color: #fff;
+      text-align: left;
+      padding: 8px;
+      border-radius: 6px;
+      position: absolute;
+      top: 25px;
+      left: 0;
+      font-size: 12px;
+      z-index: 1;
+    }
+
+    .info:hover .tooltip {
+      visibility: visible;
+    }
+
+    @media(max-width: 700px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  Numeroxa — Smart Financial Calculators
+</header>
+
+<div class="container">
+
+  <h1>Mortgage Calculator (Australia)</h1>
+
+  <div class="calculator">
+
+    <div class="grid">
+      <div>
+        <label>Loan Amount ($)</label>
+        <input id="loan" type="number" value="600000">
+      </div>
+
+      <div>
+        <label>Interest Rate (% p.a.)</label>
+        <input id="rate" type="number" value="6" step="0.01">
+      </div>
+
+      <div>
+        <label>Loan Term (years)</label>
+        <input id="years" type="number" value="30">
+      </div>
+
+      <div>
+        <label>
+          Extra repayment (per month)
+          <span class="info">ⓘ
+            <span class="tooltip">
+              Optional extra amount added to your normal repayment.
+              This reduces your loan duration and total interest paid.
+            </span>
+          </span>
+        </label>
+        <input id="extra" type="number" value="0">
+      </div>
+    </div>
+
+    <div class="result">
+      <div>Monthly repayment</div>
+      <div class="big" id="monthly"></div>
+
+      <div>Total interest</div>
+      <div id="interest"></div>
+
+      <div>Interest saved</div>
+      <div id="saved"></div>
+
+      <div>Loan duration</div>
+      <div id="duration"></div>
+
+      <div class="highlight" id="yearsSaved"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+function calculateLoan(loan, rate, months, extra) {
+  let balance = loan;
+  let totalInterest = 0;
+  let monthCount = 0;
+
+  let baseMonthly = loan * (rate * Math.pow(1 + rate, months)) /
+                    (Math.pow(1 + rate, months) - 1);
+
+  while (balance > 0 && monthCount < 1000 * 12) {
+    let interest = balance * rate;
+    let payment = baseMonthly + extra;
+
+    if (payment > balance + interest) {
+      payment = balance + interest;
+    }
+
+    balance = balance + interest - payment;
+    totalInterest += interest;
+    monthCount++;
+  }
+
+  return { totalInterest, monthCount, baseMonthly };
+}
+
+function calculate() {
+  let loan = parseFloat(document.getElementById("loan").value);
+  let rate = parseFloat(document.getElementById("rate").value) / 100 / 12;
+  let months = parseFloat(document.getElementById("years").value) * 12;
+  let extra = parseFloat(document.getElementById("extra").value) || 0;
+
+  let normal = calculateLoan(loan, rate, months, 0);
+  let extraPay = calculateLoan(loan, rate, months, extra);
+
+  function format(n) {
+    return "$" + Math.round(n).toLocaleString();
+  }
+
+  function formatYears(months) {
+    let y = Math.floor(months / 12);
+    let m = months % 12;
+    return y + "y " + m + "m";
+  }
+
+  let savedMonths = normal.monthCount - extraPay.monthCount;
+
+  document.getElementById("monthly").innerText =
+    format(extraPay.baseMonthly + extra);
+
+  document.getElementById("interest").innerText =
+    format(extraPay.totalInterest);
+
+  document.getElementById("saved").innerText =
+    format(normal.totalInterest - extraPay.totalInterest);
+
+  document.getElementById("duration").innerText =
+    formatYears(extraPay.monthCount);
+
+  document.getElementById("yearsSaved").innerText =
+    savedMonths > 0
+      ? "You will pay off your loan " + formatYears(savedMonths) + " earlier"
+      : "";
+}
+
+document.querySelectorAll("input").forEach(el => {
+  el.addEventListener("input", calculate);
+});
+
+calculate();
+</script>
+
+</body>
+</html>
