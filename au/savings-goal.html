@@ -2,10 +2,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Savings Goal Calculator</title>
+<title>Savings Goal Calculator | Numeroxa</title>
 </head>
 
 <body>
+
 <h1>Savings Goal Calculator</h1>
 
 <input id="target" value="100000">
@@ -16,8 +17,8 @@
 <div id="monthly"></div>
 
 <!-- RELATED -->
-<div>
-<b>Related calculators:</b>
+<div style="margin-top:40px;background:#eef2ff;padding:20px;border-radius:10px;">
+<strong>Related calculators:</strong>
 <ul>
 <li><a href="compound-interest.html">Compound interest</a></li>
 <li><a href="mortgage-calculator.html">Mortgage</a></li>
@@ -27,17 +28,18 @@
 
 <section>
 <h2>How to reach your savings goal</h2>
-<p>Your monthly savings depend on time and interest.</p>
+<p>Your required savings depend on time, returns, and your starting balance.</p>
 </section>
 
 <script>
 function calc(){
-let t=target.value,c=current.value,r=rate.value/100/12,n=years.value*12;
+let t=+target.value,c=+current.value,r=rate.value/100/12,n=years.value*12;
 let m=(t-c*Math.pow(1+r,n))/((Math.pow(1+r,n)-1)/r);
 monthly.innerText="$"+Math.round(m).toLocaleString();
 }
 document.querySelectorAll("input").forEach(i=>i.oninput=calc);
 calc();
 </script>
+
 </body>
 </html>
