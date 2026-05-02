@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Compare Mortgages Australia (2026) | Numeroxa</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+body {margin:0;font-family:Inter,Arial;background:#f9fafb;}
+
+header {
+  background:#0f172a;color:white;padding:18px 40px;
+  display:flex;justify-content:space-between;
+}
+
+header a {color:white;text-decoration:none;margin-left:20px;}
+
+.container {max-width:1000px;margin:auto;padding:40px;}
+
+.grid {display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+
+.card {
+  background:white;padding:20px;border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+input {
+  width:100%;padding:10px;margin-bottom:10px;
+  border-radius:6px;border:1px solid #ddd;
+}
+
+.result {margin-top:20px;}
+
+.big {font-size:24px;font-weight:bold;}
+
+.highlight {
+  margin-top:30px;
+  padding:20px;
+  background:#dbeafe;
+  border-radius:10px;
+  font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<a href="../index.html">Numeroxa</a>
+<div>
+<a href="../index.html">Home</a>
+<a href="mortgage-calculator.html">Mortgage</a>
+<a href="compound-interest.html">Compound</a>
+<a href="tax-calculator.html">Tax</a>
+</div>
+</header>
+
+<div class="container">
+
+<h1>Compare Mortgages</h1>
+
+<div class="grid">
+
+<div class="card">
+<h3>Loan A</h3>
+<input id="loan1" value="600000">
+<input id="rate1" value="6">
+<input id="years1" value="30">
+<input id="extra1" value="0">
+
+<div class="result">
+<div class="big" id="monthly1"></div>
+<div id="interest1"></div>
+</div>
+</div>
+
+<div class="card">
+<h3>Loan B</h3>
+<input id="loan2" value="600000">
+<input id="rate2" value="5.5">
+<input id="years2" value="30">
+<input id="extra2" value="0">
+
+<div class="result">
+<div class="big" id="monthly2"></div>
+<div id="interest2"></div>
+</div>
+</div>
+
+</div>
+
+<div class="highlight" id="summary"></div>
+
+<script>
+function calculateLoan(loan, rate, months, extra) {
+  let balance = loan;
+  let totalInterest = 0;
+
+  let base = loan * (rate * Math.pow(1 + rate, months)) /
+             (Math.pow(1 + rate, months) - 1);
+
+  while(balance > 0){
+    let interest = balance * rate;
+    let payment = base + extra;
+
+    if(payment > balance + interest){
+      payment = balance + interest;
+    }
+
+    balance = balance + interest - payment;
+    totalInterest += interest;
+  }
+
+  return {totalInterest, base};
+}
+
+function calc(){
+
+let l1=+loan1.value, r1=rate1.value/100/12, n1=years1.value*12, e1=+extra1.value||0;
+let l2=+loan2.value, r2=rate2.value/100/12, n2=years2.value*12, e2=+extra2.value||0;
+
+let a=calculateLoan(l1,r1,n1,e1);
+let b=calculateLoan(l2,r2,n2,e2);
+
+function f(x){return "$"+Math.round(x).toLocaleString();}
+
+monthly1.innerText=f(a.base+e1);
+interest1.innerText="Interest: "+f(a.totalInterest);
+
+monthly2.innerText=f(b.base+e2);
+interest2.innerText="Interest: "+f(b.totalInterest);
+
+let diff=b.totalInterest - a.totalInterest;
+
+summary.innerText =
+diff > 0
+? "Loan A saves you " + f(diff) + " in interest"
+: "Loan B saves you " + f(-diff) + " in interest";
+
+}
+
+document.querySelectorAll("input").forEach(i=>i.oninput=calc);
+calc();
+</script>
+
+</div>
+</body>
+</html>
