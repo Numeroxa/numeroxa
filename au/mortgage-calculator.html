@@ -3,44 +3,107 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Mortgage Calculator Australia (2026) | Numeroxa</title>
 
 <style>
-body {margin:0;font-family:Arial;background:#f9fafb;color:#111;}
-header {background:#0f172a;color:white;padding:20px;}
-.container {max-width:900px;margin:auto;padding:40px 20px;}
-.grid {display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-input {width:100%;padding:10px;border-radius:6px;border:1px solid #ddd;}
-.result {margin-top:20px;background:#f1f5f9;padding:20px;border-radius:10px;}
-.big {font-size:24px;font-weight:bold;}
-section {margin-top:50px;}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f9fafb;
+}
+
+header {
+  background: #0f172a;
+  color: white;
+  padding: 20px;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.result {
+  margin-top: 20px;
+  padding: 20px;
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.big {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+section {
+  margin-top: 50px;
+}
 </style>
 </head>
 
 <body>
-<header>Numeroxa — Smart Financial Calculators</header>
+
+<header>
+Numeroxa — Smart Financial Calculators
+</header>
 
 <div class="container">
+
 <h1>Mortgage Calculator</h1>
 
 <div class="grid">
-<div><label>Loan</label><input id="loan" type="number" value="600000"></div>
-<div><label>Rate %</label><input id="rate" type="number" value="6"></div>
-<div><label>Years</label><input id="years" type="number" value="30"></div>
-<div><label>Extra Monthly</label><input id="extra" type="number" value="0"></div>
+<div>
+<label>Loan</label>
+<input id="loan" type="number" value="600000">
+</div>
+
+<div>
+<label>Rate %</label>
+<input id="rate" type="number" value="6">
+</div>
+
+<div>
+<label>Years</label>
+<input id="years" type="number" value="30">
+</div>
+
+<div>
+<label>Extra Monthly</label>
+<input id="extra" type="number" value="0">
+</div>
 </div>
 
 <div class="result">
 <div>Monthly repayment</div>
 <div class="big" id="monthly"></div>
+
 <div>Total interest</div>
 <div id="interest"></div>
+
+<div>Interest saved</div>
+<div id="saved"></div>
+
 <div>Loan duration</div>
 <div id="duration"></div>
 </div>
 
 <!-- RELATED -->
-<div style="margin-top:40px;background:#eef2ff;padding:20px;border-radius:10px;">
+<div style="margin-top:40px; background:#eef2ff; padding:20px; border-radius:10px;">
 <strong>Related calculators:</strong>
 <ul>
 <li><a href="compound-interest.html">Compound interest calculator</a></li>
@@ -51,43 +114,76 @@ section {margin-top:50px;}
 
 <section>
 <h2>How mortgage repayments are calculated</h2>
-<p>Mortgage repayments combine principal and interest. Early payments mostly cover interest, while later payments reduce principal faster.</p>
-<h3>Why extra repayments matter</h3>
-<p>Even small additional payments can significantly reduce interest and shorten your loan.</p>
+<p>Mortgage repayments consist of principal and interest. Early repayments mostly cover interest.</p>
 </section>
 
 </div>
 
 <script>
-function calculate(){
-let P=+loan.value;
-let r=+rate.value/100/12;
-let n=+years.value*12;
-let extra=+extra.value||0;
+function calculateLoan(loan, rate, months, extra) {
+  let balance = loan;
+  let totalInterest = 0;
+  let monthCount = 0;
 
-let m=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+  let baseMonthly = loan * (rate * Math.pow(1 + rate, months)) /
+                    (Math.pow(1 + rate, months) - 1);
 
-let balance=P,totalInterest=0,months=0;
+  while (balance > 0 && monthCount < 1000 * 12) {
+    let interest = balance * rate;
+    let payment = baseMonthly + extra;
 
-while(balance>0 && months<1000*12){
-let interest=balance*r;
-let payment=m+extra;
+    if (payment > balance + interest) {
+      payment = balance + interest;
+    }
 
-if(payment>balance+interest) payment=balance+interest;
+    balance = balance + interest - payment;
+    totalInterest += interest;
+    monthCount++;
+  }
 
-balance=balance+interest-payment;
-totalInterest+=interest;
-months++;
+  return { totalInterest, monthCount, baseMonthly };
 }
 
-function f(x){return "$"+Math.round(x).toLocaleString();}
+function calculate() {
+  let loan = parseFloat(document.getElementById("loan").value);
+  let rate = parseFloat(document.getElementById("rate").value) / 100 / 12;
+  let months = parseFloat(document.getElementById("years").value) * 12;
+  let extra = parseFloat(document.getElementById("extra").value) || 0;
 
-monthly.innerText=f(m+extra);
-interest.innerText=f(totalInterest);
-duration.innerText=Math.floor(months/12)+"y "+(months%12)+"m";
+  let normal = calculateLoan(loan, rate, months, 0);
+  let extraPay = calculateLoan(loan, rate, months, extra);
+
+  function format(n) {
+    return "$" + Math.round(n).toLocaleString();
+  }
+
+  function formatYears(months) {
+    let y = Math.floor(months / 12);
+    let m = months % 12;
+    return y + "y " + m + "m";
+  }
+
+  let savedMonths = normal.monthCount - extraPay.monthCount;
+
+  document.getElementById("monthly").innerText =
+    format(extraPay.baseMonthly + extra);
+
+  document.getElementById("interest").innerText =
+    format(extraPay.totalInterest);
+
+  document.getElementById("saved").innerText =
+    format(normal.totalInterest - extraPay.totalInterest);
+
+  document.getElementById("duration").innerText =
+    formatYears(extraPay.monthCount);
 }
-document.querySelectorAll("input").forEach(i=>i.oninput=calculate);
+
+document.querySelectorAll("input").forEach(el => {
+  el.addEventListener("input", calculate);
+});
+
 calculate();
 </script>
+
 </body>
 </html>
