@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
   <title>Savings Goal Calculator Australia (2026) | Numeroxa</title>
+  <meta name="description" content="Calculate how much you need to save each month to reach your financial goal, including interest and time." />
 
-  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
@@ -87,6 +87,13 @@
       margin-top: 30px;
     }
 
+    section {
+      margin-top: 50px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
     @media(max-width: 700px) {
       .grid {
         grid-template-columns: 1fr;
@@ -145,6 +152,42 @@
     <canvas id="chart"></canvas>
 
   </div>
+
+  <!-- SEO CONTENT -->
+  <section>
+
+    <h2>How much do you need to save each month?</h2>
+    <p>
+      To reach a financial goal, your required monthly savings depend on your starting balance, time horizon, and expected investment returns. The longer you have, the less you need to save each month due to compounding.
+    </p>
+
+    <h3>Why starting early matters</h3>
+    <p>
+      Starting earlier allows compound interest to work in your favour. Even small amounts invested over a long period can grow significantly compared to larger contributions made later.
+    </p>
+
+    <h3>The role of interest rates</h3>
+    <p>
+      Higher returns reduce the amount you need to contribute. However, higher returns often come with increased risk, so it’s important to choose a rate that reflects your investment strategy.
+    </p>
+
+    <h3>How to reach your savings goal faster</h3>
+    <ul>
+      <li>Increase your monthly contributions</li>
+      <li>Extend your time horizon</li>
+      <li>Invest for higher returns (with appropriate risk)</li>
+      <li>Reduce unnecessary expenses</li>
+    </ul>
+
+    <h3>Common savings goals</h3>
+    <ul>
+      <li>Buying a home deposit</li>
+      <li>Building an emergency fund</li>
+      <li>Saving for retirement</li>
+      <li>Funding education</li>
+    </ul>
+
+  </section>
 
 </div>
 
@@ -217,32 +260,13 @@ function renderChart(labels, contributions, interest) {
     data: {
       labels: labels,
       datasets: [
-        {
-          label: "Contributions",
-          data: contributions,
-          fill: true,
-          borderWidth: 1
-        },
-        {
-          label: "Interest",
-          data: interest,
-          fill: true,
-          borderWidth: 1
-        }
+        { label: "Contributions", data: contributions, fill: true },
+        { label: "Interest", data: interest, fill: true }
       ]
     },
     options: {
       responsive: true,
-      interaction: {
-        mode: "index",
-        intersect: false
-      },
       stacked: true,
-      plugins: {
-        legend: {
-          position: "top"
-        }
-      },
       scales: {
         y: {
           stacked: true,
