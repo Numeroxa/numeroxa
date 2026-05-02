@@ -78,6 +78,14 @@
       margin-bottom: 10px;
     }
 
+    .highlight {
+      margin-top: 15px;
+      padding: 15px;
+      background: #dbeafe;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
     @media(max-width: 700px) {
       .grid {
         grid-template-columns: 1fr;
@@ -132,6 +140,8 @@
 
       <div>Loan duration</div>
       <div id="duration"></div>
+
+      <div class="highlight" id="yearsSaved"></div>
     </div>
 
   </div>
@@ -176,8 +186,13 @@ function calculate() {
     return "$" + Math.round(n).toLocaleString();
   }
 
-  let years = Math.floor(extraPay.monthCount / 12);
-  let remainingMonths = extraPay.monthCount % 12;
+  function formatYears(months) {
+    let y = Math.floor(months / 12);
+    let m = months % 12;
+    return y + "y " + m + "m";
+  }
+
+  let savedMonths = normal.monthCount - extraPay.monthCount;
 
   document.getElementById("monthly").innerText =
     format(extraPay.baseMonthly + extra);
@@ -189,7 +204,12 @@ function calculate() {
     format(normal.totalInterest - extraPay.totalInterest);
 
   document.getElementById("duration").innerText =
-    years + " years " + remainingMonths + " months";
+    formatYears(extraPay.monthCount);
+
+  document.getElementById("yearsSaved").innerText =
+    savedMonths > 0
+      ? "You will pay off your loan " + formatYears(savedMonths) + " earlier"
+      : "";
 }
 
 document.querySelectorAll("input").forEach(el => {
