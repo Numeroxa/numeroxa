@@ -17,21 +17,21 @@
 <b>Related calculators:</b>
 <ul>
 <li><a href="mortgage-calculator.html">Mortgage</a></li>
-<li><a href="compound-interest.html">Compound interest</a></li>
-<li><a href="savings-goal.html">Savings goal</a></li>
+<li><a href="compound-interest.html">Compound</a></li>
+<li><a href="savings-goal.html">Savings</a></li>
 </ul>
 </div>
 
 <section>
 <h2>Australian tax explained</h2>
-<p>Australia uses a progressive tax system...</p>
+<p>Australia uses a progressive tax system.</p>
 </section>
 
 <script>
 function calc(){
 let i=income.value,t=0;
 if(i>18200)t=(i-18200)*0.16;
-tax.innerText=Math.round(t);
+tax.innerText="$"+Math.round(t).toLocaleString();
 }
 income.oninput=calc;
 calc();
