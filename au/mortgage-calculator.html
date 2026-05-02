@@ -5,97 +5,115 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Mortgage Calculator Australia (2026) | Numeroxa</title>
+<meta name="description" content="Calculate mortgage repayments, interest, and savings from extra repayments in Australia. Includes amortisation schedule and comparison.">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
-  background: #f9fafb;
-  color: #111;
+  margin:0;
+  font-family:Inter, Arial;
+  background:#f9fafb;
+  color:#111;
 }
 
 header {
-  background: #0f172a;
-  color: white;
-  padding: 20px 40px;
-  font-weight: bold;
+  background:#0f172a;
+  color:white;
+  padding:18px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+header a {
+  color:white;
+  text-decoration:none;
+  margin-left:20px;
 }
 
 .container {
-  max-width: 900px;
-  margin: auto;
-  padding: 40px 20px;
+  max-width:1000px;
+  margin:auto;
+  padding:40px 20px;
 }
 
 h1 {
-  font-size: 32px;
-  margin-bottom: 20px;
+  font-size:32px;
+  margin-bottom:20px;
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
 }
 
 label {
-  font-size: 14px;
-  margin-bottom: 5px;
-  display: block;
+  font-size:14px;
+  margin-bottom:5px;
+  display:block;
 }
 
 input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  font-size: 16px;
+  width:100%;
+  padding:10px;
+  border-radius:6px;
+  border:1px solid #ddd;
 }
 
 .result {
-  margin-top: 30px;
-  padding: 25px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-top:30px;
+  padding:25px;
+  background:white;
+  border-radius:12px;
 }
 
 .result-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.result-label {
-  color: #555;
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
 }
 
 .big {
-  font-size: 28px;
-  font-weight: bold;
+  font-size:28px;
+  font-weight:bold;
 }
 
-.section-title {
-  margin-top: 20px;
-  font-weight: bold;
-  font-size: 16px;
+canvas {margin-top:30px;}
+
+button {
+  padding:10px 14px;
+  background:#2563eb;
+  color:white;
+  border:none;
+  border-radius:6px;
+  margin-top:20px;
+  cursor:pointer;
 }
+
+table {
+  width:100%;
+  margin-top:20px;
+  border-collapse:collapse;
+  font-size:14px;
+}
+
+th, td {
+  padding:8px;
+  border-bottom:1px solid #eee;
+}
+
+.hidden {display:none;}
+
+section {margin-top:50px;}
 
 .related {
-  margin-top: 40px;
-  padding: 20px;
-  background: #eef2ff;
-  border-radius: 10px;
-}
-
-section {
-  margin-top: 50px;
-}
-
-@media(max-width: 700px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+  margin-top:40px;
+  padding:20px;
+  background:#eef2ff;
+  border-radius:10px;
 }
 </style>
 </head>
@@ -103,7 +121,13 @@ section {
 <body>
 
 <header>
-Numeroxa — Smart Financial Calculators
+<a href="../index.html">Numeroxa</a>
+<div>
+<a href="../index.html">Home</a>
+<a href="compound-interest.html">Compound</a>
+<a href="savings-goal.html">Savings</a>
+<a href="tax-calculator.html">Tax</a>
+</div>
 </header>
 
 <div class="container">
@@ -114,220 +138,223 @@ Numeroxa — Smart Financial Calculators
 
 <div>
 <label>Loan Amount ($)</label>
-<input id="loan" type="number" value="600000">
+<input id="loan" value="600000">
 </div>
 
 <div>
 <label>Interest Rate (% p.a.)</label>
-<input id="rate" type="number" value="6">
+<input id="rate" value="6">
 </div>
 
 <div>
 <label>Loan Term (years)</label>
-<input id="years" type="number" value="30">
+<input id="years" value="30">
 </div>
 
 <div>
 <label>Extra Monthly Repayment ($)</label>
-<input id="extra" type="number" value="0">
+<input id="extra" value="0">
 </div>
 
 </div>
 
 <div class="result">
 
-<div class="section-title">Repayments</div>
-
 <div class="result-row">
-<span class="result-label">Monthly repayment</span>
+<span>Monthly repayment</span>
 <span class="big" id="monthly"></span>
 </div>
 
 <div class="result-row">
-<span class="result-label">Total interest</span>
+<span>Total interest</span>
 <span id="interest"></span>
 </div>
 
 <div class="result-row">
-<span class="result-label">Interest saved</span>
+<span>Interest saved</span>
 <span id="saved"></span>
 </div>
 
 <div class="result-row">
-<span class="result-label">Loan duration</span>
+<span>Loan duration</span>
 <span id="duration"></span>
 </div>
 
 </div>
 
+<canvas id="chart"></canvas>
+
+<button onclick="toggleTable()">Toggle Amortisation Table</button>
+<button onclick="downloadCSV()">Download CSV</button>
+
+<table id="table" class="hidden">
+<thead>
+<tr>
+<th>Month</th>
+<th>Payment</th>
+<th>Principal</th>
+<th>Interest</th>
+<th>Balance</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
 <div class="related">
 <strong>Related calculators:</strong>
 <ul>
-<li><a href="compound-interest.html">See how investing extra repayments could grow over time</a></li>
-<li><a href="savings-goal.html">Work out how much you need to save</a></li>
-<li><a href="tax-calculator.html">Estimate your after-tax income</a></li>
+<li><a href="compare-mortgages.html">Compare two mortgages</a></li>
+<li><a href="compound-interest.html">Compound interest calculator</a></li>
+<li><a href="tax-calculator.html">Income tax calculator</a></li>
 </ul>
 </div>
 
 <section>
-<h2>How mortgage repayments are calculated</h2>
+
+<h2>How mortgage repayments work in Australia</h2>
+
 <p>
-Mortgage repayments consist of both principal and interest. Early in the loan, most payments go toward interest.
+Mortgage repayments consist of both principal and interest. Early in your loan, most of your repayment goes toward interest, while later repayments reduce the principal more quickly.
 </p>
 
 <h3>Why extra repayments matter</h3>
 <p>
-Even small extra repayments can significantly reduce total interest and shorten your loan term.
+Making extra repayments reduces your loan balance faster, which lowers the total interest you pay and shortens your loan term.
 </p>
 
-<h3>Ways to pay off your mortgage faster</h3>
+<h3>How to reduce your mortgage faster</h3>
 <ul>
 <li>Make regular extra repayments</li>
-<li>Refinance to a lower rate</li>
-<li>Use offset accounts effectively</li>
+<li>Use offset accounts</li>
+<li>Refinance to lower rates</li>
 </ul>
+
+</section>
+
 <section>
 
 <h2>Frequently asked questions</h2>
 
 <h3>How are mortgage repayments calculated?</h3>
-<p>
-Mortgage repayments are calculated based on your loan amount, interest rate, and loan term. Each repayment includes both interest and principal.
-</p>
+<p>They depend on loan size, interest rate, and term.</p>
 
 <h3>What happens if I make extra repayments?</h3>
-<p>
-Extra repayments reduce your loan balance faster, which lowers the total interest paid and shortens your loan duration.
-</p>
+<p>You reduce both total interest and loan duration.</p>
 
-<h3>How much interest will I pay over my loan?</h3>
-<p>
-Total interest depends on your loan size, interest rate, and term. Longer loans and higher rates significantly increase total interest.
-</p>
+<h3>Can I pay off my mortgage early?</h3>
+<p>Yes, additional repayments allow early payoff.</p>
 
-<h3>Is it better to reduce the loan term or monthly repayments?</h3>
-<p>
-Reducing the loan term usually saves more interest overall, while lower repayments improve short-term cash flow.
-</p>
-
-<h3>What is the difference between principal and interest?</h3>
-<p>
-Principal is the amount you borrowed, while interest is the cost charged by the lender for borrowing the money.
-</p>
+<h3>Does interest compound monthly?</h3>
+<p>Yes, most Australian mortgages compound monthly.</p>
 
 </section>
 
 <script type="application/ld+json">
 {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "How are mortgage repayments calculated?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Mortgage repayments are calculated based on loan amount, interest rate, and loan term, with each payment covering both principal and interest."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What happens if I make extra repayments?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Extra repayments reduce your loan balance faster, lowering total interest and shortening the loan duration."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How much interest will I pay over my loan?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Total interest depends on loan size, interest rate, and term. Longer loans and higher rates increase total interest significantly."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Is it better to reduce the loan term or repayments?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Reducing the loan term generally saves more interest, while lower repayments improve short-term affordability."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What is the difference between principal and interest?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Principal is the borrowed amount, while interest is the cost of borrowing charged by the lender."
-      }
-    }
-  ]
+"@context":"https://schema.org",
+"@type":"FAQPage",
+"mainEntity":[
+{"@type":"Question","name":"How are mortgage repayments calculated?","acceptedAnswer":{"@type":"Answer","text":"Based on loan size, interest rate, and term."}},
+{"@type":"Question","name":"What happens if I make extra repayments?","acceptedAnswer":{"@type":"Answer","text":"They reduce interest and loan duration."}},
+{"@type":"Question","name":"Can I pay off my mortgage early?","acceptedAnswer":{"@type":"Answer","text":"Yes, with additional repayments."}},
+{"@type":"Question","name":"Does interest compound monthly?","acceptedAnswer":{"@type":"Answer","text":"Yes, most loans compound monthly."}}
+]
 }
 </script>
 
 </div>
 
 <script>
-function calculateLoan(loan, rate, months, extra) {
-  let balance = loan;
-  let totalInterest = 0;
-  let monthCount = 0;
+let chart;
+let amortData=[];
 
-  let baseMonthly = loan * (rate * Math.pow(1 + rate, months)) /
-                    (Math.pow(1 + rate, months) - 1);
-
-  while (balance > 0 && monthCount < 1000 * 12) {
-    let interest = balance * rate;
-    let payment = baseMonthly + extra;
-
-    if (payment > balance + interest) {
-      payment = balance + interest;
-    }
-
-    balance = balance + interest - payment;
-    totalInterest += interest;
-    monthCount++;
-  }
-
-  return { totalInterest, monthCount, baseMonthly };
+function basePayment(P,r,n){
+if(r===0) return P/n;
+return P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
 }
 
-function calculate() {
-  let loan = parseFloat(document.getElementById("loan").value);
-  let rate = parseFloat(document.getElementById("rate").value) / 100 / 12;
-  let months = parseFloat(document.getElementById("years").value) * 12;
-  let extra = parseFloat(document.getElementById("extra").value) || 0;
+function runLoan(P,r,n,extra){
+let balance=P,totalInterest=0,months=0;
+let base=basePayment(P,r,n);
+let yearlyBalance=[],labels=[],tableHTML="";
+amortData=[];
 
-  let normal = calculateLoan(loan, rate, months, 0);
-  let extraPay = calculateLoan(loan, rate, months, extra);
+while(balance>0 && months<1000*12){
+let interest=balance*r;
+let payment=base+extra;
+if(payment>balance+interest) payment=balance+interest;
+let principal=payment-interest;
+balance-=principal;
+totalInterest+=interest;
+months++;
 
-  function format(n) {
-    return "$" + Math.round(n).toLocaleString();
-  }
+amortData.push([months,payment,principal,interest,balance]);
 
-  function formatYears(months) {
-    let y = Math.floor(months / 12);
-    let m = months % 12;
-    return y + "y " + m + "m";
-  }
+tableHTML+=`<tr>
+<td>${months}</td>
+<td>$${Math.round(payment).toLocaleString()}</td>
+<td>$${Math.round(principal).toLocaleString()}</td>
+<td>$${Math.round(interest).toLocaleString()}</td>
+<td>$${Math.max(0,Math.round(balance)).toLocaleString()}</td>
+</tr>`;
 
-  document.getElementById("monthly").innerText =
-    format(extraPay.baseMonthly + extra);
-
-  document.getElementById("interest").innerText =
-    format(extraPay.totalInterest);
-
-  document.getElementById("saved").innerText =
-    format(normal.totalInterest - extraPay.totalInterest);
-
-  document.getElementById("duration").innerText =
-    formatYears(extraPay.monthCount);
+if(months%12===0){
+labels.push("Year "+months/12);
+yearlyBalance.push(balance);
+}
 }
 
-document.querySelectorAll("input").forEach(el => {
-  el.addEventListener("input", calculate);
+return {totalInterest,months,base,labels,yearlyBalance,tableHTML};
+}
+
+function calculate(){
+let P=+loan.value;
+let r=rate.value/100/12;
+let n=years.value*12;
+let extraVal=+extra.value||0;
+
+let normal=runLoan(P,r,n,0);
+let extraLoan=runLoan(P,r,n,extraVal);
+
+function f(x){return "$"+Math.round(x).toLocaleString();}
+
+monthly.innerText=f(extraLoan.base+extraVal);
+interest.innerText=f(extraLoan.totalInterest);
+saved.innerText=f(normal.totalInterest-extraLoan.totalInterest);
+
+let y=Math.floor(extraLoan.months/12);
+let m=extraLoan.months%12;
+duration.innerText=y+"y "+m+"m";
+
+document.querySelector("#table tbody").innerHTML=extraLoan.tableHTML;
+
+if(chart) chart.destroy();
+
+chart=new Chart(document.getElementById("chart"),{
+type:"line",
+data:{
+labels:extraLoan.labels,
+datasets:[{label:"Remaining Balance",data:extraLoan.yearlyBalance}]
+}
 });
+}
+
+function toggleTable(){
+table.classList.toggle("hidden");
+}
+
+function downloadCSV(){
+let csv="Month,Payment,Principal,Interest,Balance\n";
+amortData.forEach(r=>csv+=r.join(",")+"\n");
+
+let blob=new Blob([csv]);
+let a=document.createElement("a");
+a.href=URL.createObjectURL(blob);
+a.download="mortgage.csv";
+a.click();
+}
+
+document.querySelectorAll("input").forEach(i=>i.oninput=calculate);
 
 calculate();
 </script>
