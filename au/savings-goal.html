@@ -4,30 +4,129 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Savings Goal Calculator | Numeroxa</title>
+<title>Savings Goal Calculator Australia (2026) | Numeroxa</title>
+<meta name="description" content="Calculate how much you need to save each month to reach your financial goal. Includes interest and growth visualisation.">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body {margin:0;font-family:Inter, Arial;background:#f9fafb;}
-header {background:#0f172a;color:white;padding:18px 40px;display:flex;justify-content:space-between;}
-header a {color:white;text-decoration:none;margin-left:20px;}
-.logo {font-size:20px;font-weight:600;}
-.tagline {display:block;font-size:11px;opacity:0.7;}
-.container {max-width:1000px;margin:auto;padding:40px;}
-.grid {display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-input {width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;}
-.result {margin-top:30px;background:white;padding:25px;border-radius:12px;}
-.big {font-size:28px;font-weight:bold;}
+body {
+  margin:0;
+  font-family:Inter, Arial;
+  background:#f9fafb;
+  color:#111;
+}
+
+header {
+  background:#0f172a;
+  color:white;
+  padding:18px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+header a {
+  color:white;
+  text-decoration:none;
+  margin-left:20px;
+}
+
+.logo {
+  font-size:20px;
+  font-weight:600;
+  line-height:1.1;
+}
+
+.tagline {
+  display:block;
+  font-size:11px;
+  opacity:0.7;
+}
+
+.container {
+  max-width:1000px;
+  margin:auto;
+  padding:40px 20px;
+}
+
+h1 {
+  font-size:32px;
+  margin-bottom:20px;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+label {
+  font-size:14px;
+  margin-bottom:5px;
+  display:block;
+}
+
+input {
+  width:100%;
+  padding:10px;
+  border-radius:6px;
+  border:1px solid #ddd;
+}
+
+.result {
+  margin-top:30px;
+  padding:25px;
+  background:white;
+  border-radius:12px;
+}
+
+.result-row {
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
+
+.big {
+  font-size:28px;
+  font-weight:bold;
+}
+
+.highlight {
+  margin-top:15px;
+  padding:15px;
+  background:#dbeafe;
+  border-radius:8px;
+  font-weight:bold;
+}
+
 canvas {margin-top:30px;}
+
+.related {
+  margin-top:40px;
+  padding:20px;
+  background:#eef2ff;
+  border-radius:10px;
+}
+
+section {
+  margin-top:50px;
+}
+
+@media(max-width:700px){
+  .grid {grid-template-columns:1fr;}
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<a href="../index.html" class="logo">Numeroxa<span class="tagline">Smart Financial Calculators</span></a>
+<a href="../index.html" class="logo">
+  Numeroxa
+  <span class="tagline">Smart Financial Calculators</span>
+</a>
 <div>
 <a href="../index.html">Home</a>
 <a href="mortgage-calculator.html">Mortgage</a>
@@ -41,19 +140,99 @@ canvas {margin-top:30px;}
 <h1>Savings Goal Calculator</h1>
 
 <div class="grid">
+
+<div>
+<label>Target Amount ($)</label>
 <input id="target" value="100000">
+</div>
+
+<div>
+<label>Current Savings ($)</label>
 <input id="current" value="10000">
+</div>
+
+<div>
+<label>Interest Rate (% p.a.)</label>
 <input id="rate" value="5">
+</div>
+
+<div>
+<label>Time Period (years)</label>
 <input id="years" value="10">
 </div>
 
+</div>
+
 <div class="result">
-<div class="big" id="monthly"></div>
-<div id="contributions"></div>
-<div id="interest"></div>
+
+<div class="result-row">
+<span>Required monthly saving</span>
+<span class="big" id="monthly"></span>
+</div>
+
+<div class="result-row">
+<span>Total contributions</span>
+<span id="contributions"></span>
+</div>
+
+<div class="result-row">
+<span>Interest earned</span>
+<span id="interest"></span>
+</div>
+
+<div class="highlight" id="message"></div>
+
 </div>
 
 <canvas id="chart"></canvas>
+
+<div class="related">
+<strong>Related calculators:</strong>
+<ul>
+<li><a href="compound-interest.html">Compound interest calculator</a></li>
+<li><a href="mortgage-calculator.html">Mortgage calculator</a></li>
+<li><a href="tax-calculator.html">Tax calculator</a></li>
+</ul>
+</div>
+
+<section>
+
+<h2>How much should you save each month?</h2>
+<p>
+Your required monthly savings depend on your goal, timeframe, and expected returns. Longer timeframes reduce the amount required.
+</p>
+
+<h3>Why starting early matters</h3>
+<p>
+Starting early allows compound interest to significantly reduce how much you need to contribute.
+</p>
+
+<h3>Ways to reach your goal faster</h3>
+<ul>
+<li>Increase contributions</li>
+<li>Extend timeframe</li>
+<li>Improve investment returns</li>
+</ul>
+
+</section>
+
+<section>
+
+<h2>Frequently asked questions</h2>
+
+<h3>How much should I save each month?</h3>
+<p>It depends on your goal, timeframe, and interest rate.</p>
+
+<h3>What if I can’t reach my goal?</h3>
+<p>You can increase contributions or extend your timeframe.</p>
+
+<h3>Does interest make a big difference?</h3>
+<p>Yes, compounding significantly reduces required savings.</p>
+
+<h3>Should I start early?</h3>
+<p>Yes, starting early has the biggest impact.</p>
+
+</section>
 
 <script>
 let chart;
@@ -81,20 +260,25 @@ let totalContrib=currentVal;
 let labels=[],contribData=[],interestData=[];
 
 for(let i=0;i<=n;i++){
+
 if(i%12===0){
 labels.push("Year "+i/12);
 contribData.push(totalContrib);
 interestData.push(balance-totalContrib);
 }
+
 balance=balance*(1+r)+monthly;
 totalContrib+=monthly;
 }
 
 function f(x){return "$"+Math.round(x).toLocaleString();}
 
-monthlyEl.innerText="Monthly: "+f(monthly);
-contributions.innerText="Contributions: "+f(totalContrib);
-interest.innerText="Interest: "+f(balance-totalContrib);
+document.getElementById("monthly").innerText=f(monthly);
+document.getElementById("contributions").innerText=f(totalContrib);
+document.getElementById("interest").innerText=f(balance-totalContrib);
+
+document.getElementById("message").innerText=
+"To reach your goal, save "+f(monthly)+" per month.";
 
 if(chart) chart.destroy();
 
@@ -129,12 +313,10 @@ scales:{y:{stacked:true}}
 });
 }
 
-let monthlyEl=document.getElementById("monthly");
-
 document.querySelectorAll("input").forEach(i=>i.oninput=calculate);
+
 calculate();
 </script>
 
-</div>
 </body>
 </html>
