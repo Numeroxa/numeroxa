@@ -9,14 +9,16 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
   background: #f9fafb;
+  color: #111;
 }
 
 header {
   background: #0f172a;
   color: white;
-  padding: 20px;
+  padding: 20px 40px;
+  font-weight: bold;
 }
 
 .container {
@@ -25,10 +27,21 @@ header {
   padding: 40px 20px;
 }
 
+h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+}
+
+label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  display: block;
 }
 
 input {
@@ -36,22 +49,53 @@ input {
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ddd;
+  font-size: 16px;
 }
 
 .result {
-  margin-top: 20px;
-  padding: 20px;
-  background: #f1f5f9;
-  border-radius: 10px;
+  margin-top: 30px;
+  padding: 25px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.result-label {
+  color: #555;
 }
 
 .big {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
+}
+
+.section-title {
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.related {
+  margin-top: 40px;
+  padding: 20px;
+  background: #eef2ff;
+  border-radius: 10px;
 }
 
 section {
   margin-top: 50px;
+}
+
+@media(max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
 </head>
@@ -64,57 +108,84 @@ Numeroxa — Smart Financial Calculators
 
 <div class="container">
 
-<h1>Mortgage Calculator</h1>
+<h1>Mortgage Calculator (Australia)</h1>
 
 <div class="grid">
+
 <div>
-<label>Loan</label>
+<label>Loan Amount ($)</label>
 <input id="loan" type="number" value="600000">
 </div>
 
 <div>
-<label>Rate %</label>
+<label>Interest Rate (% p.a.)</label>
 <input id="rate" type="number" value="6">
 </div>
 
 <div>
-<label>Years</label>
+<label>Loan Term (years)</label>
 <input id="years" type="number" value="30">
 </div>
 
 <div>
-<label>Extra Monthly</label>
+<label>Extra Monthly Repayment ($)</label>
 <input id="extra" type="number" value="0">
 </div>
+
 </div>
 
 <div class="result">
-<div>Monthly repayment</div>
-<div class="big" id="monthly"></div>
 
-<div>Total interest</div>
-<div id="interest"></div>
+<div class="section-title">Repayments</div>
 
-<div>Interest saved</div>
-<div id="saved"></div>
-
-<div>Loan duration</div>
-<div id="duration"></div>
+<div class="result-row">
+<span class="result-label">Monthly repayment</span>
+<span class="big" id="monthly"></span>
 </div>
 
-<!-- RELATED -->
-<div style="margin-top:40px; background:#eef2ff; padding:20px; border-radius:10px;">
+<div class="result-row">
+<span class="result-label">Total interest</span>
+<span id="interest"></span>
+</div>
+
+<div class="result-row">
+<span class="result-label">Interest saved</span>
+<span id="saved"></span>
+</div>
+
+<div class="result-row">
+<span class="result-label">Loan duration</span>
+<span id="duration"></span>
+</div>
+
+</div>
+
+<div class="related">
 <strong>Related calculators:</strong>
 <ul>
-<li><a href="compound-interest.html">Compound interest calculator</a></li>
-<li><a href="savings-goal.html">Savings goal calculator</a></li>
-<li><a href="tax-calculator.html">Tax calculator</a></li>
+<li><a href="compound-interest.html">See how investing extra repayments could grow over time</a></li>
+<li><a href="savings-goal.html">Work out how much you need to save</a></li>
+<li><a href="tax-calculator.html">Estimate your after-tax income</a></li>
 </ul>
 </div>
 
 <section>
 <h2>How mortgage repayments are calculated</h2>
-<p>Mortgage repayments consist of principal and interest. Early repayments mostly cover interest.</p>
+<p>
+Mortgage repayments consist of both principal and interest. Early in the loan, most payments go toward interest.
+</p>
+
+<h3>Why extra repayments matter</h3>
+<p>
+Even small extra repayments can significantly reduce total interest and shorten your loan term.
+</p>
+
+<h3>Ways to pay off your mortgage faster</h3>
+<ul>
+<li>Make regular extra repayments</li>
+<li>Refinance to a lower rate</li>
+<li>Use offset accounts effectively</li>
+</ul>
 </section>
 
 </div>
@@ -162,8 +233,6 @@ function calculate() {
     let m = months % 12;
     return y + "y " + m + "m";
   }
-
-  let savedMonths = normal.monthCount - extraPay.monthCount;
 
   document.getElementById("monthly").innerText =
     format(extraPay.baseMonthly + extra);
