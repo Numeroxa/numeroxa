@@ -20,21 +20,21 @@
 <b>Related calculators:</b>
 <ul>
 <li><a href="compound-interest.html">Compound interest</a></li>
-<li><a href="mortgage-calculator.html">Mortgage calculator</a></li>
-<li><a href="tax-calculator.html">Tax calculator</a></li>
+<li><a href="mortgage-calculator.html">Mortgage</a></li>
+<li><a href="tax-calculator.html">Tax</a></li>
 </ul>
 </div>
 
 <section>
-<h2>How to reach a savings goal</h2>
-<p>Your monthly savings depend on time, interest, and starting balance...</p>
+<h2>How to reach your savings goal</h2>
+<p>Your monthly savings depend on time and interest.</p>
 </section>
 
 <script>
 function calc(){
 let t=target.value,c=current.value,r=rate.value/100/12,n=years.value*12;
 let m=(t-c*Math.pow(1+r,n))/((Math.pow(1+r,n)-1)/r);
-monthly.innerText=Math.round(m);
+monthly.innerText="$"+Math.round(m).toLocaleString();
 }
 document.querySelectorAll("input").forEach(i=>i.oninput=calc);
 calc();
