@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
   <title>Mortgage Calculator Australia (2026) | Numeroxa</title>
-  <meta name="description" content="Calculate your mortgage repayments, interest, and savings from extra repayments." />
+  <meta name="description" content="Calculate mortgage repayments, interest, and see how extra repayments reduce your loan term in Australia." />
 
   <style>
     body {
@@ -49,8 +48,8 @@
 
     label {
       font-size: 14px;
-      display: block;
       margin-bottom: 5px;
+      display: block;
     }
 
     input {
@@ -68,51 +67,16 @@
       border-radius: 10px;
     }
 
-    .result div {
-      margin-bottom: 8px;
-    }
-
     .big {
       font-size: 26px;
       font-weight: bold;
-      margin-bottom: 10px;
     }
 
-    .highlight {
-      margin-top: 15px;
-      padding: 15px;
-      background: #dbeafe;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-
-    /* Tooltip styling */
-    .info {
-      position: relative;
-      display: inline-block;
-      margin-left: 6px;
-      cursor: pointer;
-      color: #2563eb;
-      font-weight: bold;
-    }
-
-    .tooltip {
-      visibility: hidden;
-      width: 240px;
-      background: #111;
-      color: #fff;
-      text-align: left;
-      padding: 8px;
-      border-radius: 6px;
-      position: absolute;
-      top: 25px;
-      left: 0;
-      font-size: 12px;
-      z-index: 1;
-    }
-
-    .info:hover .tooltip {
-      visibility: visible;
+    section {
+      margin-top: 50px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     @media(max-width: 700px) {
@@ -143,7 +107,7 @@
 
       <div>
         <label>Interest Rate (% p.a.)</label>
-        <input id="rate" type="number" value="6" step="0.01">
+        <input id="rate" type="number" value="6">
       </div>
 
       <div>
@@ -152,15 +116,7 @@
       </div>
 
       <div>
-        <label>
-          Extra repayment (per month)
-          <span class="info">ⓘ
-            <span class="tooltip">
-              Optional extra amount added to your normal repayment.
-              This reduces your loan duration and total interest paid.
-            </span>
-          </span>
-        </label>
+        <label>Extra Monthly Repayment ($)</label>
         <input id="extra" type="number" value="0">
       </div>
     </div>
@@ -177,26 +133,61 @@
 
       <div>Loan duration</div>
       <div id="duration"></div>
-
-      <div class="highlight" id="yearsSaved"></div>
     </div>
 
   </div>
 
+  <!-- SEO CONTENT -->
+  <section>
+
+    <h2>How mortgage repayments are calculated</h2>
+    <p>
+      Mortgage repayments in Australia are typically calculated using an amortisation formula. Each repayment consists of both principal and interest, with the proportion changing over time.
+    </p>
+
+    <h3>Why interest matters</h3>
+    <p>
+      Even a small change in interest rates can significantly affect your total repayment amount over the life of the loan. Higher rates mean more of your early repayments go toward interest rather than reducing the principal.
+    </p>
+
+    <h3>Benefits of extra repayments</h3>
+    <p>
+      Making extra repayments can reduce both the total interest paid and the length of your loan. Even small additional payments each month can result in substantial savings over time.
+    </p>
+
+    <h3>Fixed vs variable interest rates</h3>
+    <p>
+      Fixed-rate loans offer certainty in repayments, while variable rates may fluctuate with market conditions. Choosing between them depends on your financial situation and risk tolerance.
+    </p>
+
+    <h3>How to reduce your mortgage faster</h3>
+    <ul>
+      <li>Make regular extra repayments</li>
+      <li>Use an offset account</li>
+      <li>Refinance to a lower rate</li>
+      <li>Increase repayment frequency</li>
+    </ul>
+
+  </section>
+
 </div>
 
 <script>
-function calculateLoan(loan, rate, months, extra) {
-  let balance = loan;
+function calculate() {
+  let P = parseFloat(document.getElementById("loan").value);
+  let r = parseFloat(document.getElementById("rate").value) / 100 / 12;
+  let n = parseFloat(document.getElementById("years").value) * 12;
+  let extra = parseFloat(document.getElementById("extra").value) || 0;
+
+  let monthly = P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+
+  let balance = P;
   let totalInterest = 0;
-  let monthCount = 0;
+  let months = 0;
 
-  let baseMonthly = loan * (rate * Math.pow(1 + rate, months)) /
-                    (Math.pow(1 + rate, months) - 1);
-
-  while (balance > 0 && monthCount < 1000 * 12) {
-    let interest = balance * rate;
-    let payment = baseMonthly + extra;
+  while (balance > 0 && months < 1000 * 12) {
+    let interest = balance * r;
+    let payment = monthly + extra;
 
     if (payment > balance + interest) {
       payment = balance + interest;
@@ -204,49 +195,18 @@ function calculateLoan(loan, rate, months, extra) {
 
     balance = balance + interest - payment;
     totalInterest += interest;
-    monthCount++;
+    months++;
   }
 
-  return { totalInterest, monthCount, baseMonthly };
-}
-
-function calculate() {
-  let loan = parseFloat(document.getElementById("loan").value);
-  let rate = parseFloat(document.getElementById("rate").value) / 100 / 12;
-  let months = parseFloat(document.getElementById("years").value) * 12;
-  let extra = parseFloat(document.getElementById("extra").value) || 0;
-
-  let normal = calculateLoan(loan, rate, months, 0);
-  let extraPay = calculateLoan(loan, rate, months, extra);
-
-  function format(n) {
-    return "$" + Math.round(n).toLocaleString();
+  function format(x) {
+    return "$" + Math.round(x).toLocaleString();
   }
 
-  function formatYears(months) {
-    let y = Math.floor(months / 12);
-    let m = months % 12;
-    return y + "y " + m + "m";
-  }
-
-  let savedMonths = normal.monthCount - extraPay.monthCount;
-
-  document.getElementById("monthly").innerText =
-    format(extraPay.baseMonthly + extra);
-
-  document.getElementById("interest").innerText =
-    format(extraPay.totalInterest);
-
-  document.getElementById("saved").innerText =
-    format(normal.totalInterest - extraPay.totalInterest);
-
+  document.getElementById("monthly").innerText = format(monthly + extra);
+  document.getElementById("interest").innerText = format(totalInterest);
+  document.getElementById("saved").innerText = format((monthly * n) - totalInterest);
   document.getElementById("duration").innerText =
-    formatYears(extraPay.monthCount);
-
-  document.getElementById("yearsSaved").innerText =
-    savedMonths > 0
-      ? "You will pay off your loan " + formatYears(savedMonths) + " earlier"
-      : "";
+    Math.floor(months / 12) + " years " + (months % 12) + " months";
 }
 
 document.querySelectorAll("input").forEach(el => {
