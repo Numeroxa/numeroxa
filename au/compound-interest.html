@@ -10,68 +10,43 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body {
-  margin: 0;
-  font-family: Inter, Arial;
-  background: #f9fafb;
-  color: #111;
-}
+body {margin:0;font-family:Inter,Arial;background:#f9fafb;color:#111;}
 
 header {
-  background:#0f172a;
-  color:white;
-  padding:18px 40px;
-  display:flex;
-  justify-content:space-between;
+  background:#0f172a;color:white;padding:18px 40px;
+  display:flex;justify-content:space-between;align-items:center;
 }
 
-header a {
-  color:white;
-  text-decoration:none;
-  margin-left:20px;
-}
+header a {color:white;text-decoration:none;margin-left:20px;}
 
-.container {
-  max-width:900px;
-  margin:auto;
-  padding:40px 20px;
-}
+.container {max-width:1000px;margin:auto;padding:40px 20px;}
 
-.grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-}
+.grid {display:grid;grid-template-columns:1fr 1fr;gap:20px;}
 
-input {
-  width:100%;
-  padding:10px;
-  border-radius:6px;
-  border:1px solid #ddd;
-}
+input {width:100%;padding:10px;border-radius:6px;border:1px solid #ddd;}
 
-.result {
-  margin-top:30px;
-  padding:25px;
-  background:white;
-  border-radius:12px;
-}
+.result {margin-top:30px;padding:25px;background:white;border-radius:12px;}
 
 .big {font-size:28px;font-weight:bold;}
 
 canvas {margin-top:30px;}
 
-table {
-  width:100%;
-  margin-top:30px;
-  border-collapse:collapse;
+.controls {margin-top:20px;}
+
+button {
+  padding:10px 15px;border:none;border-radius:6px;
+  background:#2563eb;color:white;cursor:pointer;margin-right:10px;
 }
 
-td, th {
-  padding:8px;
-  border-bottom:1px solid #eee;
-  text-align:left;
+table {
+  width:100%;margin-top:20px;border-collapse:collapse;font-size:14px;
 }
+
+th, td {
+  padding:8px;border-bottom:1px solid #eee;text-align:left;
+}
+
+.hidden {display:none;}
 </style>
 </head>
 
@@ -106,12 +81,19 @@ td, th {
 
 <canvas id="chart"></canvas>
 
-<table id="table">
+<div class="controls">
+<button onclick="toggleTable()">Toggle Monthly Table</button>
+<button onclick="downloadCSV()">Download CSV</button>
+</div>
+
+<table id="table" class="hidden">
 <thead>
 <tr>
-<th>Year</th>
+<th>Month</th>
+<th>Payment</th>
+<th>Principal</th>
+<th>Interest</th>
 <th>Balance</th>
-<th>Interest Paid</th>
 </tr>
 </thead>
 <tbody></tbody>
@@ -119,8 +101,10 @@ td, th {
 
 <script>
 let chart;
+let amortisationData=[];
 
 function calc(){
+
 let P=+loan.value;
 let r=rate.value/100/12;
 let n=years.value*12;
@@ -128,44 +112,93 @@ let extraVal=+extra.value||0;
 
 let balance=P;
 let totalInterest=0;
-let data=[],labels=[];
-let table="";
+
+let monthlyPayment=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+
+let labels=[],balanceData=[],interestData=[],principalData=[];
+let tableHTML="";
+amortisationData=[];
 
 for(let i=1;i<=n;i++){
+
 let interest=balance*r;
-let payment=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1)+extraVal;
-balance=balance+interest-payment;
+let principal=(monthlyPayment+extraVal)-interest;
+
+if(principal>balance){
+principal=balance;
+}
+
+balance-=principal;
 totalInterest+=interest;
+
+amortisationData.push([i, monthlyPayment+extraVal, principal, interest, balance]);
+
+tableHTML+=`
+<tr>
+<td>${i}</td>
+<td>$${Math.round(monthlyPayment+extraVal).toLocaleString()}</td>
+<td>$${Math.round(principal).toLocaleString()}</td>
+<td>$${Math.round(interest).toLocaleString()}</td>
+<td>$${Math.max(0,Math.round(balance)).toLocaleString()}</td>
+</tr>`;
 
 if(i%12===0){
 labels.push("Year "+i/12);
-data.push(balance);
-
-table+=`<tr>
-<td>${i/12}</td>
-<td>$${Math.round(balance).toLocaleString()}</td>
-<td>$${Math.round(totalInterest).toLocaleString()}</td>
-</tr>`;
-}
+balanceData.push(balance);
+interestData.push(totalInterest);
+principalData.push(P-balance);
 }
 
-monthly.innerText="$"+Math.round((P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1))+extraVal);
+if(balance<=0) break;
+}
+
+monthly.innerText="$"+Math.round(monthlyPayment+extraVal).toLocaleString();
 interest.innerText="Total interest: $"+Math.round(totalInterest).toLocaleString();
-duration.innerText="Duration: "+years.value+" years";
+duration.innerText="Duration: "+Math.ceil(amortisationData.length/12)+" years";
 
-document.querySelector("#table tbody").innerHTML=table;
+document.querySelector("#table tbody").innerHTML=tableHTML;
 
 if(chart)chart.destroy();
+
 chart=new Chart(document.getElementById("chart"),{
 type:"line",
-data:{labels,datasets:[{label:"Balance",data}]}
+data:{
+labels:labels,
+datasets:[
+{label:"Remaining Balance",data:balanceData},
+{label:"Principal Paid",data:principalData},
+{label:"Interest Paid",data:interestData}
+]
+},
+options:{responsive:true}
 });
 }
 
+function toggleTable(){
+document.getElementById("table").classList.toggle("hidden");
+}
+
+function downloadCSV(){
+let csv="Month,Payment,Principal,Interest,Balance\n";
+amortisationData.forEach(row=>{
+csv+=row.join(",")+"\n";
+});
+
+let blob=new Blob([csv],{type:"text/csv"});
+let url=URL.createObjectURL(blob);
+
+let a=document.createElement("a");
+a.href=url;
+a.download="amortisation.csv";
+a.click();
+}
+
 document.querySelectorAll("input").forEach(i=>i.oninput=calc);
+
 calc();
 </script>
 
 </div>
+
 </body>
 </html>
