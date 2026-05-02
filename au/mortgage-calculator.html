@@ -29,7 +29,10 @@
       padding: 40px 20px;
     }
 
-    h1 { font-size: 32px; }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
 
     .calculator {
       background: white;
@@ -44,13 +47,18 @@
       gap: 20px;
     }
 
-    label { font-size: 14px; }
+    label {
+      font-size: 14px;
+      display: block;
+      margin-bottom: 5px;
+    }
 
-    input, select {
+    input {
       width: 100%;
       padding: 10px;
       border-radius: 6px;
       border: 1px solid #ddd;
+      font-size: 16px;
     }
 
     .result {
@@ -60,10 +68,20 @@
       border-radius: 10px;
     }
 
-    .big { font-size: 26px; font-weight: bold; }
+    .result div {
+      margin-bottom: 8px;
+    }
+
+    .big {
+      font-size: 26px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
 
     @media(max-width: 700px) {
-      .grid { grid-template-columns: 1fr; }
+      .grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -109,6 +127,9 @@
       <div>Total interest</div>
       <div id="interest"></div>
 
+      <div>Interest saved</div>
+      <div id="saved"></div>
+
       <div>Loan duration</div>
       <div id="duration"></div>
     </div>
@@ -118,18 +139,13 @@
 </div>
 
 <script>
-function calculate() {
-  let loan = parseFloat(document.getElementById("loan").value);
-  let rate = parseFloat(document.getElementById("rate").value) / 100 / 12;
-  let months = parseFloat(document.getElementById("years").value) * 12;
-  let extra = parseFloat(document.getElementById("extra").value) || 0;
-
-  let baseMonthly = loan * (rate * Math.pow(1 + rate, months)) /
-                    (Math.pow(1 + rate, months) - 1);
-
+function calculateLoan(loan, rate, months, extra) {
   let balance = loan;
   let totalInterest = 0;
   let monthCount = 0;
+
+  let baseMonthly = loan * (rate * Math.pow(1 + rate, months)) /
+                    (Math.pow(1 + rate, months) - 1);
 
   while (balance > 0 && monthCount < 1000 * 12) {
     let interest = balance * rate;
@@ -144,15 +160,34 @@ function calculate() {
     monthCount++;
   }
 
-  let years = Math.floor(monthCount / 12);
-  let remainingMonths = monthCount % 12;
+  return { totalInterest, monthCount, baseMonthly };
+}
+
+function calculate() {
+  let loan = parseFloat(document.getElementById("loan").value);
+  let rate = parseFloat(document.getElementById("rate").value) / 100 / 12;
+  let months = parseFloat(document.getElementById("years").value) * 12;
+  let extra = parseFloat(document.getElementById("extra").value) || 0;
+
+  let normal = calculateLoan(loan, rate, months, 0);
+  let extraPay = calculateLoan(loan, rate, months, extra);
 
   function format(n) {
     return "$" + Math.round(n).toLocaleString();
   }
 
-  document.getElementById("monthly").innerText = format(baseMonthly + extra);
-  document.getElementById("interest").innerText = format(totalInterest);
+  let years = Math.floor(extraPay.monthCount / 12);
+  let remainingMonths = extraPay.monthCount % 12;
+
+  document.getElementById("monthly").innerText =
+    format(extraPay.baseMonthly + extra);
+
+  document.getElementById("interest").innerText =
+    format(extraPay.totalInterest);
+
+  document.getElementById("saved").innerText =
+    format(normal.totalInterest - extraPay.totalInterest);
+
   document.getElementById("duration").innerText =
     years + " years " + remainingMonths + " months";
 }
