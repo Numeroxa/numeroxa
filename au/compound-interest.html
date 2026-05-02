@@ -2,63 +2,233 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Compound Interest Calculator | Numeroxa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Compound Interest Calculator Australia (2026) | Numeroxa</title>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
-body{font-family:Arial;background:#f9fafb;margin:0;padding:40px;}
-canvas{margin-top:30px;}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f9fafb;
+}
+
+header {
+  background: #0f172a;
+  color: white;
+  padding: 20px;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.result {
+  margin-top: 20px;
+  padding: 20px;
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.big {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+canvas {
+  margin-top: 30px;
+}
+
+section {
+  margin-top: 50px;
+}
 </style>
 </head>
 
 <body>
 
+<header>
+Numeroxa — Smart Financial Calculators
+</header>
+
+<div class="container">
+
 <h1>Compound Interest Calculator</h1>
 
-<input id="p" value="10000">
-<input id="m" value="500">
-<input id="r" value="7">
-<input id="y" value="20">
+<div class="grid">
+<div>
+<label>Initial Investment ($)</label>
+<input id="principal" type="number" value="10000">
+</div>
 
-<div id="final"></div>
+<div>
+<label>Monthly Contribution ($)</label>
+<input id="monthly" type="number" value="500">
+</div>
+
+<div>
+<label>Interest Rate (% p.a.)</label>
+<input id="rate" type="number" value="7">
+</div>
+
+<div>
+<label>Time Period (years)</label>
+<input id="years" type="number" value="20">
+</div>
+</div>
+
+<div class="result">
+<div>Final balance</div>
+<div class="big" id="final"></div>
+
+<div>Total contributions</div>
+<div id="contributions"></div>
+
+<div>Interest earned</div>
+<div id="interest"></div>
+</div>
+
 <canvas id="chart"></canvas>
 
 <!-- RELATED -->
-<div style="margin-top:40px;background:#eef2ff;padding:20px;border-radius:10px;">
+<div style="margin-top:40px; background:#eef2ff; padding:20px; border-radius:10px;">
 <strong>Related calculators:</strong>
 <ul>
 <li><a href="mortgage-calculator.html">Mortgage calculator</a></li>
-<li><a href="savings-goal.html">Savings goal</a></li>
+<li><a href="savings-goal.html">Savings goal calculator</a></li>
 <li><a href="tax-calculator.html">Tax calculator</a></li>
 </ul>
 </div>
 
 <section>
 <h2>What is compound interest?</h2>
-<p>Compound interest grows your money exponentially by earning returns on both principal and accumulated interest.</p>
+<p>
+Compound interest allows your investment to grow exponentially by earning returns on both your initial investment and accumulated interest over time.
+</p>
+
+<h3>Why time matters</h3>
+<p>
+The longer your money remains invested, the more powerful compounding becomes.
+</p>
+
+<h3>How to maximise returns</h3>
+<ul>
+<li>Start early</li>
+<li>Invest regularly</li>
+<li>Reinvest earnings</li>
+</ul>
 </section>
+
+</div>
 
 <script>
 let chart;
 
-function calc(){
-let P=+p.value,PMT=+m.value,rte=r.value/100/12,n=y.value*12;
-let bal=P,labels=[],data=[];
+function calculate() {
+  let P = parseFloat(document.getElementById("principal").value) || 0;
+  let PMT = parseFloat(document.getElementById("monthly").value) || 0;
+  let r = parseFloat(document.getElementById("rate").value) / 100 / 12;
+  let years = parseFloat(document.getElementById("years").value);
+  let n = years * 12;
 
-for(let i=0;i<=n;i++){
-if(i%12===0){labels.push(i/12);data.push(bal);}
-bal=bal*(1+rte)+PMT;
+  let balance = P;
+  let totalContrib = P;
+
+  let labels = [];
+  let contribData = [];
+  let interestData = [];
+
+  for (let i = 0; i <= n; i++) {
+
+    if (i % 12 === 0) {
+      let interest = balance - totalContrib;
+
+      labels.push("Year " + (i / 12));
+      contribData.push(totalContrib);
+      interestData.push(interest);
+    }
+
+    balance = balance * (1 + r) + PMT;
+    totalContrib += PMT;
+  }
+
+  let finalBalance = balance;
+  let contributions = totalContrib;
+  let interest = finalBalance - contributions;
+
+  function format(x) {
+    return "$" + Math.round(x).toLocaleString();
+  }
+
+  document.getElementById("final").innerText = format(finalBalance);
+  document.getElementById("contributions").innerText = format(contributions);
+  document.getElementById("interest").innerText = format(interest);
+
+  renderChart(labels, contribData, interestData);
 }
 
-final.innerText="$"+Math.round(bal).toLocaleString();
+function renderChart(labels, contributions, interest) {
+  const ctx = document.getElementById("chart").getContext("2d");
 
-if(chart)chart.destroy();
-chart=new Chart(document.getElementById("chart"),{
-type:"line",
-data:{labels,datasets:[{label:"Balance",data,fill:true}]}
+  if (chart) chart.destroy();
+
+  chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: "Contributions",
+          data: contributions,
+          fill: true
+        },
+        {
+          label: "Interest",
+          data: interest,
+          fill: true
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: {
+        mode: "index",
+        intersect: false
+      },
+      scales: {
+        y: {
+          stacked: true,
+          ticks: {
+            callback: value => "$" + value.toLocaleString()
+          }
+        }
+      }
+    }
+  });
+}
+
+document.querySelectorAll("input").forEach(el => {
+  el.addEventListener("input", calculate);
 });
-}
-document.querySelectorAll("input").forEach(i=>i.oninput=calc);
-calc();
+
+calculate();
 </script>
 
 </body>
