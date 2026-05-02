@@ -4,104 +4,73 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Compound Interest Calculator Australia (2026) | Numeroxa</title>
+<title>Mortgage Calculator Australia (2026) | Numeroxa</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+  font-family: Inter, Arial;
   background: #f9fafb;
   color: #111;
 }
 
 header {
-  background: #0f172a;
-  color: white;
-  padding: 20px 40px;
-  font-weight: bold;
+  background:#0f172a;
+  color:white;
+  padding:18px 40px;
+  display:flex;
+  justify-content:space-between;
+}
+
+header a {
+  color:white;
+  text-decoration:none;
+  margin-left:20px;
 }
 
 .container {
-  max-width: 900px;
-  margin: auto;
-  padding: 40px 20px;
-}
-
-h1 {
-  font-size: 32px;
-  margin-bottom: 20px;
+  max-width:900px;
+  margin:auto;
+  padding:40px 20px;
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
-
-label {
-  font-size: 14px;
-  margin-bottom: 5px;
-  display: block;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
 }
 
 input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid #ddd;
-  font-size: 16px;
+  width:100%;
+  padding:10px;
+  border-radius:6px;
+  border:1px solid #ddd;
 }
 
 .result {
-  margin-top: 30px;
-  padding: 25px;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-top:30px;
+  padding:25px;
+  background:white;
+  border-radius:12px;
 }
 
-.result-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
+.big {font-size:28px;font-weight:bold;}
+
+canvas {margin-top:30px;}
+
+table {
+  width:100%;
+  margin-top:30px;
+  border-collapse:collapse;
 }
 
-.result-label {
-  color: #555;
-}
-
-.big {
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.section-title {
-  margin-top: 20px;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-canvas {
-  margin-top: 30px;
-}
-
-.related {
-  margin-top: 40px;
-  padding: 20px;
-  background: #eef2ff;
-  border-radius: 10px;
-}
-
-section {
-  margin-top: 50px;
-}
-
-@media(max-width: 700px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
+td, th {
+  padding:8px;
+  border-bottom:1px solid #eee;
+  text-align:left;
 }
 </style>
 </head>
@@ -109,255 +78,94 @@ section {
 <body>
 
 <header>
-Numeroxa — Smart Financial Calculators
+<a href="../index.html">Numeroxa</a>
+<div>
+<a href="../index.html">Home</a>
+<a href="compound-interest.html">Compound</a>
+<a href="savings-goal.html">Savings</a>
+<a href="tax-calculator.html">Tax</a>
+</div>
 </header>
 
 <div class="container">
 
-<h1>Compound Interest Calculator</h1>
+<h1>Mortgage Calculator</h1>
 
 <div class="grid">
-
-<div>
-<label>Initial Investment ($)</label>
-<input id="principal" type="number" value="10000">
-</div>
-
-<div>
-<label>Monthly Contribution ($)</label>
-<input id="monthly" type="number" value="500">
-</div>
-
-<div>
-<label>Interest Rate (% p.a.)</label>
-<input id="rate" type="number" value="7">
-</div>
-
-<div>
-<label>Time Period (years)</label>
-<input id="years" type="number" value="20">
-</div>
-
+<input id="loan" value="600000">
+<input id="rate" value="6">
+<input id="years" value="30">
+<input id="extra" value="0">
 </div>
 
 <div class="result">
-
-<div class="section-title">Results</div>
-
-<div class="result-row">
-<span class="result-label">Final balance</span>
-<span class="big" id="final"></span>
-</div>
-
-<div class="result-row">
-<span class="result-label">Total contributions</span>
-<span id="contributions"></span>
-</div>
-
-<div class="result-row">
-<span class="result-label">Interest earned</span>
-<span id="interest"></span>
-</div>
-
+<div class="big" id="monthly"></div>
+<div id="interest"></div>
+<div id="duration"></div>
 </div>
 
 <canvas id="chart"></canvas>
 
-<div class="related">
-<strong>Related calculators:</strong>
-<ul>
-<li><a href="mortgage-calculator.html">Compare investing vs paying off your mortgage</a></li>
-<li><a href="savings-goal.html">Calculate how much you need to save monthly</a></li>
-<li><a href="tax-calculator.html">Estimate your after-tax income</a></li>
-</ul>
-</div>
-
-<section>
-<h2>What is compound interest?</h2>
-<p>
-Compound interest allows your money to grow exponentially by earning returns on both your initial investment and accumulated interest.
-</p>
-
-<h3>Why time is critical</h3>
-<p>
-The longer you invest, the more powerful compounding becomes.
-</p>
-
-<h3>How to maximise growth</h3>
-<ul>
-<li>Start early</li>
-<li>Contribute regularly</li>
-<li>Reinvest returns</li>
-</ul>
-<section>
-
-<h2>Frequently asked questions</h2>
-
-<h3>What is compound interest?</h3>
-<p>
-Compound interest means earning returns on both your initial investment and previously earned interest.
-</p>
-
-<h3>How often is interest compounded?</h3>
-<p>
-Most investments compound monthly or annually. More frequent compounding leads to faster growth.
-</p>
-
-<h3>Why does compounding take time to grow?</h3>
-<p>
-Compounding starts slowly but accelerates over time as interest earns interest.
-</p>
-
-<h3>Does contributing regularly make a big difference?</h3>
-<p>
-Yes, regular contributions significantly increase your final balance due to compounding.
-</p>
-
-<h3>What interest rate should I use?</h3>
-<p>
-It depends on your investment type—savings accounts are lower, while shares or ETFs typically have higher long-term returns.
-</p>
-
-</section>
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "What is compound interest?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Compound interest means earning returns on both your initial investment and accumulated interest over time."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How often is interest compounded?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Interest is typically compounded monthly or annually, with more frequent compounding leading to faster growth."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Why does compounding take time to grow?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Compounding grows slowly at first but accelerates as interest accumulates and earns additional returns."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Does contributing regularly make a difference?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Regular contributions significantly increase long-term returns through compounding."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "What interest rate should I use?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "The rate depends on your investment type, with higher-risk assets generally offering higher returns."
-      }
-    }
-  ]
-}
-</script>
-
-</div>
+<table id="table">
+<thead>
+<tr>
+<th>Year</th>
+<th>Balance</th>
+<th>Interest Paid</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
 
 <script>
 let chart;
 
-function calculate() {
-  let P = parseFloat(document.getElementById("principal").value) || 0;
-  let PMT = parseFloat(document.getElementById("monthly").value) || 0;
-  let r = parseFloat(document.getElementById("rate").value) / 100 / 12;
-  let years = parseFloat(document.getElementById("years").value);
-  let n = years * 12;
+function calc(){
+let P=+loan.value;
+let r=rate.value/100/12;
+let n=years.value*12;
+let extraVal=+extra.value||0;
 
-  let balance = P;
-  let totalContrib = P;
+let balance=P;
+let totalInterest=0;
+let data=[],labels=[];
+let table="";
 
-  let labels = [];
-  let contribData = [];
-  let interestData = [];
+for(let i=1;i<=n;i++){
+let interest=balance*r;
+let payment=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1)+extraVal;
+balance=balance+interest-payment;
+totalInterest+=interest;
 
-  for (let i = 0; i <= n; i++) {
+if(i%12===0){
+labels.push("Year "+i/12);
+data.push(balance);
 
-    if (i % 12 === 0) {
-      let interest = balance - totalContrib;
-
-      labels.push("Year " + (i / 12));
-      contribData.push(totalContrib);
-      interestData.push(interest);
-    }
-
-    balance = balance * (1 + r) + PMT;
-    totalContrib += PMT;
-  }
-
-  let finalBalance = balance;
-  let contributions = totalContrib;
-  let interest = finalBalance - contributions;
-
-  function f(x){ return "$" + Math.round(x).toLocaleString(); }
-
-  document.getElementById("final").innerText = f(finalBalance);
-  document.getElementById("contributions").innerText = f(contributions);
-  document.getElementById("interest").innerText = f(interest);
-
-  renderChart(labels, contribData, interestData);
+table+=`<tr>
+<td>${i/12}</td>
+<td>$${Math.round(balance).toLocaleString()}</td>
+<td>$${Math.round(totalInterest).toLocaleString()}</td>
+</tr>`;
+}
 }
 
-function renderChart(labels, contributions, interest) {
-  const ctx = document.getElementById("chart").getContext("2d");
+monthly.innerText="$"+Math.round((P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1))+extraVal);
+interest.innerText="Total interest: $"+Math.round(totalInterest).toLocaleString();
+duration.innerText="Duration: "+years.value+" years";
 
-  if (chart) chart.destroy();
+document.querySelector("#table tbody").innerHTML=table;
 
-  chart = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: labels,
-      datasets: [
-        {
-          label: "Contributions",
-          data: contributions,
-          fill: true
-        },
-        {
-          label: "Interest",
-          data: interest,
-          fill: true
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      interaction: { mode: "index", intersect: false },
-      scales: {
-        y: {
-          stacked: true,
-          ticks: {
-            callback: value => "$" + value.toLocaleString()
-          }
-        }
-      }
-    }
-  });
-}
-
-document.querySelectorAll("input").forEach(el => {
-  el.addEventListener("input", calculate);
+if(chart)chart.destroy();
+chart=new Chart(document.getElementById("chart"),{
+type:"line",
+data:{labels,datasets:[{label:"Balance",data}]}
 });
+}
 
-calculate();
+document.querySelectorAll("input").forEach(i=>i.oninput=calc);
+calc();
 </script>
 
+</div>
 </body>
 </html>
