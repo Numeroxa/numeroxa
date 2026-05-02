@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Mortgage Calculator Australia (2026) | Numeroxa</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mortgage Calculator Australia | Numeroxa</title>
 
 <style>
 body {margin:0;font-family:Arial;background:#f9fafb;}
 header {background:#0f172a;color:white;padding:20px;}
 .container {max-width:900px;margin:auto;padding:40px 20px;}
 .grid {display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-input {width:100%;padding:10px;}
+input {width:100%;padding:10px;border-radius:6px;border:1px solid #ddd;}
 .result {margin-top:20px;background:#f1f5f9;padding:20px;border-radius:10px;}
 section {margin-top:50px;}
 </style>
@@ -23,19 +23,19 @@ section {margin-top:50px;}
 <h1>Mortgage Calculator</h1>
 
 <div class="grid">
-<input id="loan" value="600000">
-<input id="rate" value="6">
-<input id="years" value="30">
-<input id="extra" value="0">
+<input id="loan" type="number" value="600000">
+<input id="rate" type="number" value="6">
+<input id="years" type="number" value="30">
+<input id="extra" type="number" value="0">
 </div>
 
 <div class="result">
-<div id="monthly"></div>
-<div id="interest"></div>
+<div>Monthly repayment: <b id="monthly"></b></div>
+<div>Total interest: <b id="interest"></b></div>
 </div>
 
 <!-- RELATED -->
-<div style="margin-top:30px;background:#eef2ff;padding:20px;border-radius:10px;">
+<div style="margin-top:40px;background:#eef2ff;padding:20px;border-radius:10px;">
 <b>Related calculators:</b>
 <ul>
 <li><a href="compound-interest.html">Compound interest calculator</a></li>
@@ -45,20 +45,28 @@ section {margin-top:50px;}
 </div>
 
 <section>
-<h2>How mortgage repayments work</h2>
-<p>Mortgage repayments consist of principal and interest...</p>
+<h2>How mortgage repayments are calculated</h2>
+<p>Mortgage repayments combine principal and interest. Early payments are mostly interest.</p>
 </section>
 
 </div>
 
 <script>
-function calc(){
+function calculate(){
 let P=loan.value,r=rate.value/100/12,n=years.value*12;
 let m=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
-monthly.innerText="$"+Math.round(m);
+monthly.innerText="$"+Math.round(m).toLocaleString();
+
+let balance=P,totalInterest=0;
+for(let i=0;i<n;i++){
+let interest=balance*r;
+balance=balance+interest-m;
+totalInterest+=interest;
 }
-document.querySelectorAll("input").forEach(i=>i.oninput=calc);
-calc();
+interest.innerText="$"+Math.round(totalInterest).toLocaleString();
+}
+document.querySelectorAll("input").forEach(i=>i.oninput=calculate);
+calculate();
 </script>
 </body>
 </html>
