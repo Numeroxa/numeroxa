@@ -18,9 +18,7 @@ body {
 }
 
 /* NAVIGATION */
-nav a {
-  margin-left:20px;
-}
+nav a { margin-left:20px; }
 
 .menu-toggle {
   display:none;
@@ -30,10 +28,7 @@ nav a {
 
 /* MOBILE NAV */
 @media(max-width:700px){
-  .menu-toggle {
-    display:block;
-    color:white;
-  }
+  .menu-toggle { display:block; color:white; }
 
   nav {
     display:none;
@@ -50,9 +45,7 @@ nav a {
     margin:10px 0;
   }
 
-  nav.active {
-    display:block;
-  }
+  nav.active { display:block; }
 }
 
 header {
@@ -74,7 +67,6 @@ header a {
 .logo {
   font-size:20px;
   font-weight:600;
-  letter-spacing:0.5px;
   line-height:1.1;
 }
 
@@ -141,9 +133,7 @@ input, select {
   border-radius:10px;
 }
 
-section {
-  margin-top:50px;
-}
+section { margin-top:50px; }
 </style>
 </head>
 
@@ -227,58 +217,48 @@ section {
 </ul>
 </div>
 
-<section>
-<h2>How income tax works in Australia</h2>
-<p>Australia uses a progressive tax system.</p>
-</section>
-
-<section>
-<h2>Frequently asked questions</h2>
-<h3>How much tax should I pay?</h3>
-<p>Depends on income and residency.</p>
-</section>
-
 </div>
 
 <script>
 function calculate(){
 
-let incomeVal=+income.value;
-let residentStatus=resident.value;
-let hasHECS=hecs.value==="yes";
+let incomeVal = +document.getElementById("income").value;
+let residentStatus = document.getElementById("resident").value;
+let hasHECS = document.getElementById("hecs").value === "yes";
 
-let tax=0;
+let taxValue = 0;
 
 if(residentStatus==="resident"){
-if(incomeVal>18200) tax+=(Math.min(incomeVal,45000)-18200)*0.16;
-if(incomeVal>45000) tax+=(Math.min(incomeVal,135000)-45000)*0.30;
-if(incomeVal>135000) tax+=(Math.min(incomeVal,190000)-135000)*0.37;
-if(incomeVal>190000) tax+=(incomeVal-190000)*0.45;
+if(incomeVal>18200) taxValue+=(Math.min(incomeVal,45000)-18200)*0.16;
+if(incomeVal>45000) taxValue+=(Math.min(incomeVal,135000)-45000)*0.30;
+if(incomeVal>135000) taxValue+=(Math.min(incomeVal,190000)-135000)*0.37;
+if(incomeVal>190000) taxValue+=(incomeVal-190000)*0.45;
 }else{
-if(incomeVal>0) tax+=(Math.min(incomeVal,135000))*0.30;
-if(incomeVal>135000) tax+=(Math.min(incomeVal,190000)-135000)*0.37;
-if(incomeVal>190000) tax+=(incomeVal-190000)*0.45;
+if(incomeVal>0) taxValue+=(Math.min(incomeVal,135000))*0.30;
+if(incomeVal>135000) taxValue+=(Math.min(incomeVal,190000)-135000)*0.37;
+if(incomeVal>190000) taxValue+=(incomeVal-190000)*0.45;
 }
 
-let medicare = residentStatus==="resident" ? incomeVal*0.02 : 0;
+let medicareValue = residentStatus==="resident" ? incomeVal*0.02 : 0;
 
-let hecsPay = 0;
+let hecsValue = 0;
 if(hasHECS && incomeVal>50000){
-hecsPay = incomeVal * 0.05;
+hecsValue = incomeVal * 0.05;
 }
 
-let total = tax + medicare + hecsPay;
-let net = incomeVal - total;
+let totalValue = taxValue + medicareValue + hecsValue;
+let netValue = incomeVal - totalValue;
 
-function f(x){return "$"+Math.round(x).toLocaleString();}
+function f(x){ return "$"+Math.round(x).toLocaleString(); }
 
-tax.innerText=f(tax);
-medicare.innerText=f(medicare);
-hecsPay.innerText=f(hecsPay);
-total.innerText=f(total);
-net.innerText=f(net);
+document.getElementById("tax").innerText = f(taxValue);
+document.getElementById("medicare").innerText = f(medicareValue);
+document.getElementById("hecsPay").innerText = f(hecsValue);
+document.getElementById("total").innerText = f(totalValue);
+document.getElementById("net").innerText = f(netValue);
 
-rate.innerText="Effective tax rate: "+((total/incomeVal)*100).toFixed(1)+"%";
+document.getElementById("rate").innerText =
+"Effective tax rate: " + ((totalValue/incomeVal)*100).toFixed(1) + "%";
 }
 
 document.querySelectorAll("input, select").forEach(el=>el.oninput=calculate);
