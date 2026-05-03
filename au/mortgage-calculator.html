@@ -18,7 +18,6 @@ body {
   color:#111;
 }
 
-/* NAV */
 nav a { margin-left:20px; }
 
 .menu-toggle {
@@ -64,16 +63,8 @@ header a {
   margin-left:20px;
 }
 
-.logo {
-  font-size:20px;
-  font-weight:600;
-}
-
-.tagline {
-  display:block;
-  font-size:11px;
-  opacity:0.7;
-}
+.logo { font-size:20px; font-weight:600; }
+.tagline { display:block; font-size:11px; opacity:0.7; }
 
 .container {
   max-width:1000px;
@@ -81,10 +72,7 @@ header a {
   padding:40px 20px;
 }
 
-h1 {
-  font-size:32px;
-  margin-bottom:20px;
-}
+h1 { font-size:32px; margin-bottom:20px; }
 
 .grid {
   display:grid;
@@ -92,11 +80,7 @@ h1 {
   gap:20px;
 }
 
-label {
-  font-size:14px;
-  margin-bottom:5px;
-  display:block;
-}
+label { font-size:14px; margin-bottom:5px; display:block; }
 
 input {
   width:100%;
@@ -105,7 +89,6 @@ input {
   border:1px solid #ddd;
 }
 
-/* RESULT CARD */
 .result {
   margin-top:30px;
   padding:28px;
@@ -117,13 +100,7 @@ input {
 .result-primary {
   display:flex;
   justify-content:space-between;
-  align-items:center;
   margin-bottom:18px;
-}
-
-.result-primary .label {
-  font-size:16px;
-  color:#555;
 }
 
 .result-primary .value {
@@ -143,14 +120,7 @@ input {
   margin-bottom:10px;
 }
 
-.result-label {
-  color:#666;
-  font-size:14px;
-}
-
-.result-value {
-  font-weight:500;
-}
+.result-label { color:#666; font-size:14px; }
 
 canvas { margin-top:30px; }
 
@@ -240,7 +210,7 @@ section { margin-top:50px; }
 
 <div class="result">
 <div class="result-primary">
-  <span class="label">Monthly repayment</span>
+  <span>Monthly repayment</span>
   <span class="value" id="monthly"></span>
 </div>
 
@@ -248,17 +218,17 @@ section { margin-top:50px; }
 
 <div class="result-row">
   <span class="result-label">Total interest</span>
-  <span class="result-value" id="interest"></span>
+  <span id="interest"></span>
 </div>
 
 <div class="result-row">
   <span class="result-label">Interest saved</span>
-  <span class="result-value" id="saved"></span>
+  <span id="saved"></span>
 </div>
 
 <div class="result-row">
   <span class="result-label">Loan duration</span>
-  <span class="result-value" id="duration"></span>
+  <span id="duration"></span>
 </div>
 </div>
 
@@ -289,117 +259,130 @@ section { margin-top:50px; }
 </ul>
 </div>
 
-<!-- FULL CONTENT RESTORED -->
-
 <section>
 <h2>How mortgage repayments are calculated</h2>
-<p>
-Mortgage repayments are calculated using your loan amount, interest rate, and loan term. Each repayment includes both interest and principal.
-</p>
-
-<h3>What affects your mortgage repayments?</h3>
-<ul>
-<li>Loan size</li>
-<li>Interest rate</li>
-<li>Loan term</li>
-</ul>
-
-<h3>Why extra repayments matter</h3>
-<p>
-Extra repayments reduce total interest and shorten your loan term.
-</p>
+<p>Mortgage repayments include both interest and principal.</p>
 </section>
 
 <section>
 <h2>Frequently asked questions</h2>
-
-<h3>How are mortgage repayments calculated?</h3>
-<p>Using an amortisation formula.</p>
-
-<h3>What happens if I make extra repayments?</h3>
-<p>You reduce interest and loan duration.</p>
-
-<h3>How much interest will I pay?</h3>
-<p>Depends on loan size, rate, and term.</p>
-
-<h3>Is weekly better than monthly?</h3>
-<p>It can reduce interest slightly.</p>
-
-<h3>What is an amortisation schedule?</h3>
-<p>A breakdown of each payment.</p>
-
-<h3>Can I pay off my mortgage early?</h3>
-<p>Yes, usually.</p>
-
+<p>See above for details.</p>
 </section>
 
 </div>
 
 <script>
-// (unchanged calculator logic — same as your version)
-</script>
-<script type="application/ld+json">
-{
-"@context":"https://schema.org",
-"@type":"FAQPage",
-"mainEntity":[
+let chart;
+let amortData=[];
 
-{
-"@type":"Question",
-"name":"How are mortgage repayments calculated?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"Mortgage repayments are calculated using loan amount, interest rate, and loan term, with each payment including both principal and interest."
+const loanEl = document.getElementById("loan");
+const rateEl = document.getElementById("rate");
+const yearsEl = document.getElementById("years");
+const extraEl = document.getElementById("extra");
+
+const monthlyEl = document.getElementById("monthly");
+const interestEl = document.getElementById("interest");
+const savedEl = document.getElementById("saved");
+const durationEl = document.getElementById("duration");
+
+function basePayment(P,r,n){
+if(r===0) return P/n;
+return P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
 }
-},
 
-{
-"@type":"Question",
-"name":"What happens if I make extra repayments?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"Extra repayments reduce your loan balance faster, saving interest and shortening your loan duration."
-}
-},
+function runLoan(P,r,n,extra){
+let balance=P,totalInterest=0,months=0;
+let base=basePayment(P,r,n);
 
-{
-"@type":"Question",
-"name":"How much interest will I pay?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"Total interest depends on loan size, interest rate, and loan term. Higher rates and longer terms increase total interest."
-}
-},
+let labels=[],balanceSeries=[],interestSeries=[],principalSeries=[];
+let tableHTML=""; amortData=[];
 
-{
-"@type":"Question",
-"name":"Is it better to pay weekly or monthly?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"Paying more frequently can reduce interest slightly, especially if it results in extra repayments."
-}
-},
+while(balance>0){
+let interest=balance*r;
+let payment=base+extra;
+if(payment>balance+interest) payment=balance+interest;
 
-{
-"@type":"Question",
-"name":"What is an amortisation schedule?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"An amortisation schedule is a detailed breakdown of each repayment showing how much goes toward interest and principal."
-}
-},
+let principal=payment-interest;
+balance-=principal;
+totalInterest+=interest;
+months++;
 
-{
-"@type":"Question",
-"name":"Can I pay off my mortgage early?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"Yes, most mortgages allow extra repayments, though some fixed-rate loans may have restrictions."
+amortData.push([months,payment,principal,interest,balance]);
+
+tableHTML+=`<tr>
+<td>${months}</td>
+<td>$${Math.round(payment).toLocaleString()}</td>
+<td>$${Math.round(principal).toLocaleString()}</td>
+<td>$${Math.round(interest).toLocaleString()}</td>
+<td>$${Math.max(0,Math.round(balance)).toLocaleString()}</td>
+</tr>`;
+
+if(months%12===0){
+labels.push("Year "+months/12);
+balanceSeries.push(balance);
+interestSeries.push(totalInterest);
+principalSeries.push(principal);
 }
 }
 
+document.querySelector("#table tbody").innerHTML=tableHTML;
+
+return {totalInterest,months,base,labels,balanceSeries,interestSeries,principalSeries};
+}
+
+function calculate(){
+
+let P=+loanEl.value;
+let r=rateEl.value/100/12;
+let n=yearsEl.value*12;
+let extra=+extraEl.value||0;
+
+let normal=runLoan(P,r,n,0);
+let extraLoan=runLoan(P,r,n,extra);
+
+function f(x){return "$"+Math.round(x).toLocaleString();}
+
+monthlyEl.innerText=f(extraLoan.base+extra);
+interestEl.innerText=f(extraLoan.totalInterest);
+savedEl.innerText=f(normal.totalInterest-extraLoan.totalInterest);
+
+let y=Math.floor(extraLoan.months/12);
+let m=extraLoan.months%12;
+durationEl.innerText=y+"y "+m+"m";
+
+if(chart) chart.destroy();
+
+chart=new Chart(document.getElementById("chart"),{
+type:"line",
+data:{
+labels:extraLoan.labels,
+datasets:[
+{label:"Balance",data:extraLoan.balanceSeries},
+{label:"Interest",data:extraLoan.interestSeries}
 ]
 }
+});
+}
+
+document.querySelectorAll("input").forEach(i=>i.oninput=calculate);
+calculate();
+
+function toggleTable(){document.getElementById("table").classList.toggle("hidden");}
+
+function downloadCSV(){
+let csv="Month,Payment,Principal,Interest,Balance\n";
+amortData.forEach(r=>csv+=r.join(",")+"\n");
+let blob=new Blob([csv]);
+let a=document.createElement("a");
+a.href=URL.createObjectURL(blob);
+a.download="mortgage.csv";
+a.click();
+}
+
+function toggleMenu(){
+document.getElementById("nav").classList.toggle("active");
+}
 </script>
+
 </body>
 </html>
