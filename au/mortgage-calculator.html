@@ -19,9 +19,7 @@ body {
 }
 
 /* NAVIGATION */
-nav a {
-  margin-left:20px;
-}
+nav a { margin-left:20px; }
 
 .menu-toggle {
   display:none;
@@ -31,10 +29,7 @@ nav a {
 
 /* MOBILE NAV */
 @media(max-width:700px){
-  .menu-toggle {
-    display:block;
-    color:white;
-  }
+  .menu-toggle { display:block; color:white; }
 
   nav {
     display:none;
@@ -51,9 +46,7 @@ nav a {
     margin:10px 0;
   }
 
-  nav.active {
-    display:block;
-  }
+  nav.active { display:block; }
 }
 
 header {
@@ -75,7 +68,6 @@ header a {
 .logo {
   font-size:20px;
   font-weight:600;
-  letter-spacing:0.5px;
   line-height:1.1;
 }
 
@@ -115,11 +107,37 @@ input {
   border:1px solid #ddd;
 }
 
+/* RESULT CARD UPGRADE */
 .result {
   margin-top:30px;
-  padding:25px;
+  padding:28px;
   background:white;
-  border-radius:12px;
+  border-radius:14px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.06);
+}
+
+.result-primary {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.result-primary .label {
+  font-size:16px;
+  color:#555;
+}
+
+.result-primary .value {
+  font-size:24px;
+  font-weight:600;
+  letter-spacing:0.3px;
+}
+
+.result-divider {
+  height:1px;
+  background:#eee;
+  margin:16px 0;
 }
 
 .result-row {
@@ -128,13 +146,16 @@ input {
   margin-bottom:10px;
 }
 
-.big {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
+.result-label {
+  color:#666;
+  font-size:14px;
 }
 
-canvas {margin-top:30px;}
+.result-value {
+  font-weight:500;
+}
+
+canvas { margin-top:30px; }
 
 button {
   padding:10px 14px;
@@ -158,9 +179,7 @@ th, td {
   border-bottom:1px solid #eee;
 }
 
-.hidden {display:none;}
-
-section {margin-top:50px;}
+.hidden { display:none; }
 
 .related {
   margin-top:40px;
@@ -169,8 +188,10 @@ section {margin-top:50px;}
   border-radius:10px;
 }
 
+section { margin-top:50px; }
+
 @media(max-width:700px){
-  .grid {grid-template-columns:1fr;}
+  .grid { grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -222,26 +243,31 @@ section {margin-top:50px;}
 </div>
 </div>
 
+<!-- NEW RESULT CARD -->
 <div class="result">
+
+<div class="result-primary">
+  <span class="label">Monthly repayment</span>
+  <span class="value" id="monthly"></span>
+</div>
+
+<div class="result-divider"></div>
+
 <div class="result-row">
-<span>Monthly repayment</span>
-<span class="big" id="monthly"></span>
+  <span class="result-label">Total interest</span>
+  <span class="result-value" id="interest"></span>
 </div>
 
 <div class="result-row">
-<span>Total interest</span>
-<span id="interest"></span>
+  <span class="result-label">Interest saved</span>
+  <span class="result-value" id="saved"></span>
 </div>
 
 <div class="result-row">
-<span>Interest saved</span>
-<span id="saved"></span>
+  <span class="result-label">Loan duration</span>
+  <span class="result-value" id="duration"></span>
 </div>
 
-<div class="result-row">
-<span>Loan duration</span>
-<span id="duration"></span>
-</div>
 </div>
 
 <canvas id="chart"></canvas>
@@ -270,63 +296,18 @@ section {margin-top:50px;}
 <li><a href="tax-calculator.html">Income tax calculator</a></li>
 </ul>
 </div>
-<section>
 
+<section>
 <h2>How mortgage repayments are calculated</h2>
-
-<p>
-Mortgage repayments are calculated using your loan amount, interest rate, and loan term. Each repayment includes both interest and principal. Early in the loan, a larger portion of your payment goes toward interest, while later payments increasingly reduce the principal.
-</p>
-
-<h3>What affects your mortgage repayments?</h3>
-<ul>
-<li>Loan size – larger loans increase repayments</li>
-<li>Interest rate – higher rates significantly increase total interest</li>
-<li>Loan term – longer terms reduce monthly payments but increase total interest</li>
-</ul>
-
-<h3>Why extra repayments matter</h3>
-<p>
-Making additional repayments reduces your loan balance faster, which decreases the interest charged over time. Even small extra payments can save tens of thousands of dollars and shorten your loan by years.
-</p>
-
+<p>Mortgage repayments are calculated using your loan amount, interest rate, and loan term...</p>
 </section>
 
 <section>
-
 <h2>Frequently asked questions</h2>
-
 <h3>How are mortgage repayments calculated?</h3>
-<p>
-Repayments are based on a standard amortisation formula that spreads payments evenly over the loan term.
-</p>
-
-<h3>What happens if I make extra repayments?</h3>
-<p>
-Extra repayments reduce your balance faster, saving interest and shortening your loan duration.
-</p>
-
-<h3>How much interest will I pay?</h3>
-<p>
-Total interest depends on your loan amount, interest rate, and term. Longer loans and higher rates increase total interest significantly.
-</p>
-
-<h3>Is it better to pay weekly or monthly?</h3>
-<p>
-Paying more frequently can slightly reduce interest, especially if it results in extra repayments over time.
-</p>
-
-<h3>What is an amortisation schedule?</h3>
-<p>
-It’s a detailed breakdown of each payment showing how much goes toward interest and principal.
-</p>
-
-<h3>Can I pay off my mortgage early?</h3>
-<p>
-Yes, most loans allow extra repayments, though some fixed loans may have restrictions.
-</p>
-
+<p>Repayments are based on a standard amortisation formula.</p>
 </section>
+
 </div>
 
 <script>
@@ -347,11 +328,7 @@ let months=0;
 
 let base=basePayment(P,r,n);
 
-let labels=[];
-let balanceSeries=[];
-let interestSeries=[];
-let principalSeries=[];
-
+let labels=[],balanceSeries=[],interestSeries=[],principalSeries=[];
 let tableHTML="";
 amortData=[];
 
@@ -389,16 +366,7 @@ principalSeries.push(totalPrincipal);
 }
 }
 
-return {
-totalInterest,
-months,
-base,
-labels,
-balanceSeries,
-interestSeries,
-principalSeries,
-tableHTML
-};
+return {totalInterest,months,base,labels,balanceSeries,interestSeries,principalSeries,tableHTML};
 }
 
 function calculate(){
@@ -434,17 +402,11 @@ datasets:[
 {label:"Principal Paid",data:extraLoan.principalSeries},
 {label:"Interest Paid",data:extraLoan.interestSeries}
 ]
-},
-options:{
-responsive:true,
-interaction:{mode:"index",intersect:false}
 }
 });
 }
 
-function toggleTable(){
-table.classList.toggle("hidden");
-}
+function toggleTable(){ table.classList.toggle("hidden"); }
 
 function downloadCSV(){
 let csv="Month,Payment,Principal,Interest,Balance\n";
