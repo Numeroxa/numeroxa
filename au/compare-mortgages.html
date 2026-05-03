@@ -9,52 +9,26 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-body {margin:0;font-family:Inter,Arial;background:#f9fafb;}
-
-header {
-  background:#0f172a;color:white;padding:18px 40px;
-  display:flex;justify-content:space-between;
+body {
+  margin:0;
+  font-family:Inter, Arial;
+  background:#f9fafb;
+  color:#111;
 }
 
-header a {color:white;text-decoration:none;margin-left:20px;}
-
-.container {max-width:1000px;margin:auto;padding:40px;}
-
-.grid {display:grid;grid-template-columns:1fr 1fr;gap:20px;}
-
-.card {
-  background:white;padding:20px;border-radius:12px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.05);
-}
-
-input {
-  width:100%;padding:10px;margin-bottom:10px;
-  border-radius:6px;border:1px solid #ddd;
-}
-
-.result {margin-top:20px;}
-
-.big {font-size:24px;font-weight:bold;}
-
-.highlight {
-  margin-top:30px;
-  padding:20px;
-  background:#dbeafe;
-  border-radius:10px;
-  font-weight:bold;
-  /* Navigation (desktop) */
+/* Navigation */
 nav a {
   margin-left:20px;
 }
 
-/* Hamburger menu button */
+/* Hamburger */
 .menu-toggle {
   display:none;
   font-size:24px;
   cursor:pointer;
 }
 
-/* MOBILE */
+/* MOBILE NAV */
 @media(max-width:700px){
 
   .menu-toggle {
@@ -81,6 +55,87 @@ nav a {
     display:block;
   }
 }
+
+header {
+  background:#0f172a;
+  color:white;
+  padding:18px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:relative;
+}
+
+header a {
+  color:white;
+  text-decoration:none;
+  margin-left:20px;
+}
+
+.logo {
+  font-size:20px;
+  font-weight:600;
+  line-height:1.1;
+}
+
+.tagline {
+  display:block;
+  font-size:11px;
+  opacity:0.7;
+}
+
+.container {
+  max-width:1000px;
+  margin:auto;
+  padding:40px;
+}
+
+h1 {
+  margin-bottom:20px;
+}
+
+.grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+.card {
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.05);
+}
+
+input {
+  width:100%;
+  padding:10px;
+  margin-bottom:10px;
+  border-radius:6px;
+  border:1px solid #ddd;
+}
+
+.result {
+  margin-top:20px;
+}
+
+.big {
+  font-size:24px;
+  font-weight:bold;
+}
+
+.highlight {
+  margin-top:30px;
+  padding:20px;
+  background:#dbeafe;
+  border-radius:10px;
+  font-weight:bold;
+}
+
+@media(max-width:700px){
+  .grid {
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
@@ -89,7 +144,7 @@ nav a {
 
 <header>
 
-<a href="/index.html" class="logo">
+<a href="/numeroxa-finance/index.html" class="logo">
   Numeroxa
   <span class="tagline">Smart Financial Calculators</span>
 </a>
@@ -97,11 +152,11 @@ nav a {
 <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
 <nav id="nav">
-  <a href="/index.html">Home</a>
-  <a href="/au/mortgage-calculator.html">Mortgage</a>
-  <a href="/au/compound-interest.html">Compound</a>
-  <a href="/au/savings-goal.html">Savings</a>
-  <a href="/au/tax-calculator.html">Tax</a>
+  <a href="/numeroxa-finance/index.html">Home</a>
+  <a href="/numeroxa-finance/au/mortgage-calculator.html">Mortgage</a>
+  <a href="/numeroxa-finance/au/compound-interest.html">Compound</a>
+  <a href="/numeroxa-finance/au/savings-goal.html">Savings</a>
+  <a href="/numeroxa-finance/au/tax-calculator.html">Tax</a>
 </nav>
 
 </header>
@@ -141,6 +196,8 @@ nav a {
 </div>
 
 <div class="highlight" id="summary"></div>
+
+</div>
 
 <script>
 function calculateLoan(loan, rate, months, extra) {
@@ -187,18 +244,15 @@ summary.innerText =
 diff > 0
 ? "Loan A saves you " + f(diff) + " in interest"
 : "Loan B saves you " + f(-diff) + " in interest";
-
 }
 
 document.querySelectorAll("input").forEach(i=>i.oninput=calc);
 calc();
-</script>
 
-</div>
- <script>
 function toggleMenu(){
   document.getElementById("nav").classList.toggle("active");
 }
-</script> 
+</script>
+
 </body>
 </html>
