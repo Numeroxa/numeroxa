@@ -15,20 +15,21 @@ body {
   font-family:Inter, Arial;
   background:#f9fafb;
   color:#111;
+}
 
-  /* Navigation (desktop) */
+/* Navigation (desktop) */
 nav a {
   margin-left:20px;
 }
 
-/* Hamburger menu button */
+/* Hamburger menu */
 .menu-toggle {
   display:none;
   font-size:24px;
   cursor:pointer;
 }
 
-/* MOBILE */
+/* MOBILE NAV */
 @media(max-width:700px){
 
   .menu-toggle {
@@ -55,7 +56,6 @@ nav a {
     display:block;
   }
 }
-}
 
 header {
   background:#0f172a;
@@ -64,6 +64,7 @@ header {
   display:flex;
   justify-content:space-between;
   align-items:center;
+  position:relative;
 }
 
 header a {
@@ -134,7 +135,7 @@ p {
 
 <header>
 
-<a href="/index.html" class="logo">
+<a href="/numeroxa-finance/index.html" class="logo">
   Numeroxa
   <span class="tagline">Smart Financial Calculators</span>
 </a>
@@ -142,11 +143,11 @@ p {
 <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
 <nav id="nav">
-  <a href="/index.html">Home</a>
-  <a href="/au/mortgage-calculator.html">Mortgage</a>
-  <a href="/au/compound-interest.html">Compound</a>
-  <a href="/au/savings-goal.html">Savings</a>
-  <a href="/au/tax-calculator.html">Tax</a>
+  <a href="/numeroxa-finance/index.html">Home</a>
+  <a href="/numeroxa-finance/au/mortgage-calculator.html">Mortgage</a>
+  <a href="/numeroxa-finance/au/compound-interest.html">Compound</a>
+  <a href="/numeroxa-finance/au/savings-goal.html">Savings</a>
+  <a href="/numeroxa-finance/au/tax-calculator.html">Tax</a>
 </nav>
 
 </header>
@@ -178,10 +179,12 @@ Tax Calculator
 </div>
 
 </div>
+
 <script>
 function toggleMenu(){
   document.getElementById("nav").classList.toggle("active");
 }
 </script>
+
 </body>
 </html>
