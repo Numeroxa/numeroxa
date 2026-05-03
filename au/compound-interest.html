@@ -18,6 +18,45 @@ body {
   color:#111;
 }
 
+/* NAVIGATION */
+nav a {
+  margin-left:20px;
+}
+
+.menu-toggle {
+  display:none;
+  font-size:24px;
+  cursor:pointer;
+}
+
+/* MOBILE NAV */
+@media(max-width:700px){
+
+  .menu-toggle {
+    display:block;
+    color:white;
+  }
+
+  nav {
+    display:none;
+    position:absolute;
+    top:70px;
+    right:20px;
+    background:#0f172a;
+    padding:15px;
+    border-radius:8px;
+  }
+
+  nav a {
+    display:block;
+    margin:10px 0;
+  }
+
+  nav.active {
+    display:block;
+  }
+}
+
 header {
   background:#0f172a;
   color:white;
@@ -25,6 +64,7 @@ header {
   display:flex;
   justify-content:space-between;
   align-items:center;
+  position:relative;
 }
 
 header a {
@@ -108,45 +148,6 @@ section {
 
 @media(max-width:700px){
   .grid {grid-template-columns:1fr;}
-  /* Navigation (desktop) */
-nav a {
-  margin-left:20px;
-}
-
-/* Hamburger menu button */
-.menu-toggle {
-  display:none;
-  font-size:24px;
-  cursor:pointer;
-}
-
-/* MOBILE */
-@media(max-width:700px){
-
-  .menu-toggle {
-    display:block;
-    color:white;
-  }
-
-  nav {
-    display:none;
-    position:absolute;
-    top:70px;
-    right:20px;
-    background:#0f172a;
-    padding:15px;
-    border-radius:8px;
-  }
-
-  nav a {
-    display:block;
-    margin:10px 0;
-  }
-
-  nav.active {
-    display:block;
-  }
-}
 }
 </style>
 </head>
@@ -155,7 +156,7 @@ nav a {
 
 <header>
 
-<a href="/index.html" class="logo">
+<a href="/numeroxa-finance/index.html" class="logo">
   Numeroxa
   <span class="tagline">Smart Financial Calculators</span>
 </a>
@@ -163,11 +164,11 @@ nav a {
 <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
 <nav id="nav">
-  <a href="/index.html">Home</a>
-  <a href="/au/mortgage-calculator.html">Mortgage</a>
-  <a href="/au/compound-interest.html">Compound</a>
-  <a href="/au/savings-goal.html">Savings</a>
-  <a href="/au/tax-calculator.html">Tax</a>
+  <a href="/numeroxa-finance/index.html">Home</a>
+  <a href="/numeroxa-finance/au/mortgage-calculator.html">Mortgage</a>
+  <a href="/numeroxa-finance/au/compound-interest.html">Compound</a>
+  <a href="/numeroxa-finance/au/savings-goal.html">Savings</a>
+  <a href="/numeroxa-finance/au/tax-calculator.html">Tax</a>
 </nav>
 
 </header>
@@ -231,43 +232,19 @@ nav a {
 </div>
 
 <section>
-
 <h2>What is compound interest?</h2>
 <p>
-Compound interest means you earn returns not only on your original investment, but also on the returns that accumulate over time.
+Compound interest means you earn returns not only on your original investment, but also on accumulated returns over time.
 </p>
-
-<h3>Why compounding matters</h3>
-<p>
-The longer you invest, the more powerful compounding becomes, as your investment growth accelerates.
-</p>
-
-<h3>How to maximise returns</h3>
-<ul>
-<li>Start early</li>
-<li>Invest consistently</li>
-<li>Reinvest earnings</li>
-</ul>
-
 </section>
 
 <section>
-
 <h2>Frequently asked questions</h2>
-
 <h3>What is compound interest?</h3>
-<p>It is interest earned on both your original investment and accumulated returns.</p>
-
-<h3>Why is compounding powerful?</h3>
-<p>Because returns generate further returns over time.</p>
-
-<h3>Do regular contributions help?</h3>
-<p>Yes, consistent investing significantly increases outcomes.</p>
-
-<h3>Does time matter?</h3>
-<p>Time is the most important factor in compounding growth.</p>
-
+<p>Interest earned on both your initial investment and returns.</p>
 </section>
+
+</div>
 
 <script>
 let chart;
@@ -336,13 +313,12 @@ scales:{y:{stacked:true}}
 }
 
 document.querySelectorAll("input").forEach(i=>i.oninput=calculate);
-
 calculate();
-</script>
-<script>
+
 function toggleMenu(){
   document.getElementById("nav").classList.toggle("active");
 }
 </script>
+
 </body>
 </html>
