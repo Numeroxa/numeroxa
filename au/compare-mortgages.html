@@ -201,54 +201,146 @@ input {
 </div>
 
 <script>
-function calculateLoan(loan, rate, months, extra) {
-  let balance = loan;
-  let totalInterest = 0;
+let chart;
+let amortData=[];
 
-  let base = loan * (rate * Math.pow(1 + rate, months)) /
-             (Math.pow(1 + rate, months) - 1);
+const loanEl = document.getElementById("loan");
+const rateEl = document.getElementById("rate");
+const yearsEl = document.getElementById("years");
+const extraEl = document.getElementById("extra");
 
-  while(balance > 0){
-    let interest = balance * rate;
-    let payment = base + extra;
+const monthlyEl = document.getElementById("monthly");
+const interestEl = document.getElementById("interest");
+const savedEl = document.getElementById("saved");
+const durationEl = document.getElementById("duration");
 
-    if(payment > balance + interest){
-      payment = balance + interest;
+const tableEl = document.getElementById("table");
+
+function basePayment(P,r,n){
+  if(r===0) return P/n;
+  return P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+}
+
+function runLoan(P,r,n,extra){
+
+  let balance=P;
+  let totalInterest=0;
+  let totalPrincipal=0;
+  let months=0;
+
+  let base=basePayment(P,r,n);
+
+  let labels=[];
+  let balanceSeries=[];
+  let interestSeries=[];
+  let principalSeries=[];
+
+  let tableHTML="";
+  amortData=[];
+
+  while(balance>0 && months<1000*12){
+
+    let interest=balance*r;
+    let payment=base+extra;
+
+    if(payment>balance+interest){
+      payment=balance+interest;
     }
 
-    balance = balance + interest - payment;
-    totalInterest += interest;
+    let principal=payment-interest;
+
+    balance-=principal;
+    totalInterest+=interest;
+    totalPrincipal+=principal;
+    months++;
+
+    amortData.push([months,payment,principal,interest,balance]);
+
+    tableHTML+=`<tr>
+<td>${months}</td>
+<td>$${Math.round(payment).toLocaleString()}</td>
+<td>$${Math.round(principal).toLocaleString()}</td>
+<td>$${Math.round(interest).toLocaleString()}</td>
+<td>$${Math.max(0,Math.round(balance)).toLocaleString()}</td>
+</tr>`;
+
+    if(months%12===0){
+      labels.push("Year "+months/12);
+      balanceSeries.push(balance);
+      interestSeries.push(totalInterest);
+      principalSeries.push(totalPrincipal);
+    }
   }
 
-  return {totalInterest, base};
+  document.querySelector("#table tbody").innerHTML=tableHTML;
+
+  return {
+    totalInterest,
+    months,
+    base,
+    labels,
+    balanceSeries,
+    interestSeries,
+    principalSeries
+  };
 }
 
-function calc(){
+function calculate(){
 
-let l1=+loan1.value, r1=rate1.value/100/12, n1=years1.value*12, e1=+extra1.value||0;
-let l2=+loan2.value, r2=rate2.value/100/12, n2=years2.value*12, e2=+extra2.value||0;
+  let P=+loanEl.value;
+  let r=rateEl.value/100/12;
+  let n=yearsEl.value*12;
+  let extraVal=+extraEl.value||0;
 
-let a=calculateLoan(l1,r1,n1,e1);
-let b=calculateLoan(l2,r2,n2,e2);
+  let normal=runLoan(P,r,n,0);
+  let extraLoan=runLoan(P,r,n,extraVal);
 
-function f(x){return "$"+Math.round(x).toLocaleString();}
+  function f(x){return "$"+Math.round(x).toLocaleString();}
 
-monthly1.innerText=f(a.base+e1);
-interest1.innerText="Interest: "+f(a.totalInterest);
+  monthlyEl.innerText=f(extraLoan.base+extraVal);
+  interestEl.innerText=f(extraLoan.totalInterest);
+  savedEl.innerText=f(normal.totalInterest-extraLoan.totalInterest);
 
-monthly2.innerText=f(b.base+e2);
-interest2.innerText="Interest: "+f(b.totalInterest);
+  let y=Math.floor(extraLoan.months/12);
+  let m=extraLoan.months%12;
+  durationEl.innerText=y+"y "+m+"m";
 
-let diff=b.totalInterest - a.totalInterest;
+  if(chart) chart.destroy();
 
-summary.innerText =
-diff > 0
-? "Loan A saves you " + f(diff) + " in interest"
-: "Loan B saves you " + f(-diff) + " in interest";
+  chart=new Chart(document.getElementById("chart"),{
+    type:"line",
+    data:{
+      labels:extraLoan.labels,
+      datasets:[
+        {label:"Remaining Balance",data:extraLoan.balanceSeries},
+        {label:"Principal Paid",data:extraLoan.principalSeries},
+        {label:"Interest Paid",data:extraLoan.interestSeries}
+      ]
+    },
+    options:{
+      responsive:true,
+      interaction:{mode:"index",intersect:false}
+    }
+  });
 }
 
-document.querySelectorAll("input").forEach(i=>i.oninput=calc);
-calc();
+function toggleTable(){
+  tableEl.classList.toggle("hidden");
+}
+
+function downloadCSV(){
+  let csv="Month,Payment,Principal,Interest,Balance\n";
+  amortData.forEach(r=>csv+=r.join(",")+"\n");
+
+  let blob=new Blob([csv]);
+  let a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="mortgage.csv";
+  a.click();
+}
+
+document.querySelectorAll("input").forEach(i=>i.oninput=calculate);
+calculate();
 
 function toggleMenu(){
   document.getElementById("nav").classList.toggle("active");
