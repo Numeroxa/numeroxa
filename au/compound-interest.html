@@ -108,6 +108,45 @@ section {
 
 @media(max-width:700px){
   .grid {grid-template-columns:1fr;}
+  /* Navigation (desktop) */
+nav a {
+  margin-left:20px;
+}
+
+/* Hamburger menu button */
+.menu-toggle {
+  display:none;
+  font-size:24px;
+  cursor:pointer;
+}
+
+/* MOBILE */
+@media(max-width:700px){
+
+  .menu-toggle {
+    display:block;
+    color:white;
+  }
+
+  nav {
+    display:none;
+    position:absolute;
+    top:70px;
+    right:20px;
+    background:#0f172a;
+    padding:15px;
+    border-radius:8px;
+  }
+
+  nav a {
+    display:block;
+    margin:10px 0;
+  }
+
+  nav.active {
+    display:block;
+  }
+}
 }
 </style>
 </head>
