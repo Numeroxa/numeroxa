@@ -18,10 +18,8 @@ body {
   color:#111;
 }
 
-/* NAVIGATION */
-nav a {
-  margin-left:20px;
-}
+/* NAV */
+nav a { margin-left:20px; }
 
 .menu-toggle {
   display:none;
@@ -29,13 +27,8 @@ nav a {
   cursor:pointer;
 }
 
-/* MOBILE NAV */
 @media(max-width:700px){
-
-  .menu-toggle {
-    display:block;
-    color:white;
-  }
+  .menu-toggle { display:block; color:white; }
 
   nav {
     display:none;
@@ -52,9 +45,7 @@ nav a {
     margin:10px 0;
   }
 
-  nav.active {
-    display:block;
-  }
+  nav.active { display:block; }
 }
 
 header {
@@ -76,7 +67,6 @@ header a {
 .logo {
   font-size:20px;
   font-weight:600;
-  line-height:1.1;
 }
 
 .tagline {
@@ -115,11 +105,36 @@ input {
   border:1px solid #ddd;
 }
 
+/* RESULT CARD */
 .result {
   margin-top:30px;
-  padding:25px;
+  padding:28px;
   background:white;
-  border-radius:12px;
+  border-radius:14px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.06);
+}
+
+.result-primary {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.result-primary .label {
+  font-size:16px;
+  color:#555;
+}
+
+.result-primary .value {
+  font-size:24px;
+  font-weight:600;
+}
+
+.result-divider {
+  height:1px;
+  background:#eee;
+  margin:16px 0;
 }
 
 .result-row {
@@ -128,13 +143,16 @@ input {
   margin-bottom:10px;
 }
 
-.big {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
+.result-label {
+  color:#666;
+  font-size:14px;
 }
 
-canvas {margin-top:30px;}
+.result-value {
+  font-weight:500;
+}
+
+canvas { margin-top:30px; }
 
 .related {
   margin-top:40px;
@@ -143,12 +161,10 @@ canvas {margin-top:30px;}
   border-radius:10px;
 }
 
-section {
-  margin-top:50px;
-}
+section { margin-top:50px; }
 
 @media(max-width:700px){
-  .grid {grid-template-columns:1fr;}
+  .grid { grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -156,7 +172,6 @@ section {
 <body>
 
 <header>
-
 <a href="/numeroxa-finance/index.html" class="logo">
   Numeroxa
   <span class="tagline">Smart Financial Calculators</span>
@@ -171,7 +186,6 @@ section {
   <a href="/numeroxa-finance/au/savings-goal.html">Savings</a>
   <a href="/numeroxa-finance/au/tax-calculator.html">Tax</a>
 </nav>
-
 </header>
 
 <div class="container">
@@ -204,19 +218,21 @@ section {
 
 <div class="result">
 
+<div class="result-primary">
+  <span class="label">Final balance</span>
+  <span class="value" id="final"></span>
+</div>
+
+<div class="result-divider"></div>
+
 <div class="result-row">
-<span>Final balance</span>
-<span class="big" id="final"></span>
+  <span class="result-label">Total contributions</span>
+  <span class="result-value" id="contributions"></span>
 </div>
 
 <div class="result-row">
-<span>Total contributions</span>
-<span id="contributions"></span>
-</div>
-
-<div class="result-row">
-<span>Interest earned</span>
-<span id="interest"></span>
+  <span class="result-label">Interest earned</span>
+  <span class="result-value" id="interest"></span>
 </div>
 
 </div>
@@ -233,61 +249,14 @@ section {
 </div>
 
 <section>
-
 <h2>What is compound interest?</h2>
-
-<p>
-Compound interest is the process where your investment earns returns not only on your original amount, but also on the accumulated interest over time. This creates exponential growth.
-</p>
-
-<h3>Why compounding is powerful</h3>
-<p>
-The longer your money is invested, the more significant the compounding effect becomes. Small, consistent contributions can grow into large amounts over time.
-</p>
-
-<h3>Key factors affecting growth</h3>
-<ul>
-<li>Time – the most important factor</li>
-<li>Interest rate – higher rates accelerate growth</li>
-<li>Regular contributions – increase total returns</li>
-</ul>
-
+<p>Compound interest is the process where your investment earns returns on both your original amount and accumulated interest.</p>
 </section>
 
 <section>
-
 <h2>Frequently asked questions</h2>
-
-<h3>What is compound interest in simple terms?</h3>
-<p>
-It’s interest earned on both your initial investment and previously earned interest.
-</p>
-
-<h3>How often should I contribute?</h3>
-<p>
-Regular contributions (monthly or weekly) significantly improve long-term outcomes.
-</p>
-
-<h3>Does starting early matter?</h3>
-<p>
-Yes, time has the biggest impact on compounding growth.
-</p>
-
-<h3>What rate of return should I use?</h3>
-<p>
-This depends on your investment type—shares typically return more than savings accounts but with higher risk.
-</p>
-
-<h3>Can I lose money with compounding?</h3>
-<p>
-Yes, if your investments decline in value, compounding can work in reverse.
-</p>
-
-<h3>Is compounding realistic?</h3>
-<p>
-Yes, it reflects real-world investment growth over time when returns are reinvested.
-</p>
-
+<h3>What is compound interest?</h3>
+<p>Interest earned on both principal and accumulated returns.</p>
 </section>
 
 </div>
@@ -332,28 +301,9 @@ type:"line",
 data:{
 labels:labels,
 datasets:[
-{
-label:"Contributions",
-data:contribData,
-fill:true,
-tension:0.3,
-backgroundColor:"rgba(37,99,235,0.2)",
-borderColor:"rgba(37,99,235,1)"
-},
-{
-label:"Interest",
-data:interestData,
-fill:true,
-tension:0.3,
-backgroundColor:"rgba(236,72,153,0.2)",
-borderColor:"rgba(236,72,153,1)"
-}
+{label:"Contributions",data:contribData},
+{label:"Interest",data:interestData}
 ]
-},
-options:{
-responsive:true,
-interaction:{mode:"index",intersect:false},
-scales:{y:{stacked:true}}
 }
 });
 }
@@ -365,68 +315,6 @@ function toggleMenu(){
   document.getElementById("nav").classList.toggle("active");
 }
 </script>
-<script type="application/ld+json">
-{
-"@context":"https://schema.org",
-"@type":"FAQPage",
-"mainEntity":[
 
-{
-"@type":"Question",
-"name":"What is compound interest?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"Compound interest is interest earned on both your initial investment and previously accumulated interest, leading to exponential growth over time."
-}
-},
-
-{
-"@type":"Question",
-"name":"Why is compound interest powerful?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"Because your returns generate additional returns, compounding accelerates growth significantly over long periods."
-}
-},
-
-{
-"@type":"Question",
-"name":"Does starting early make a difference?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"Yes, the longer your money is invested, the more time it has to compound, making time the most important factor."
-}
-},
-
-{
-"@type":"Question",
-"name":"Do regular contributions help?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"Yes, consistent contributions significantly increase your final balance and overall returns."
-}
-},
-
-{
-"@type":"Question",
-"name":"What interest rate should I use?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"This depends on your investment type, with shares typically offering higher long-term returns than savings accounts."
-}
-},
-
-{
-"@type":"Question",
-"name":"Is compound interest guaranteed?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"No, investment returns can vary and are not guaranteed, especially in market-based investments."
-}
-}
-
-]
-}
-</script>
 </body>
 </html>
