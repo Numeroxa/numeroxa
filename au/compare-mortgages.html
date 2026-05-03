@@ -346,6 +346,13 @@ function toggleMenu(){
   document.getElementById("nav").classList.toggle("active");
 }
 </script>
-
+<script>
+if (window.location.hostname === "numeroxa.github.io") {
+  window.location.href = window.location.href.replace(
+    "numeroxa.github.io/numeroxa-finance",
+    "www.numeroxa.com"
+  );
+}
+</script>
 </body>
 </html>
