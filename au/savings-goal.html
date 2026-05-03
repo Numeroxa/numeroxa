@@ -18,10 +18,8 @@ body {
   color:#111;
 }
 
-/* NAVIGATION */
-nav a {
-  margin-left:20px;
-}
+/* NAV */
+nav a { margin-left:20px; }
 
 .menu-toggle {
   display:none;
@@ -29,12 +27,8 @@ nav a {
   cursor:pointer;
 }
 
-/* MOBILE NAV */
 @media(max-width:700px){
-  .menu-toggle {
-    display:block;
-    color:white;
-  }
+  .menu-toggle { display:block; color:white; }
 
   nav {
     display:none;
@@ -51,9 +45,7 @@ nav a {
     margin:10px 0;
   }
 
-  nav.active {
-    display:block;
-  }
+  nav.active { display:block; }
 }
 
 header {
@@ -75,7 +67,6 @@ header a {
 .logo {
   font-size:20px;
   font-weight:600;
-  line-height:1.1;
 }
 
 .tagline {
@@ -114,11 +105,36 @@ input {
   border:1px solid #ddd;
 }
 
+/* RESULT CARD (UPDATED) */
 .result {
   margin-top:30px;
-  padding:25px;
+  padding:28px;
   background:white;
-  border-radius:12px;
+  border-radius:14px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.06);
+}
+
+.result-primary {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.result-primary .label {
+  font-size:16px;
+  color:#555;
+}
+
+.result-primary .value {
+  font-size:24px;
+  font-weight:600;
+}
+
+.result-divider {
+  height:1px;
+  background:#eee;
+  margin:16px 0;
 }
 
 .result-row {
@@ -127,20 +143,24 @@ input {
   margin-bottom:10px;
 }
 
-.big {
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
+.result-label {
+  color:#666;
+  font-size:14px;
 }
+
+.result-value {
+  font-weight:500;
+}
+
 .highlight {
-  margin-top:15px;
+  margin-top:18px;
   padding:15px;
   background:#dbeafe;
   border-radius:8px;
-  font-weight:bold;
+  font-weight:600;
 }
 
-canvas {margin-top:30px;}
+canvas { margin-top:30px; }
 
 .related {
   margin-top:40px;
@@ -149,12 +169,10 @@ canvas {margin-top:30px;}
   border-radius:10px;
 }
 
-section {
-  margin-top:50px;
-}
+section { margin-top:50px; }
 
 @media(max-width:700px){
-  .grid {grid-template-columns:1fr;}
+  .grid { grid-template-columns:1fr; }
 }
 </style>
 </head>
@@ -162,7 +180,6 @@ section {
 <body>
 
 <header>
-
 <a href="/numeroxa-finance/index.html" class="logo">
   Numeroxa
   <span class="tagline">Smart Financial Calculators</span>
@@ -177,7 +194,6 @@ section {
   <a href="/numeroxa-finance/au/savings-goal.html">Savings</a>
   <a href="/numeroxa-finance/au/tax-calculator.html">Tax</a>
 </nav>
-
 </header>
 
 <div class="container">
@@ -210,19 +226,21 @@ section {
 
 <div class="result">
 
+<div class="result-primary">
+  <span class="label">Required monthly saving</span>
+  <span class="value" id="monthly"></span>
+</div>
+
+<div class="result-divider"></div>
+
 <div class="result-row">
-<span>Required monthly saving</span>
-<span class="big" id="monthly"></span>
+  <span class="result-label">Total contributions</span>
+  <span class="result-value" id="contributions"></span>
 </div>
 
 <div class="result-row">
-<span>Total contributions</span>
-<span id="contributions"></span>
-</div>
-
-<div class="result-row">
-<span>Interest earned</span>
-<span id="interest"></span>
+  <span class="result-label">Interest earned</span>
+  <span class="result-value" id="interest"></span>
 </div>
 
 <div class="highlight" id="message"></div>
@@ -245,7 +263,7 @@ section {
 <h2>How to reach your savings goal</h2>
 
 <p>
-Reaching a savings goal depends on how much you save, how long you save for, and the interest earned. This calculator shows how these factors work together to determine your required monthly contribution.
+Reaching a savings goal depends on how much you save, how long you save for, and the interest earned. This calculator shows how these factors work together.
 </p>
 
 <h3>What affects your savings plan?</h3>
@@ -258,7 +276,7 @@ Reaching a savings goal depends on how much you save, how long you save for, and
 
 <h3>Why starting early helps</h3>
 <p>
-The earlier you begin saving, the more time your money has to grow through compound interest, reducing the amount you need to contribute each month.
+The earlier you begin saving, the more time your money has to grow through compound interest.
 </p>
 
 </section>
@@ -268,34 +286,22 @@ The earlier you begin saving, the more time your money has to grow through compo
 <h2>Frequently asked questions</h2>
 
 <h3>How much should I save each month?</h3>
-<p>
-It depends on your goal, timeframe, and expected return. This calculator provides a tailored estimate.
-</p>
+<p>It depends on your goal, timeframe, and expected return.</p>
 
 <h3>What if I can’t reach my goal?</h3>
-<p>
-You can increase contributions, extend your timeframe, or aim for higher returns.
-</p>
+<p>You can increase contributions, extend your timeframe, or aim for higher returns.</p>
 
 <h3>Does interest make a big difference?</h3>
-<p>
-Yes, even modest interest rates can significantly reduce the amount you need to save.
-</p>
+<p>Yes, even modest interest rates significantly reduce required savings.</p>
 
 <h3>Should I save or invest?</h3>
-<p>
-Savings are lower risk, while investments offer higher potential returns with more risk.
-</p>
+<p>Savings are lower risk, investments offer higher potential returns.</p>
 
 <h3>What happens if I start later?</h3>
-<p>
-You will need to contribute more each month to reach the same goal.
-</p>
+<p>You will need to contribute more each month.</p>
 
 <h3>Is this calculator accurate?</h3>
-<p>
-It provides a reliable estimate based on standard compounding formulas.
-</p>
+<p>It provides a reliable estimate using standard formulas.</p>
 
 </section>
 
@@ -327,25 +333,22 @@ let totalContrib=currentVal;
 let labels=[],contribData=[],interestData=[];
 
 for(let i=0;i<=n;i++){
-
 if(i%12===0){
 labels.push("Year "+i/12);
 contribData.push(totalContrib);
 interestData.push(balance-totalContrib);
 }
-
 balance=balance*(1+r)+monthly;
 totalContrib+=monthly;
 }
 
 function f(x){return "$"+Math.round(x).toLocaleString();}
 
-document.getElementById("monthly").innerText=f(monthly);
-document.getElementById("contributions").innerText=f(totalContrib);
-document.getElementById("interest").innerText=f(balance-totalContrib);
+monthlyEl.innerText=f(monthly);
+contributions.innerText=f(totalContrib);
+interest.innerText=f(balance-totalContrib);
 
-document.getElementById("message").innerText=
-"To reach your goal, save "+f(monthly)+" per month.";
+message.innerText="To reach your goal, save "+f(monthly)+" per month.";
 
 if(chart) chart.destroy();
 
@@ -358,7 +361,6 @@ datasets:[
 label:"Contributions",
 data:contribData,
 fill:true,
-tension:0.3,
 backgroundColor:"rgba(37,99,235,0.2)",
 borderColor:"rgba(37,99,235,1)"
 },
@@ -366,7 +368,6 @@ borderColor:"rgba(37,99,235,1)"
 label:"Interest",
 data:interestData,
 fill:true,
-tension:0.3,
 backgroundColor:"rgba(236,72,153,0.2)",
 borderColor:"rgba(236,72,153,1)"
 }
@@ -380,6 +381,8 @@ scales:{y:{stacked:true}}
 });
 }
 
+const monthlyEl = document.getElementById("monthly");
+
 document.querySelectorAll("input").forEach(i=>i.oninput=calculate);
 calculate();
 
@@ -387,68 +390,6 @@ function toggleMenu(){
   document.getElementById("nav").classList.toggle("active");
 }
 </script>
-<script type="application/ld+json">
-{
-"@context":"https://schema.org",
-"@type":"FAQPage",
-"mainEntity":[
 
-{
-"@type":"Question",
-"name":"How much should I save each month?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"The amount depends on your savings goal, timeframe, and interest rate. This calculator estimates the required monthly contribution."
-}
-},
-
-{
-"@type":"Question",
-"name":"What happens if I start late?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"Starting later means you need to save more each month to reach the same goal."
-}
-},
-
-{
-"@type":"Question",
-"name":"Does interest make a big difference?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"Yes, even modest interest can significantly reduce the amount you need to save over time."
-}
-},
-
-{
-"@type":"Question",
-"name":"Should I save or invest?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"Saving offers lower risk, while investing can provide higher returns but with more volatility."
-}
-},
-
-{
-"@type":"Question",
-"name":"Can I change my savings plan?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"Yes, adjusting contributions, timeframe, or expected returns will change your required savings."
-}
-},
-
-{
-"@type":"Question",
-"name":"Is this calculator accurate?",
-"acceptedAnswer":{
-"@type":"Answer",
-"text":"It provides a reliable estimate based on standard financial formulas but should not replace professional advice."
-}
-}
-
-]
-}
-</script>
 </body>
 </html>
