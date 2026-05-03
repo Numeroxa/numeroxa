@@ -249,14 +249,60 @@ section { margin-top:50px; }
 </div>
 
 <section>
+
 <h2>What is compound interest?</h2>
-<p>Compound interest is the process where your investment earns returns on both your original amount and accumulated interest.</p>
+<p>
+Compound interest is the process where your investment earns returns not only on your original amount, but also on the accumulated interest over time. This creates exponential growth.
+</p>
+
+<h3>Why compounding is powerful</h3>
+<p>
+The longer your money is invested, the more significant the compounding effect becomes. Small, consistent contributions can grow into large amounts over time.
+</p>
+
+<h3>Key factors affecting growth</h3>
+<ul>
+<li>Time – the most important factor</li>
+<li>Interest rate – higher rates accelerate growth</li>
+<li>Regular contributions – increase total returns</li>
+</ul>
+
 </section>
 
 <section>
+
 <h2>Frequently asked questions</h2>
-<h3>What is compound interest?</h3>
-<p>Interest earned on both principal and accumulated returns.</p>
+
+<h3>What is compound interest in simple terms?</h3>
+<p>
+It’s interest earned on both your initial investment and previously earned interest.
+</p>
+
+<h3>How often should I contribute?</h3>
+<p>
+Regular contributions (monthly or weekly) significantly improve long-term outcomes.
+</p>
+
+<h3>Does starting early matter?</h3>
+<p>
+Yes, time has the biggest impact on compounding growth.
+</p>
+
+<h3>What rate of return should I use?</h3>
+<p>
+This depends on your investment type—shares typically return more than savings accounts but with higher risk.
+</p>
+
+<h3>Can I lose money with compounding?</h3>
+<p>
+Yes, if your investments decline in value, compounding can work in reverse.
+</p>
+
+<h3>Is compounding realistic?</h3>
+<p>
+Yes, it reflects real-world investment growth over time when returns are reinvested.
+</p>
+
 </section>
 
 </div>
@@ -301,9 +347,28 @@ type:"line",
 data:{
 labels:labels,
 datasets:[
-{label:"Contributions",data:contribData},
-{label:"Interest",data:interestData}
+{
+label:"Contributions",
+data:contribData,
+fill:true,
+tension:0.3,
+backgroundColor:"rgba(37,99,235,0.2)",
+borderColor:"rgba(37,99,235,1)"
+},
+{
+label:"Interest",
+data:interestData,
+fill:true,
+tension:0.3,
+backgroundColor:"rgba(236,72,153,0.2)",
+borderColor:"rgba(236,72,153,1)"
+}
 ]
+},
+options:{
+responsive:true,
+interaction:{mode:"index",intersect:false},
+scales:{y:{stacked:true}}
 }
 });
 }
@@ -313,6 +378,22 @@ calculate();
 
 function toggleMenu(){
   document.getElementById("nav").classList.toggle("active");
+}
+</script>
+
+<!-- FAQ SCHEMA -->
+<script type="application/ld+json">
+{
+"@context":"https://schema.org",
+"@type":"FAQPage",
+"mainEntity":[
+{"@type":"Question","name":"What is compound interest in simple terms?","acceptedAnswer":{"@type":"Answer","text":"It is interest earned on both your initial investment and previously earned interest."}},
+{"@type":"Question","name":"How often should I contribute?","acceptedAnswer":{"@type":"Answer","text":"Regular contributions significantly improve long-term outcomes."}},
+{"@type":"Question","name":"Does starting early matter?","acceptedAnswer":{"@type":"Answer","text":"Yes, time has the biggest impact on compounding growth."}},
+{"@type":"Question","name":"What rate of return should I use?","acceptedAnswer":{"@type":"Answer","text":"It depends on your investment type and risk tolerance."}},
+{"@type":"Question","name":"Can I lose money with compounding?","acceptedAnswer":{"@type":"Answer","text":"Yes, investments can decline in value."}},
+{"@type":"Question","name":"Is compounding realistic?","acceptedAnswer":{"@type":"Answer","text":"Yes, it reflects real-world reinvested returns over time."}}
+]
 }
 </script>
 
