@@ -17,6 +17,44 @@ body {
   color:#111;
 }
 
+/* NAVIGATION */
+nav a {
+  margin-left:20px;
+}
+
+.menu-toggle {
+  display:none;
+  font-size:24px;
+  cursor:pointer;
+}
+
+/* MOBILE NAV */
+@media(max-width:700px){
+  .menu-toggle {
+    display:block;
+    color:white;
+  }
+
+  nav {
+    display:none;
+    position:absolute;
+    top:70px;
+    right:20px;
+    background:#0f172a;
+    padding:15px;
+    border-radius:8px;
+  }
+
+  nav a {
+    display:block;
+    margin:10px 0;
+  }
+
+  nav.active {
+    display:block;
+  }
+}
+
 header {
   background:#0f172a;
   color:white;
@@ -24,6 +62,7 @@ header {
   display:flex;
   justify-content:space-between;
   align-items:center;
+  position:relative;
 }
 
 header a {
@@ -42,7 +81,6 @@ header a {
 .tagline {
   display:block;
   font-size:11px;
-  font-weight:400;
   opacity:0.7;
 }
 
@@ -105,44 +143,6 @@ input, select {
 
 section {
   margin-top:50px;
-
-  .menu-toggle {
-  display:none;
-  font-size:24px;
-  cursor:pointer;
-}
-
-nav a {
-  margin-left:20px;
-}
-
-/* MOBILE */
-@media(max-width:700px){
-
-  .menu-toggle {
-    display:block;
-    color:white;
-  }
-
-  nav {
-    display:none;
-    position:absolute;
-    top:70px;
-    right:20px;
-    background:#0f172a;
-    padding:15px;
-    border-radius:8px;
-  }
-
-  nav a {
-    display:block;
-    margin:10px 0;
-  }
-
-  nav.active {
-    display:block;
-  }
-}
 }
 </style>
 </head>
@@ -151,7 +151,7 @@ nav a {
 
 <header>
 
-<a href="/index.html" class="logo">
+<a href="/numeroxa-finance/index.html" class="logo">
   Numeroxa
   <span class="tagline">Smart Financial Calculators</span>
 </a>
@@ -159,14 +159,15 @@ nav a {
 <div class="menu-toggle" onclick="toggleMenu()">☰</div>
 
 <nav id="nav">
-  <a href="/index.html">Home</a>
-  <a href="/au/mortgage-calculator.html">Mortgage</a>
-  <a href="/au/compound-interest.html">Compound</a>
-  <a href="/au/savings-goal.html">Savings</a>
-  <a href="/au/tax-calculator.html">Tax</a>
+  <a href="/numeroxa-finance/index.html">Home</a>
+  <a href="/numeroxa-finance/au/mortgage-calculator.html">Mortgage</a>
+  <a href="/numeroxa-finance/au/compound-interest.html">Compound</a>
+  <a href="/numeroxa-finance/au/savings-goal.html">Savings</a>
+  <a href="/numeroxa-finance/au/tax-calculator.html">Tax</a>
 </nav>
 
 </header>
+
 <div class="container">
 
 <h1>Income Tax Calculator (Australia)</h1>
@@ -227,55 +228,15 @@ nav a {
 </div>
 
 <section>
-
 <h2>How income tax works in Australia</h2>
-
-<p>
-Australia uses a progressive tax system, meaning income is taxed in brackets rather than a single flat rate.
-</p>
-
-<h3>What is the Medicare levy?</h3>
-<p>
-Most residents pay a 2% levy to fund public healthcare.
-</p>
-
-<h3>What is HECS/HELP?</h3>
-<p>
-Student loan repayments are calculated as a percentage of income above a threshold.
-</p>
-
+<p>Australia uses a progressive tax system.</p>
 </section>
 
 <section>
-
 <h2>Frequently asked questions</h2>
-
 <h3>How much tax should I pay?</h3>
-<p>It depends on income, residency, and deductions.</p>
-
-<h3>Why is my effective rate lower?</h3>
-<p>Because only part of your income is taxed at higher rates.</p>
-
-<h3>Do I have to pay Medicare levy?</h3>
-<p>Most residents do.</p>
-
-<h3>When do HECS repayments start?</h3>
-<p>Once income exceeds a threshold.</p>
-
+<p>Depends on income and residency.</p>
 </section>
-
-<script type="application/ld+json">
-{
-"@context":"https://schema.org",
-"@type":"FAQPage",
-"mainEntity":[
-{"@type":"Question","name":"How much tax should I pay?","acceptedAnswer":{"@type":"Answer","text":"Depends on income and residency."}},
-{"@type":"Question","name":"Why is my effective rate lower?","acceptedAnswer":{"@type":"Answer","text":"Because tax is progressive."}},
-{"@type":"Question","name":"Do I pay Medicare levy?","acceptedAnswer":{"@type":"Answer","text":"Most residents do."}},
-{"@type":"Question","name":"When do HECS repayments start?","acceptedAnswer":{"@type":"Answer","text":"Above income threshold."}}
-]
-}
-</script>
 
 </div>
 
@@ -311,29 +272,22 @@ let net = incomeVal - total;
 
 function f(x){return "$"+Math.round(x).toLocaleString();}
 
-taxEl.innerText=f(tax);
-medicareEl.innerText=f(medicare);
-hecsPayEl.innerText=f(hecsPay);
-totalEl.innerText=f(total);
-netEl.innerText=f(net);
+tax.innerText=f(tax);
+medicare.innerText=f(medicare);
+hecsPay.innerText=f(hecsPay);
+total.innerText=f(total);
+net.innerText=f(net);
 
 rate.innerText="Effective tax rate: "+((total/incomeVal)*100).toFixed(1)+"%";
 }
 
-let taxEl=document.getElementById("tax");
-let medicareEl=document.getElementById("medicare");
-let hecsPayEl=document.getElementById("hecsPay");
-let totalEl=document.getElementById("total");
-let netEl=document.getElementById("net");
-
 document.querySelectorAll("input, select").forEach(el=>el.oninput=calculate);
-
 calculate();
-</script>
-<script>
+
 function toggleMenu(){
   document.getElementById("nav").classList.toggle("active");
 }
 </script>
+
 </body>
 </html>
