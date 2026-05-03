@@ -43,12 +43,10 @@ header {
 }
 
 header a {color:white;text-decoration:none;margin-left:20px;}
-
 .logo {font-size:20px;font-weight:600;}
 .tagline {display:block;font-size:11px;opacity:0.7;}
 
 .container {max-width:1000px;margin:auto;padding:40px 20px;}
-
 h1 {font-size:32px;margin-bottom:20px;}
 
 .grid {
@@ -239,12 +237,12 @@ section {margin-top:50px;}
 <section>
 <h2>How mortgage repayments are calculated</h2>
 <p>
-Mortgage repayments are calculated using your loan amount, interest rate, and loan term. Early payments are mostly interest, while later payments reduce the principal.
+Mortgage repayments are calculated using your loan amount, interest rate, and loan term. Each repayment includes both interest and principal. Early in the loan, more goes toward interest; later, more goes toward principal.
 </p>
 
 <h3>Why extra repayments matter</h3>
 <p>
-Extra repayments reduce your balance faster and can save tens of thousands in interest.
+Extra repayments reduce your balance faster and can save tens of thousands in interest while shortening your loan term.
 </p>
 </section>
 
@@ -265,7 +263,8 @@ Extra repayments reduce your balance faster and can save tens of thousands in in
 </div>
 
 <script>
-let chart, amortData=[];
+let chart;
+let amortData=[];
 
 const loan=document.getElementById("loan");
 const rate=document.getElementById("rate");
@@ -277,37 +276,110 @@ const interest=document.getElementById("interest");
 const saved=document.getElementById("saved");
 const duration=document.getElementById("duration");
 
-function payment(P,r,n){
-if(r===0) return P/n;
-return P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+function basePayment(P,r,n){
+  if(r===0) return P/n;
+  return P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
 }
 
-function calc(){
+function runLoan(P,r,n,extra){
+
+let balance=P;
+let totalInterest=0;
+let months=0;
+
+let base=basePayment(P,r,n);
+
+let labels=[],balanceSeries=[],interestSeries=[];
+let tableHTML="";
+amortData=[];
+
+while(balance>0 && months<1000*12){
+
+let interest=balance*r;
+let payment=base+extra;
+
+if(payment>balance+interest){
+payment=balance+interest;
+}
+
+let principal=payment-interest;
+
+balance-=principal;
+totalInterest+=interest;
+months++;
+
+amortData.push([months,payment,principal,interest,balance]);
+
+tableHTML+=`<tr>
+<td>${months}</td>
+<td>$${Math.round(payment).toLocaleString()}</td>
+<td>$${Math.round(principal).toLocaleString()}</td>
+<td>$${Math.round(interest).toLocaleString()}</td>
+<td>$${Math.max(0,Math.round(balance)).toLocaleString()}</td>
+</tr>`;
+
+if(months%12===0){
+labels.push("Year "+months/12);
+balanceSeries.push(balance);
+interestSeries.push(totalInterest);
+}
+}
+
+document.querySelector("#table tbody").innerHTML=tableHTML;
+
+return {totalInterest,months,base,labels,balanceSeries,interestSeries};
+}
+
+function calculate(){
+
 let P=+loan.value;
 let r=rate.value/100/12;
 let n=years.value*12;
 let e=+extra.value||0;
 
-let bal=P, months=0, totInt=0;
-let base=payment(P,r,n);
+let normal=runLoan(P,r,n,0);
+let extraLoan=runLoan(P,r,n,e);
 
-while(bal>0){
-let i=bal*r;
-let pay=base+e;
-if(pay>bal+i) pay=bal+i;
-bal=bal+i-pay;
-totInt+=i;
-months++;
+function f(x){return "$"+Math.round(x).toLocaleString();}
+
+monthly.innerText=f(extraLoan.base+e);
+interest.innerText=f(extraLoan.totalInterest);
+saved.innerText=f(normal.totalInterest-extraLoan.totalInterest);
+
+let y=Math.floor(extraLoan.months/12);
+let m=extraLoan.months%12;
+duration.innerText=y+"y "+m+"m";
+
+if(chart) chart.destroy();
+
+chart=new Chart(document.getElementById("chart"),{
+type:"line",
+data:{
+labels:extraLoan.labels,
+datasets:[
+{label:"Balance",data:extraLoan.balanceSeries},
+{label:"Interest Paid",data:extraLoan.interestSeries}
+]
+}
+});
 }
 
-monthly.innerText="$"+Math.round(base+e).toLocaleString();
-interest.innerText="$"+Math.round(totInt).toLocaleString();
-saved.innerText="—";
-duration.innerText=Math.floor(months/12)+"y "+months%12+"m";
+document.querySelectorAll("input").forEach(i=>i.oninput=calculate);
+calculate();
+
+function toggleTable(){
+document.getElementById("table").classList.toggle("hidden");
 }
 
-document.querySelectorAll("input").forEach(i=>i.oninput=calc);
-calc();
+function downloadCSV(){
+let csv="Month,Payment,Principal,Interest,Balance\n";
+amortData.forEach(r=>csv+=r.join(",")+"\n");
+let blob=new Blob([csv]);
+let a=document.createElement("a");
+a.href=URL.createObjectURL(blob);
+a.download="mortgage.csv";
+a.click();
+}
 
 function toggleMenu(){
 document.getElementById("nav").classList.toggle("active");
