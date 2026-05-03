@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -11,24 +12,13 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body {
-  margin:0;
-  font-family:Inter, Arial;
-  background:#f9fafb;
-  color:#111;
-}
+body {margin:0;font-family:Inter, Arial;background:#f9fafb;color:#111;}
+nav a {margin-left:20px;}
 
-nav a { margin-left:20px; }
-
-.menu-toggle {
-  display:none;
-  font-size:24px;
-  cursor:pointer;
-}
+.menu-toggle {display:none;font-size:24px;cursor:pointer;}
 
 @media(max-width:700px){
-  .menu-toggle { display:block; color:white; }
-
+  .menu-toggle {display:block;color:white;}
   nav {
     display:none;
     position:absolute;
@@ -38,13 +28,8 @@ nav a { margin-left:20px; }
     padding:15px;
     border-radius:8px;
   }
-
-  nav a {
-    display:block;
-    margin:10px 0;
-  }
-
-  nav.active { display:block; }
+  nav a {display:block;margin:10px 0;}
+  nav.active {display:block;}
 }
 
 header {
@@ -57,22 +42,14 @@ header {
   position:relative;
 }
 
-header a {
-  color:white;
-  text-decoration:none;
-  margin-left:20px;
-}
+header a {color:white;text-decoration:none;margin-left:20px;}
 
-.logo { font-size:20px; font-weight:600; }
-.tagline { display:block; font-size:11px; opacity:0.7; }
+.logo {font-size:20px;font-weight:600;}
+.tagline {display:block;font-size:11px;opacity:0.7;}
 
-.container {
-  max-width:1000px;
-  margin:auto;
-  padding:40px 20px;
-}
+.container {max-width:1000px;margin:auto;padding:40px 20px;}
 
-h1 { font-size:32px; margin-bottom:20px; }
+h1 {font-size:32px;margin-bottom:20px;}
 
 .grid {
   display:grid;
@@ -80,7 +57,7 @@ h1 { font-size:32px; margin-bottom:20px; }
   gap:20px;
 }
 
-label { font-size:14px; margin-bottom:5px; display:block; }
+label {font-size:14px;margin-bottom:5px;display:block;}
 
 input {
   width:100%;
@@ -120,9 +97,9 @@ input {
   margin-bottom:10px;
 }
 
-.result-label { color:#666; font-size:14px; }
+.result-label {color:#666;font-size:14px;}
 
-canvas { margin-top:30px; }
+canvas {margin-top:30px;}
 
 button {
   padding:10px 14px;
@@ -146,7 +123,7 @@ th, td {
   border-bottom:1px solid #eee;
 }
 
-.hidden { display:none; }
+.hidden {display:none;}
 
 .related {
   margin-top:40px;
@@ -155,12 +132,13 @@ th, td {
   border-radius:10px;
 }
 
-section { margin-top:50px; }
+section {margin-top:50px;}
 
 @media(max-width:700px){
-  .grid { grid-template-columns:1fr; }
+  .grid {grid-template-columns:1fr;}
 }
 </style>
+
 </head>
 
 <body>
@@ -234,8 +212,7 @@ section { margin-top:50px; }
 
 <canvas id="chart"></canvas>
 
-<button onclick="toggleTable()">Toggle Amortisation Table</button>
-<button onclick="downloadCSV()">Download CSV</button>
+<button onclick="toggleTable()">Toggle Amortisation Table</button> <button onclick="downloadCSV()">Download CSV</button>
 
 <table id="table" class="hidden">
 <thead>
@@ -261,123 +238,76 @@ section { margin-top:50px; }
 
 <section>
 <h2>How mortgage repayments are calculated</h2>
-<p>Mortgage repayments include both interest and principal.</p>
+<p>
+Mortgage repayments are calculated using your loan amount, interest rate, and loan term. Early payments are mostly interest, while later payments reduce the principal.
+</p>
+
+<h3>Why extra repayments matter</h3>
+<p>
+Extra repayments reduce your balance faster and can save tens of thousands in interest.
+</p>
 </section>
 
 <section>
 <h2>Frequently asked questions</h2>
-<p>See above for details.</p>
+
+<h3>How are repayments calculated?</h3>
+<p>Using a standard amortisation formula.</p>
+
+<h3>What happens with extra repayments?</h3>
+<p>You reduce both interest and loan duration.</p>
+
+<h3>Can I pay off early?</h3>
+<p>Yes, most loans allow it.</p>
+
 </section>
 
 </div>
 
 <script>
-let chart;
-let amortData=[];
+let chart, amortData=[];
 
-const loanEl = document.getElementById("loan");
-const rateEl = document.getElementById("rate");
-const yearsEl = document.getElementById("years");
-const extraEl = document.getElementById("extra");
+const loan=document.getElementById("loan");
+const rate=document.getElementById("rate");
+const years=document.getElementById("years");
+const extra=document.getElementById("extra");
 
-const monthlyEl = document.getElementById("monthly");
-const interestEl = document.getElementById("interest");
-const savedEl = document.getElementById("saved");
-const durationEl = document.getElementById("duration");
+const monthly=document.getElementById("monthly");
+const interest=document.getElementById("interest");
+const saved=document.getElementById("saved");
+const duration=document.getElementById("duration");
 
-function basePayment(P,r,n){
+function payment(P,r,n){
 if(r===0) return P/n;
 return P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
 }
 
-function runLoan(P,r,n,extra){
-let balance=P,totalInterest=0,months=0;
-let base=basePayment(P,r,n);
+function calc(){
+let P=+loan.value;
+let r=rate.value/100/12;
+let n=years.value*12;
+let e=+extra.value||0;
 
-let labels=[],balanceSeries=[],interestSeries=[],principalSeries=[];
-let tableHTML=""; amortData=[];
+let bal=P, months=0, totInt=0;
+let base=payment(P,r,n);
 
-while(balance>0){
-let interest=balance*r;
-let payment=base+extra;
-if(payment>balance+interest) payment=balance+interest;
-
-let principal=payment-interest;
-balance-=principal;
-totalInterest+=interest;
+while(bal>0){
+let i=bal*r;
+let pay=base+e;
+if(pay>bal+i) pay=bal+i;
+bal=bal+i-pay;
+totInt+=i;
 months++;
-
-amortData.push([months,payment,principal,interest,balance]);
-
-tableHTML+=`<tr>
-<td>${months}</td>
-<td>$${Math.round(payment).toLocaleString()}</td>
-<td>$${Math.round(principal).toLocaleString()}</td>
-<td>$${Math.round(interest).toLocaleString()}</td>
-<td>$${Math.max(0,Math.round(balance)).toLocaleString()}</td>
-</tr>`;
-
-if(months%12===0){
-labels.push("Year "+months/12);
-balanceSeries.push(balance);
-interestSeries.push(totalInterest);
-principalSeries.push(principal);
-}
 }
 
-document.querySelector("#table tbody").innerHTML=tableHTML;
-
-return {totalInterest,months,base,labels,balanceSeries,interestSeries,principalSeries};
+monthly.innerText="$"+Math.round(base+e).toLocaleString();
+interest.innerText="$"+Math.round(totInt).toLocaleString();
+saved.innerText="—";
+duration.innerText=Math.floor(months/12)+"y "+months%12+"m";
 }
 
-function calculate(){
-
-let P=+loanEl.value;
-let r=rateEl.value/100/12;
-let n=yearsEl.value*12;
-let extra=+extraEl.value||0;
-
-let normal=runLoan(P,r,n,0);
-let extraLoan=runLoan(P,r,n,extra);
-
-function f(x){return "$"+Math.round(x).toLocaleString();}
-
-monthlyEl.innerText=f(extraLoan.base+extra);
-interestEl.innerText=f(extraLoan.totalInterest);
-savedEl.innerText=f(normal.totalInterest-extraLoan.totalInterest);
-
-let y=Math.floor(extraLoan.months/12);
-let m=extraLoan.months%12;
-durationEl.innerText=y+"y "+m+"m";
-
-if(chart) chart.destroy();
-
-chart=new Chart(document.getElementById("chart"),{
-type:"line",
-data:{
-labels:extraLoan.labels,
-datasets:[
-{label:"Balance",data:extraLoan.balanceSeries},
-{label:"Interest",data:extraLoan.interestSeries}
-]
-}
-});
-}
-
-document.querySelectorAll("input").forEach(i=>i.oninput=calculate);
-calculate();
-
-function toggleTable(){document.getElementById("table").classList.toggle("hidden");}
-
-function downloadCSV(){
-let csv="Month,Payment,Principal,Interest,Balance\n";
-amortData.forEach(r=>csv+=r.join(",")+"\n");
-let blob=new Blob([csv]);
-let a=document.createElement("a");
-a.href=URL.createObjectURL(blob);
-a.download="mortgage.csv";
-a.click();
-}
+document.querySelectorAll("input").forEach(i=>i.oninput=calc);
+calc();
 
 function toggleMenu(){
 document.getElementById("nav").classList.toggle("active");
