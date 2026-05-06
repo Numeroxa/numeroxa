@@ -12,7 +12,7 @@
 <style>
 body {
   margin:0;
-  font-family:Inter, Arial;
+  font-family:Inter, Arial, sans-serif;
   background:#f9fafb;
   color:#111;
 }
@@ -24,6 +24,7 @@ header {
   display:flex;
   justify-content:space-between;
   align-items:center;
+  flex-wrap:wrap;
 }
 
 header a {
@@ -35,6 +36,19 @@ header a {
 .logo {
   font-size:20px;
   font-weight:600;
+  line-height:1.1;
+}
+
+.tagline {
+  display:block;
+  font-size:11px;
+  opacity:0.7;
+}
+
+nav {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
 }
 
 .container {
@@ -72,6 +86,29 @@ p {
 
 ul {
   margin-top:10px;
+  line-height:1.7;
+}
+
+@media (max-width: 768px) {
+  header {
+    padding:20px;
+  }
+
+  nav {
+    margin-top:15px;
+    width:100%;
+  }
+
+  header a {
+    margin-left:0;
+    margin-right:15px;
+    margin-top:8px;
+    display:inline-block;
+  }
+
+  h1 {
+    font-size:28px;
+  }
 }
 </style>
 </head>
@@ -79,12 +116,13 @@ ul {
 <body>
 
 <header>
+
 <a href="../index.html" class="logo">
   Numeroxa
   <span class="tagline">Smart Financial Calculators</span>
 </a>
 
-<nav id="nav">
+<nav>
   <a href="../index.html">Home</a>
   <a href="mortgage-calculator.html">Mortgage</a>
   <a href="compound-interest.html">Compound</a>
@@ -94,6 +132,7 @@ ul {
   <a href="how-much-deposit-house-australia.html">Deposit</a>
   <a href="mortgage-repayments-australia.html">Repayments</a>
 </nav>
+
 </header>
 
 <div class="container">
@@ -112,7 +151,7 @@ Knowing how much mortgage you can afford is one of the most important steps when
 <h2>How lenders calculate borrowing capacity</h2>
 
 <p>
-Banks don’t simply look at your income—they assess your overall financial position to determine how much you can safely borrow.
+Banks don’t simply look at your income — they assess your overall financial position to determine how much you can safely borrow.
 </p>
 
 <ul>
@@ -123,7 +162,7 @@ Banks don’t simply look at your income—they assess your overall financial po
 </ul>
 
 <p>
-Most lenders apply a “stress test” by assessing your loan at a higher interest rate than the current market rate.
+Most lenders apply a stress test by assessing your loan at a higher interest rate than the current market rate.
 </p>
 
 <h2>How much income do you need?</h2>
@@ -145,7 +184,7 @@ For example, a household earning $120,000 per year may be able to borrow approxi
 
 <ul>
 <li><strong>Interest rates:</strong> Higher rates reduce borrowing capacity</li>
-<li><strong>Loan term:</strong> Longer terms lower repayments but increase interest</li>
+<li><strong>Loan term:</strong> Longer terms lower repayments but increase total interest</li>
 <li><strong>Expenses:</strong> Higher spending reduces how much you can borrow</li>
 <li><strong>Deposit size:</strong> Larger deposits improve borrowing power</li>
 </ul>
@@ -183,30 +222,36 @@ Just because a lender approves a certain amount doesn’t mean you should borrow
 <h2>Frequently asked questions</h2>
 
 <h3>How much mortgage can I afford on my salary?</h3>
+
 <p>
 It depends on your income, expenses, and current interest rates. Most lenders use detailed affordability assessments rather than simple formulas.
 </p>
 
 <h3>What is the 30% rule?</h3>
+
 <p>
 The 30% rule suggests spending no more than 30% of your income on housing, though this is only a guideline.
 </p>
 
 <h3>Do banks include living expenses?</h3>
+
 <p>
 Yes, lenders carefully assess your living expenses when determining borrowing capacity.
 </p>
 
 <h3>How much deposit do I need?</h3>
+
 <p>
 Typically 5–20% of the property value, though smaller deposits may require lenders mortgage insurance (LMI).
 </p>
+
 <p>
 You should also understand how much upfront savings are required. Read our guide:
 <a href="how-much-deposit-house-australia.html">
 How much deposit do I need?
 </a>
 </p>
+
 </div>
 
 <script type="application/ld+json">
@@ -217,17 +262,26 @@ How much deposit do I need?
 {
 "@type":"Question",
 "name":"How much mortgage can I afford?",
-"acceptedAnswer":{"@type":"Answer","text":"It depends on income, expenses, interest rates, and lender assessments."}
+"acceptedAnswer":{
+"@type":"Answer",
+"text":"It depends on income, expenses, interest rates, and lender assessments."
+}
 },
 {
 "@type":"Question",
 "name":"What income do I need for a mortgage in Australia?",
-"acceptedAnswer":{"@type":"Answer","text":"Many lenders allow borrowing of 5–6 times income, depending on financial situation."}
+"acceptedAnswer":{
+"@type":"Answer",
+"text":"Many lenders allow borrowing of 5–6 times income, depending on financial situation."
+}
 },
 {
 "@type":"Question",
 "name":"What deposit is required?",
-"acceptedAnswer":{"@type":"Answer","text":"Typically 5–20% of the property value."}
+"acceptedAnswer":{
+"@type":"Answer",
+"text":"Typically 5–20% of the property value."
+}
 }
 ]
 }
