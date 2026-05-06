@@ -12,7 +12,7 @@
 <style>
 body {
   margin:0;
-  font-family:Inter, Arial;
+  font-family:Inter, Arial, sans-serif;
   background:#f9fafb;
   color:#111;
 }
@@ -24,6 +24,7 @@ header {
   display:flex;
   justify-content:space-between;
   align-items:center;
+  flex-wrap:wrap;
 }
 
 header a {
@@ -32,14 +33,38 @@ header a {
   margin-left:20px;
 }
 
+.logo {
+  font-size:20px;
+  font-weight:600;
+  line-height:1.1;
+}
+
+.tagline {
+  display:block;
+  font-size:11px;
+  opacity:0.7;
+}
+
+nav {
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
 .container {
   max-width:900px;
   margin:auto;
   padding:40px 20px;
 }
 
-h1 { font-size:32px; margin-bottom:15px; }
-h2 { margin-top:40px; }
+h1 {
+  font-size:32px;
+  margin-bottom:15px;
+}
+
+h2 {
+  margin-top:40px;
+}
 
 p {
   line-height:1.6;
@@ -62,12 +87,47 @@ table {
   width:100%;
   margin-top:20px;
   border-collapse:collapse;
+  background:white;
 }
 
 th, td {
-  padding:10px;
+  padding:12px;
   border-bottom:1px solid #eee;
   text-align:left;
+}
+
+th {
+  background:#f3f4f6;
+}
+
+ul {
+  line-height:1.7;
+}
+
+@media (max-width: 768px) {
+  header {
+    padding:20px;
+  }
+
+  nav {
+    width:100%;
+    margin-top:15px;
+  }
+
+  header a {
+    margin-left:0;
+    margin-right:15px;
+    margin-top:8px;
+    display:inline-block;
+  }
+
+  h1 {
+    font-size:28px;
+  }
+
+  table {
+    font-size:14px;
+  }
 }
 </style>
 </head>
@@ -75,6 +135,7 @@ th, td {
 <body>
 
 <header>
+
 <a href="../index.html" class="logo">
   Numeroxa
   <span class="tagline">Smart Financial Calculators</span>
@@ -90,6 +151,7 @@ th, td {
   <a href="how-much-deposit-house-australia.html">Deposit</a>
   <a href="mortgage-repayments-australia.html">Repayments</a>
 </nav>
+
 </header>
 
 <div class="container">
@@ -112,10 +174,22 @@ Below is a rough guide to monthly repayments for a 30-year loan at 6% interest:
 </p>
 
 <table>
-<tr><th>Loan Amount</th><th>Monthly Repayment</th></tr>
-<tr><td>$400,000</td><td>~$2,400</td></tr>
-<tr><td>$600,000</td><td>~$3,600</td></tr>
-<tr><td>$800,000</td><td>~$4,800</td></tr>
+<tr>
+  <th>Loan Amount</th>
+  <th>Monthly Repayment</th>
+</tr>
+<tr>
+  <td>$400,000</td>
+  <td>~$2,400</td>
+</tr>
+<tr>
+  <td>$600,000</td>
+  <td>~$3,600</td>
+</tr>
+<tr>
+  <td>$800,000</td>
+  <td>~$4,800</td>
+</tr>
 </table>
 
 <p>
@@ -147,27 +221,31 @@ A small increase in interest rates can have a large effect on your repayments. F
 <li>Make extra repayments</li>
 <li>Refinance to a lower interest rate</li>
 <li>Increase your deposit</li>
-<li>Extend your loan term (short-term relief)</li>
+<li>Extend your loan term for short-term relief</li>
 </ul>
 
 <h2>Frequently asked questions</h2>
 
 <h3>How much are mortgage repayments in Australia?</h3>
+
 <p>
 Repayments vary based on loan size, interest rate, and term, but a $600,000 loan at 6% is roughly $3,600 per month.
 </p>
 
 <h3>How can I lower my repayments?</h3>
+
 <p>
 You can reduce repayments by refinancing, increasing your deposit, or extending your loan term.
 </p>
 
 <h3>Do interest rates make a big difference?</h3>
+
 <p>
 Yes, even small changes in interest rates can significantly impact your monthly repayments.
 </p>
 
 <h3>Are repayments fixed?</h3>
+
 <p>
 Repayments may be fixed or variable depending on your loan type.
 </p>
@@ -179,9 +257,30 @@ Repayments may be fixed or variable depending on your loan type.
 "@context":"https://schema.org",
 "@type":"FAQPage",
 "mainEntity":[
-{"@type":"Question","name":"How much are mortgage repayments?","acceptedAnswer":{"@type":"Answer","text":"Repayments depend on loan size, interest rate, and loan term."}},
-{"@type":"Question","name":"How can I reduce repayments?","acceptedAnswer":{"@type":"Answer","text":"By refinancing, increasing deposit, or adjusting loan term."}},
-{"@type":"Question","name":"Do interest rates affect repayments?","acceptedAnswer":{"@type":"Answer","text":"Yes, even small rate changes can significantly affect repayments."}}
+{
+"@type":"Question",
+"name":"How much are mortgage repayments?",
+"acceptedAnswer":{
+"@type":"Answer",
+"text":"Repayments depend on loan size, interest rate, and loan term."
+}
+},
+{
+"@type":"Question",
+"name":"How can I reduce repayments?",
+"acceptedAnswer":{
+"@type":"Answer",
+"text":"By refinancing, increasing deposit, or adjusting loan term."
+}
+},
+{
+"@type":"Question",
+"name":"Do interest rates affect repayments?",
+"acceptedAnswer":{
+"@type":"Answer",
+"text":"Yes, even small rate changes can significantly affect repayments."
+}
+}
 ]
 }
 </script>
